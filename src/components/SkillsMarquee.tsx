@@ -334,7 +334,7 @@ export default function SkillsMarquee() {
 
       <div className="container mx-auto px-8 relative z-10">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -403,7 +403,7 @@ export default function SkillsMarquee() {
         </motion.div>
         
         {/* Enhanced container with cosmic shadow effect */}
-        <div className="relative mb-12 overflow-hidden group">
+        <div className="relative mb-6 overflow-hidden group">
           {/* Cosmic gradient background that blends with space */}
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80 backdrop-blur-sm rounded-3xl"></div>
           
@@ -430,56 +430,7 @@ export default function SkillsMarquee() {
               <GlassSkillItem key={`ltr-${i}`} skill={skill} index={i} />
             ))}
           </div>
-          
-          {/* Futuristic navigation arrows */}
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 flex flex-col gap-3">
-            <motion.button 
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center group"
-              onClick={() => {
-                const container = document.getElementById('skills-row-1');
-                if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-              }}
-              whileHover={{ 
-                boxShadow: '0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px rgba(120, 120, 255, 0.5)',
-                scale: 1.05
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                className="text-white/70 group-hover:text-white transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </motion.div>
-            </motion.button>
-            <motion.button 
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center group"
-              onClick={() => {
-                const container = document.getElementById('skills-row-1');
-                if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-              }}
-              whileHover={{ 
-                boxShadow: '0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px rgba(120, 120, 255, 0.5)',
-                scale: 1.05
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                className="text-white/70 group-hover:text-white transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </motion.div>
-            </motion.button>
-          </div>
+
         </div>
         
         {/* Row 2: Analytics & ML Tools - Right to Left */}
@@ -510,56 +461,7 @@ export default function SkillsMarquee() {
               <GlassSkillItem key={`rtl-${i}`} skill={skill} index={i} />
             ))}
           </div>
-          
-          {/* Futuristic navigation arrows */}
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 flex flex-col gap-3">
-            <motion.button 
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center group"
-              onClick={() => {
-                const container = document.getElementById('skills-row-2');
-                if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-              }}
-              whileHover={{ 
-                boxShadow: '0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px rgba(120, 120, 255, 0.5)',
-                scale: 1.05
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                className="text-white/70 group-hover:text-white transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-              </motion.div>
-            </motion.button>
-            <motion.button 
-              className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center group"
-              onClick={() => {
-                const container = document.getElementById('skills-row-2');
-                if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-              }}
-              whileHover={{ 
-                boxShadow: '0 0 15px rgba(255, 255, 255, 0.3), 0 0 5px rgba(120, 120, 255, 0.5)',
-                scale: 1.05
-              }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-                className="text-white/70 group-hover:text-white transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </motion.div>
-            </motion.button>
-          </div>
+
         </div>
       </div>
     </section>

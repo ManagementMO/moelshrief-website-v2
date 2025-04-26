@@ -313,7 +313,7 @@ const AboutSection = () => {
     <section 
       id="about" 
       ref={sectionRef} 
-      className="relative py-32 lg:py-40 overflow-hidden text-white"
+      className="relative py-24 lg:py-32 overflow-hidden text-white"
     >
       {/* Dynamic background with parallax effect */}
       <motion.div 
@@ -497,7 +497,7 @@ const AboutSection = () => {
               </div>
               
               <motion.h3 
-                className="text-2xl font-semibold mb-8 text-white"
+                className="text-2xl font-semibold mb-6 text-white"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4, duration: 0.8 }}
@@ -508,7 +508,7 @@ const AboutSection = () => {
                 My Interests:
               </motion.h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {interests.map((interest, index) => (
                   <motion.div
                     key={interest.id}

@@ -38,7 +38,7 @@ const ContactSection = () => {
   return (
     <section 
       id="contact" 
-      className="relative py-28 overflow-hidden bg-black"
+      className="relative py-16 overflow-hidden bg-black"
     >
       {/* Enhanced decorative elements that match the space theme */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
