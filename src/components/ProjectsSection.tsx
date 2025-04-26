@@ -112,7 +112,7 @@ const ProjectsSection = () => {
   return (
     <section 
       id="projects" 
-      className="relative py-12 overflow-hidden bg-gradient-to-b from-background to-futuristic-dark/40"
+      className="relative py-10 overflow-hidden bg-gradient-to-b from-background to-futuristic-dark/40"
     >
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-10">

@@ -88,46 +88,42 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
           scale: { duration: 0.5, ease: [0.19, 1, 0.22, 1] },
         }}
       >
-        {/* Enhanced color accent ring with animation */}
+        {/* Subtle border highlight */}
         <motion.div 
           className="absolute inset-0 rounded-xl"
           style={{
-            background: `radial-gradient(circle at center, ${skill.color}33 0%, transparent 70%)`,
-            border: `1px solid ${skill.color}22`,
-            opacity: isHovered ? 0.6 : 0.2,
-            transition: 'opacity 0.5s ease',
+            border: `1px solid ${isHovered ? `${skill.color}40` : 'rgba(255, 255, 255, 0.1)'}`,
+            transition: 'border 0.3s ease',
           }}
-          animate={isHovered ? {
-            boxShadow: [
-              `0 0 10px ${skill.color}22`,
-              `0 0 20px ${skill.color}33`,
-              `0 0 10px ${skill.color}22`
-            ]
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
         />
 
-        {/* Enhanced glossy highlight with animation */}
-        <motion.div 
-          className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-white/30 to-transparent rounded-t-xl"
-          style={{
-            opacity: isHovered ? 0.8 : 0.6,
-            transition: 'opacity 0.5s ease',
-          }}
-          animate={isHovered ? {
-            opacity: [0.6, 0.8, 0.6],
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-        
-        {/* Enhanced bottom reflection */}
-        <motion.div 
-          className="absolute bottom-0 left-0 right-0 h-1/6 bg-gradient-to-t from-white/10 to-transparent rounded-b-xl"
-          style={{
-            opacity: isHovered ? 0.5 : 0.2,
-            transition: 'opacity 0.5s ease',
-          }}
-        />
+        {/* Diagonal reflection - only visible on hover */}
+        {isHovered && (
+          <motion.div 
+            className="absolute inset-0 overflow-hidden rounded-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div 
+              className="absolute -inset-full bg-gradient-to-br from-white/40 via-white/0 to-transparent"
+              style={{ 
+                transform: "rotate(30deg) translateY(0%)",
+                width: "300%",
+                height: "300%"
+              }}
+              animate={{
+                translateY: ["100%", "-100%"]
+              }}
+              transition={{
+                duration: 1.5,
+                ease: "easeInOut",
+                delay: 0.2
+              }}
+            />
+          </motion.div>
+        )}
         
         {/* Icon with enhanced effects */}
         <motion.div 
@@ -171,50 +167,7 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
           </div>
         </motion.div>
 
-        {/* Enhanced hover glow effect */}
-        <motion.div 
-          className="absolute inset-0 rounded-xl"
-          style={{
-            background: `radial-gradient(circle at center, ${skill.color}22 0%, transparent 70%)`,
-            filter: 'blur(20px)',
-            opacity: isHovered ? 1 : 0,
-            transition: 'opacity 0.5s ease',
-          }}
-          animate={isHovered ? {
-            opacity: [0.7, 1, 0.7],
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-        
-        {/* Animated particles on hover */}
-        {isHovered && (
-          <>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute rounded-full bg-white/20"
-                style={{
-                  width: Math.random() * 4 + 2 + 'px',
-                  height: Math.random() * 4 + 2 + 'px',
-                  left: Math.random() * 100 + '%',
-                  top: Math.random() * 100 + '%',
-                  boxShadow: `0 0 ${Math.random() * 5 + 5}px ${skill.color}44`,
-                }}
-                animate={{
-                  y: [0, -20, 0],
-                  x: [0, Math.random() * 10 - 5, 0],
-                  opacity: [0, 0.8, 0],
-                }}
-                transition={{
-                  duration: Math.random() * 2 + 1,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: Math.random(),
-                }}
-              />
-            ))}
-          </>
-        )}
+
       </motion.div>
       
       {/* Enhanced skill name with futuristic animation */}
@@ -334,7 +287,7 @@ export default function SkillsMarquee() {
 
       <div className="container mx-auto px-8 relative z-10">
         <motion.div 
-          className="text-center mb-8"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -403,9 +356,9 @@ export default function SkillsMarquee() {
         </motion.div>
         
         {/* Enhanced container with cosmic shadow effect */}
-        <div className="relative mb-6 overflow-hidden group">
+        <div className="relative mb-4 overflow-hidden group">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80 backdrop-blur-sm rounded-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-black/95 backdrop-blur-sm rounded-3xl"></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-blue-500/5 blur-3xl"></div>
@@ -419,9 +372,20 @@ export default function SkillsMarquee() {
                }}>
           </div>
           
-          {/* Enhanced fade edges that blend with the space background */}
-          <div className="absolute top-0 bottom-0 left-0 w-80 z-10 bg-gradient-to-r from-black via-black/70 to-transparent pointer-events-none rounded-l-3xl"></div>
-          <div className="absolute top-0 bottom-0 right-0 w-80 z-10 bg-gradient-to-l from-black via-black/70 to-transparent pointer-events-none rounded-r-3xl"></div>
+          {/* Enhanced shadow fade edges for a more natural transition */}
+          <div className="absolute top-0 bottom-0 left-0 w-[250px] z-10 pointer-events-none rounded-l-3xl" 
+               style={{
+                 background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
+                 boxShadow: 'inset 20px 0 30px rgba(0,0,0,0.5)'
+               }}>
+          </div>
+          
+          <div className="absolute top-0 bottom-0 right-0 w-[250px] z-10 pointer-events-none rounded-r-3xl"
+               style={{
+                 background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
+                 boxShadow: 'inset -20px 0 30px rgba(0,0,0,0.5)'
+               }}>
+          </div>
           
           <div className="flex py-6 w-min animate-marquee-ltr pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
                style={{ animationDuration: firstRowDuration, scrollBehavior: 'smooth' }}
@@ -436,7 +400,7 @@ export default function SkillsMarquee() {
         {/* Row 2: Analytics & ML Tools - Right to Left */}
         <div className="relative overflow-hidden group">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/80 backdrop-blur-sm rounded-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-black/95 backdrop-blur-sm rounded-3xl"></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/3 right-1/4 w-36 h-36 rounded-full bg-purple-500/5 blur-3xl"></div>
@@ -450,9 +414,20 @@ export default function SkillsMarquee() {
                }}>
           </div>
           
-          {/* Enhanced fade edges that blend with the space background */}
-          <div className="absolute top-0 bottom-0 left-0 w-80 z-10 bg-gradient-to-r from-black via-black/70 to-transparent pointer-events-none rounded-l-3xl"></div>
-          <div className="absolute top-0 bottom-0 right-0 w-80 z-10 bg-gradient-to-l from-black via-black/70 to-transparent pointer-events-none rounded-r-3xl"></div>
+          {/* Enhanced shadow fade edges for a more natural transition */}
+          <div className="absolute top-0 bottom-0 left-0 w-[250px] z-10 pointer-events-none rounded-l-3xl" 
+               style={{
+                 background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
+                 boxShadow: 'inset 20px 0 30px rgba(0,0,0,0.5)'
+               }}>
+          </div>
+          
+          <div className="absolute top-0 bottom-0 right-0 w-[250px] z-10 pointer-events-none rounded-r-3xl"
+               style={{
+                 background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
+                 boxShadow: 'inset -20px 0 30px rgba(0,0,0,0.5)'
+               }}>
+          </div>
           
           <div className="flex py-6 w-min animate-marquee-rtl pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
                style={{ animationDuration: secondRowDuration, scrollBehavior: 'smooth' }}
