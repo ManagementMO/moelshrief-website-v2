@@ -486,7 +486,7 @@ const AboutSection = () => {
                 <motion.div
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 0.85, ease: [0.4, 0.01, 0.2, 1] }}
+                  transition={{ duration: 1.6, ease: [0.4, 0.01, 0.2, 1] }}
                   style={{
                     width: '100%',
                     height: '3px',
