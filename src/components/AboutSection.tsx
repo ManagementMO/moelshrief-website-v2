@@ -554,8 +554,6 @@ const AboutSection = () => {
                           : '0 10px 30px rgba(0, 0, 0, 0.2)',
                       }}
                     >
-                      {/* Background glow effect */}
-                      <NeonGlow color={interest.color} />
                       
                       {/* Content */}
                       <div className="relative z-10">
