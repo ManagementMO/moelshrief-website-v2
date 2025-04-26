@@ -483,6 +483,20 @@ const AboutSection = () => {
                   </h2>
                 </motion.div>
                 
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.85, ease: [0.4, 0.01, 0.2, 1] }}
+                  style={{
+                    width: '100%',
+                    height: '3px',
+                    background: 'linear-gradient(90deg, #4fa3ff 0%, #d26bcb 100%)',
+                    margin: '2.5rem 0 1.5rem 0',
+                    borderRadius: '2px',
+                    boxShadow: '0 0 8px 0 #4fa3ff44, 0 0 8px 0 #d26bcb33',
+                    transformOrigin: 'left',
+                  }}
+                />
                 <motion.p 
                   className="text-xl text-white/80 leading-relaxed max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
