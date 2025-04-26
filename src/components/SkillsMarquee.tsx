@@ -35,7 +35,7 @@ const secondRowSkills: Skill[] = [
   { name: "R", icon: "r", color: "#276DC3" },
   { name: "SciKit Learn", icon: "scikitlearn", color: "#F7931E" },
   { name: "Azure", icon: "microsoftazure", color: "#0078D4" },
-  { name: "Analytics", icon: "googleanalytics", color: "#E37400" },
+
   { name: "Git", icon: "git", color: "#F05032" },
   { name: "VS Code", icon: "visualstudiocode", color: "#007ACC" },
 ];
