@@ -80,9 +80,9 @@ const Footer = () => {
                   </motion.div>
                 </span>
                 using 
-                <span className="text-blue-400 ml-1 mr-1">TypeScript</span>
-                <span className="text-cyan-400 mr-1">React</span>
-                <span className="text-sky-400 mr-1">Tailwind</span>
+                <span className="text-blue-400 ml-1 mr-1">TypeScript,</span>
+                <span className="text-cyan-400 mr-1">React,</span>
+                <span className="text-sky-400 mr-1">Tailwind,</span>
                 <span className="text-purple-400">&</span>
                 <span className="text-yellow-400 ml-1">Vite</span>
               </p>
