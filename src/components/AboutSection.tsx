@@ -517,7 +517,20 @@ const AboutSection = () => {
                     transition={{ delay: 1.6 + index * 0.1, duration: 0.8 }}
                     onHoverStart={() => setHoverInterest(interest.id)}
                     onHoverEnd={() => setHoverInterest(null)}
-                    whileHover={{ scale: 1.03 }}
+                    whileHover={{ scale: [1, 1.06, 1] }}
+                    whileTap={{ scale: 1.04 }}
+                    transition={
+                      {
+                        delay: 1.6 + index * 0.1,
+                        duration: 0.8,
+                        scale: {
+                          duration: 1.6,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                          ease: 'easeInOut',
+                        }
+                      }
+                    }
                   >
                     <div 
                       className="relative p-6 rounded-xl border border-white/10 backdrop-blur-md bg-white/5 transition-all duration-300 group overflow-hidden"

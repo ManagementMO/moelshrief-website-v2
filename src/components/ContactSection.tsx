@@ -82,7 +82,7 @@ const ContactSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-5xl font-bold mb-6 tracking-tight text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]">
+          <h2 className="text-5xl font-bold mb-6 tracking-tight text-white" style={{ textShadow: '0 0 30px rgba(255,255,255,0.8)' }}>
             Let's Connect
           </h2>
           

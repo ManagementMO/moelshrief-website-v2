@@ -117,13 +117,14 @@ const ProjectsSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <motion.h2 
-            className="text-4xl font-bold mb-6"
+            className="text-4xl font-bold mb-6 text-white"
+            style={{ textShadow: '0 0 30px rgba(255,255,255,0.8)' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            Featured <span className="text-futuristic-blue">Projects</span>
+            Featured Projects
           </motion.h2>
         </div>
         

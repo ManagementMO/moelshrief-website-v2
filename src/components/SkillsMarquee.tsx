@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useAnimation } from "framer-motion";
 
 interface Skill {
   name: string;
@@ -40,11 +40,123 @@ const secondRowSkills: Skill[] = [
   { name: "VS Code", icon: "visualstudiocode", color: "#007ACC" },
 ];
 
+// Add this at the top of your file, after the imports
+const SHINE_CSS = `
+  @keyframes singleShine {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .shine-effect-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    border-radius: 0.75rem;
+  }
+  
+  .shine-effect {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    right: -100%;
+    bottom: -100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.15), 
+      transparent
+    );
+    transform: translateX(-100%);
+  }
+  
+  /* Only animate on group-hover (once) */
+  .group:hover .shine-effect-container {
+    opacity: 1;
+  }
+  
+  .group:hover .shine-effect {
+    animation: singleShine 0.8s ease-in-out;
+    animation-iteration-count: 1;
+  }
+`;
+
 // Enhanced component for a single skill item with glass effect
 const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, index }) => {
   const theme = useTheme();
-  const iconUrl = `https://cdn.simpleicons.org/${skill.icon}`;
+  const getIconUrl = (icon: string) => {
+    // Robust mapping for colored logos
+    switch (icon) {
+      case 'python':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg';
+      case 'mysql':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg';
+      case 'pandas':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg';
+      case 'apachespark':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original-wordmark.svg';
+      case 'apachekafka':
+        return '/icons/kafka-colored.svg';
+      case 'amazonaws':
+        return '/icons/aws-colored.svg';
+      case 'docker':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg';
+      case 'kubernetes':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg';
+      case 'apacheairflow':
+        return '/icons/airflow-colored.svg';
+      case 'apachehadoop':
+        return '/icons/hadoop-colored.svg';
+      case 'redis':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg';
+      case 'postgresql':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg';
+      case 'tensorflow':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg';
+      case 'pytorch':
+        return '/icons/pytorch-colored.svg';
+      case 'numpy':
+        return '/icons/numpy-colored.svg';
+      case 'powerbi':
+        return '/icons/powerbi-colored.svg';
+      case 'tableau':
+        return '/icons/tableau-colored.svg';
+      case 'microsoftexcel':
+        return '/icons/excel-colored.svg';
+      case 'r':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg';
+      case 'scikitlearn':
+        return '/icons/scikitlearn-colored.svg';
+      case 'microsoftazure':
+        return '/icons/azure-colored.svg';
+      case 'googleanalytics':
+        return '/icons/analytics-colored.svg';
+      case 'git':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg';
+      case 'visualstudiocode':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg';
+      default:
+        return `https://cdn.simpleicons.org/${icon}`;
+    }
+  };
+  const iconUrl = getIconUrl(skill.icon);
   const [isHovered, setIsHovered] = useState(false);
+  const shineControls = useAnimation();
+  const shineVariants = {
+    hidden: { x: "-110%" },
+    visible: {
+      x: "110%",
+      transition: { duration: 0.9, ease: [0.25, 1, 0.5, 1] }
+    }
+  };
   
   const hoverDelayMs = (index % 5) * 50;
   
@@ -67,13 +179,18 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
     <motion.div 
       className="flex flex-col items-center gap-3 min-w-[130px] group" 
       style={{ perspective: "1500px" }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => {
+        setIsHovered(true);
+        shineControls.start("visible");
+      }}
+      onHoverEnd={() => {
+        setIsHovered(false);
+        shineControls.start("hidden", { duration: 0 });
+      }}
     >
       <motion.div 
-        className="relative h-24 w-24 rounded-xl flex items-center justify-center p-5 overflow-hidden holographic-card cybernetic-glow"
+        className="relative h-24 w-24 rounded-xl flex items-center justify-center p-5 overflow-hidden"
         style={{
-          background: `linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))`,
           backdropFilter: 'blur(10px)',
           border: `1px solid ${isHovered ? `rgba(${skill.color.replace('#', '').match(/.{2}/g)?.map(c => parseInt(c, 16)).join(',')}, 0.3)` : 'rgba(255, 255, 255, 0.1)'}`,
           boxShadow: isHovered 
@@ -81,12 +198,8 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
             : `0 8px 32px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.08)`,
           transition: `all 0.6s cubic-bezier(0.19, 1, 0.22, 1) ${hoverDelayMs}ms`,
         }}
-        whileHover={{ 
-          scale: 1.05,
-        }}
-        transition={{
-          scale: { duration: 0.5, ease: [0.19, 1, 0.22, 1] },
-        }}
+        whileHover={{ scale: 1.05 }}
+        transition={{ scale: { duration: 0.5, ease: [0.19, 1, 0.22, 1] } }}
       >
         {/* Subtle border highlight */}
         <motion.div 
@@ -96,35 +209,17 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
             transition: 'border 0.3s ease',
           }}
         />
-
-        {/* Diagonal reflection - only visible on hover */}
-        {isHovered && (
-          <motion.div 
-            className="absolute inset-0 overflow-hidden rounded-xl"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.div 
-              className="absolute -inset-full bg-gradient-to-br from-white/40 via-white/0 to-transparent"
-              style={{ 
-                transform: "rotate(30deg) translateY(0%)",
-                width: "300%",
-                height: "300%"
-              }}
-              animate={{
-                translateY: ["100%", "-100%"]
-              }}
-              transition={{
-                duration: 1.5,
-                ease: "easeInOut",
-                delay: 0.2
-              }}
-            />
-          </motion.div>
-        )}
-        
+        {/* Framer Motion shine effect, controlled */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-xl overflow-hidden"
+        >
+          <motion.div
+            className="absolute left-[-60%] top-[-60%] w-[220%] h-[220%] bg-gradient-to-br from-transparent via-white/20 to-transparent rounded-xl"
+            variants={shineVariants}
+            initial="hidden"
+            animate={shineControls}
+          />
+        </motion.div>
         {/* Icon with enhanced effects */}
         <motion.div 
           className="w-14 h-14 relative z-10"
@@ -146,28 +241,11 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
               loading="lazy"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${skill.icon}.svg`;
-                target.style.filter = `brightness(0) invert(1)`;
-                target.onerror = () => {
-                  target.src = '';
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent) {
-                    const textEl = document.createElement('div');
-                    textEl.innerText = skill.name.substring(0, 2).toUpperCase();
-                    textEl.style.fontSize = '20px';
-                    textEl.style.fontWeight = 'bold';
-                    textEl.style.color = skill.color;
-                    textEl.style.filter = `drop-shadow(0 0 5px ${skill.color}44)`;
-                    parent.appendChild(textEl);
-                  }
-                };
+                target.src = '/icons/fallback-colored.svg';
               }}
             />
           </div>
         </motion.div>
-
-
       </motion.div>
       
       {/* Enhanced skill name with futuristic animation */}
@@ -230,6 +308,7 @@ export default function SkillsMarquee() {
   return (
     <section className="py-20 overflow-hidden relative reveal" id="skills">
       <style>{keyframes}</style>
+      <style>{SHINE_CSS}</style>
 
       {/* Transparent background to blend with the page background */}
       <div className="absolute inset-0 bg-transparent pointer-events-none"></div>
@@ -296,21 +375,9 @@ export default function SkillsMarquee() {
           {/* Futuristic title with animated glow */}
           <div className="relative inline-block mb-6">
             <motion.h2 
-              className="text-4xl md:text-5xl font-bold tracking-tight relative z-10"
+              className="text-4xl md:text-5xl font-bold tracking-tight relative z-10 text-white"
               style={{
-                background: 'linear-gradient(to right, #60a5fa, #a855f7, #ec4899)',
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 30px rgba(168,85,247,0.5)',
-              }}
-              animate={{
-                backgroundPosition: ['0% center', '200% center'],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear",
+                textShadow: '0 0 30px rgba(255, 255, 255, 0.8)',
               }}
             >
               Tech Stack
@@ -358,7 +425,7 @@ export default function SkillsMarquee() {
         {/* Enhanced container with cosmic shadow effect */}
         <div className="relative mb-4 overflow-hidden group">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-black/95 backdrop-blur-sm rounded-3xl"></div>
+          <div className="absolute inset-0 rounded-3xl" style={{ background: '#000' }}></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-blue-500/5 blur-3xl"></div>
@@ -372,20 +439,15 @@ export default function SkillsMarquee() {
                }}>
           </div>
           
-          {/* Enhanced shadow fade edges for a more natural transition */}
-          <div className="absolute top-0 bottom-0 left-0 w-[250px] z-10 pointer-events-none rounded-l-3xl" 
+          {/* True fade gradient overlays for smooth logo fade-in/out */}
+          <div className="pointer-events-none absolute top-0 left-0 h-full w-24 z-20" 
                style={{
-                 background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
-                 boxShadow: 'inset 20px 0 30px rgba(0,0,0,0.5)'
-               }}>
-          </div>
-          
-          <div className="absolute top-0 bottom-0 right-0 w-[250px] z-10 pointer-events-none rounded-r-3xl"
+                 background: 'linear-gradient(to right, #0a0a0a 70%, transparent 100%)'
+               }} />
+          <div className="pointer-events-none absolute top-0 right-0 h-full w-24 z-20" 
                style={{
-                 background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
-                 boxShadow: 'inset -20px 0 30px rgba(0,0,0,0.5)'
-               }}>
-          </div>
+                 background: 'linear-gradient(to left, #0a0a0a 70%, transparent 100%)'
+               }} />
           
           <div className="flex py-6 w-min animate-marquee-ltr pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
                style={{ animationDuration: firstRowDuration, scrollBehavior: 'smooth' }}
@@ -400,7 +462,7 @@ export default function SkillsMarquee() {
         {/* Row 2: Analytics & ML Tools - Right to Left */}
         <div className="relative overflow-hidden group">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/30 to-black/95 backdrop-blur-sm rounded-3xl"></div>
+          <div className="absolute inset-0 rounded-3xl" style={{ background: '#000' }}></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/3 right-1/4 w-36 h-36 rounded-full bg-purple-500/5 blur-3xl"></div>
@@ -414,20 +476,15 @@ export default function SkillsMarquee() {
                }}>
           </div>
           
-          {/* Enhanced shadow fade edges for a more natural transition */}
-          <div className="absolute top-0 bottom-0 left-0 w-[250px] z-10 pointer-events-none rounded-l-3xl" 
+          {/* True fade gradient overlays for smooth logo fade-in/out */}
+          <div className="pointer-events-none absolute top-0 left-0 h-full w-24 z-20" 
                style={{
-                 background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
-                 boxShadow: 'inset 20px 0 30px rgba(0,0,0,0.5)'
-               }}>
-          </div>
-          
-          <div className="absolute top-0 bottom-0 right-0 w-[250px] z-10 pointer-events-none rounded-r-3xl"
+                 background: 'linear-gradient(to right, #0a0a0a 70%, transparent 100%)'
+               }} />
+          <div className="pointer-events-none absolute top-0 right-0 h-full w-24 z-20" 
                style={{
-                 background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.4) 80%, rgba(0,0,0,0) 100%)',
-                 boxShadow: 'inset -20px 0 30px rgba(0,0,0,0.5)'
-               }}>
-          </div>
+                 background: 'linear-gradient(to left, #0a0a0a 70%, transparent 100%)'
+               }} />
           
           <div className="flex py-6 w-min animate-marquee-rtl pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
                style={{ animationDuration: secondRowDuration, scrollBehavior: 'smooth' }}

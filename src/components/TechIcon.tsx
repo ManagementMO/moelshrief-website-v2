@@ -138,7 +138,7 @@ export const TechIcon = ({ technology, className }: TechIconProps) => {
   return (
     <motion.div
       className={cn(
-        'relative flex items-center justify-center w-14 h-14 rounded-xl overflow-hidden',
+        'relative group flex items-center justify-center w-14 h-14 rounded-xl overflow-hidden',
         'border border-white/10 backdrop-blur-xl transition-all duration-300 shadow-lg',
         isHovered ? 'scale-110 shadow-xl' : 'scale-100',
         className
@@ -165,8 +165,8 @@ export const TechIcon = ({ technology, className }: TechIconProps) => {
       <div 
         className={cn(
           'relative z-10 w-8 h-8 flex items-center justify-center',
-          'transition-all duration-300 ease-out transform',
-          isHovered ? 'scale-110 rotate-[-5deg]' : 'scale-100 rotate-0'
+          'transition-all duration-300 ease-out',
+          isHovered ? 'scale-115 rotate-[-5deg]' : 'scale-100 rotate-0'
         )}
       >
         {icon}
@@ -175,10 +175,10 @@ export const TechIcon = ({ technology, className }: TechIconProps) => {
       {/* Shine Effect */}
       <div 
         className={cn(
-          'absolute top-0 left-[-75%] w-[50%] h-full',
-          'bg-gradient-to-r from-transparent via-white/20 to-transparent',
-          'transform -skew-x-12 transition-transform duration-700 ease-in-out',
-          isHovered ? 'translate-x-[250%]' : 'translate-x-0'
+          'absolute top-0 left-[-100%] w-[200%] h-[200%]',
+          'bg-gradient-to-br from-transparent via-white/20 to-transparent',
+          'transform rotate-45 transition-transform duration-700 ease-in-out',
+          isHovered ? 'translate-x-[100%]' : 'translate-x-0'
         )}
         style={{ pointerEvents: 'none' }} 
       />
