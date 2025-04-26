@@ -12,6 +12,10 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { lazy, Suspense } from "react";
+
+// Lazy load the cybernetic cursor for better performance
+const CyberneticCursor = lazy(() => import("./components/CyberneticCursor"));
 
 // Create a QueryClient instance
 const queryClient = new QueryClient();
@@ -21,6 +25,10 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      {/* Cybernetic cursor with fallback */}
+      <Suspense fallback={null}>
+        <CyberneticCursor />
+      </Suspense>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

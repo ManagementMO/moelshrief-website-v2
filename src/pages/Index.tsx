@@ -31,14 +31,12 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground overflow-hidden transition-colors duration-300">
-      {/* Background elements */}
-      <div className="fixed inset-0 z-0 opacity-50 pointer-events-none">
-        {/* Reduced number of background elements */}
-      </div>
+    <div className="relative min-h-screen bg-black text-white overflow-hidden transition-colors duration-300">
+      {/* Enhanced background elements */}
+      <div className="fixed inset-0 z-0 opacity-70 pointer-events-none bg-gradient-radial from-gray-900/50 via-black to-black"></div>
       
-      {/* Noise texture overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-noise opacity-5"></div>
+      {/* Noise texture overlay with reduced opacity */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-noise opacity-3"></div>
       
       {/* Main content */}
       <div className="relative z-10">
