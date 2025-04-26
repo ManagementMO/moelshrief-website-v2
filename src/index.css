@@ -123,9 +123,9 @@ html {
   @apply backdrop-blur-xl;
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.05) 100%
   );
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
@@ -147,8 +147,8 @@ html {
   background: radial-gradient(
     circle at center,
     rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    transparent 60%
+    rgba(255, 255, 255, 0.1) 30%,
+    transparent 70%
   );
   transform: rotate(-45deg);
   animation: shine 10s infinite;
@@ -239,11 +239,40 @@ html {
   transition: all 0.3s ease;
 }
 
-.headline-glow:hover {
-  text-shadow: 
-    0 0 15px rgba(var(--primary), 0.7),
-    0 0 30px rgba(var(--primary), 0.5),
-    0 0 45px rgba(var(--primary), 0.3);
+/* Vibrant Data Scientist and Management Engineering styles */
+.vibrant-ds {
+  font-weight: 700;
+  background: linear-gradient(90deg, #4fa3ff 0%, #7b2ff2 60%, #38bdf8 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.5s ease, filter 0.3s ease, transform 0.3s ease;
+}
+.vibrant-me {
+  font-weight: 700;
+  background: linear-gradient(90deg, #d26bcb 0%, #f357a8 60%, #ffb86c 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.5s ease, filter 0.3s ease, transform 0.3s ease;
+}
+.vibrant-ds:hover,
+.vibrant-me:hover {
+  background-position: 100% 50%;
+  filter: brightness(1.4) saturate(1.2);
+  animation: text-wiggle 0.4s ease-in-out;
+}
+
+@keyframes text-wiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  15% { transform: scale(1.03) rotate(-1deg); }
+  30% { transform: scale(1.02) rotate(1deg); }
+  45% { transform: scale(1.03) rotate(-1deg); }
+  60% { transform: scale(1.02) rotate(1deg); }
 }
 
 /* RTX-style input fields */
@@ -479,7 +508,7 @@ html {
   background: radial-gradient(
     circle at center,
     rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0.08) 30%,
+    rgba(255, 255, 255, 0.1) 30%,
     transparent 70%
   );
   transform: rotate(-45deg);
@@ -611,9 +640,9 @@ html {
     transparent 100%
   );
   background-size: 200% 200%;
+  mix-blend-mode: overlay;
   opacity: 0;
   transition: opacity 0.5s ease;
-  mix-blend-mode: overlay;
 }
 
 .holographic-card:hover::before {
@@ -969,7 +998,7 @@ html {
       0 0 25px #00e6e6,
       0 0 30px #00e6e6,
       0 0 35px #00e6e6;
-    transform: translateY(-2px) skew(1deg);
+    transform: translateY(-3px) skew(1deg);
     background-position: 25% 50%;
   }
   50% {
@@ -981,7 +1010,7 @@ html {
       0 0 25px #e600e6,
       0 0 30px #e600e6,
       0 0 35px #e600e6;
-    transform: translateY(0) skew(0deg);
+    transform: translateY(2px) skew(-1deg);
     background-position: 50% 50%;
   }
   75% {
@@ -993,7 +1022,7 @@ html {
       0 0 25px #e6e600,
       0 0 30px #e6e600,
       0 0 35px #e6e600;
-    transform: translateY(2px) skew(-1deg);
+    transform: translateY(-2px) skew(1deg);
     background-position: 75% 50%;
   }
   100% {

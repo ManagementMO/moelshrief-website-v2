@@ -492,7 +492,7 @@ const AboutSection = () => {
                     textShadow: '0 2px 10px rgba(0,0,0,0.3)',
                   }}
                 >
-                  Hey, I'm Mohammed, I'm a data scientist and Management Engineering student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and pretending Python doesn't scare me.
+                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">data scientist</span> and <br /><span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and pretending Python doesn't scare me.
                 </motion.p>
               </div>
               
