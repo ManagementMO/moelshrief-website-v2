@@ -30,6 +30,11 @@ const techConfig: Record<string, { color: string; icon: string; glowColor: strin
     icon: 'icons/gemini.svg',
     glowColor: 'rgba(142, 36, 170, 0.5)'
   },
+  'Spark': {
+    color: 'from-[#E25A1C]/20 to-[#FF9900]/20',
+    icon: 'icons/spark-colored.svg',
+    glowColor: 'rgba(226, 90, 28, 0.5)'
+  },
   'Flask': {
     color: 'from-[#000000]/20 to-[#333333]/20',
     icon: 'icons/flask.svg',

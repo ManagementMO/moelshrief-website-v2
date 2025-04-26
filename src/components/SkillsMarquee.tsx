@@ -13,7 +13,7 @@ const firstRowSkills: Skill[] = [
   { name: "Python", icon: "python", color: "#3776AB" },
   { name: "SQL", icon: "mysql", color: "#4479A1" },
   { name: "Pandas", icon: "pandas", color: "#150458" },
-  { name: "Spark", icon: "apachespark", color: "#E25A1C" },
+
   { name: "Kafka", icon: "apachekafka", color: "#231F20" },
   { name: "AWS", icon: "amazonaws", color: "#FF9900" },
   { name: "Docker", icon: "docker", color: "#2496ED" },
