@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, lazy, Suspense } from "react";
 import type { CSSProperties } from "react";
+import type { MotionStyle } from "framer-motion";
 
 // Lazy load the enhanced 3D profile component
 const Enhanced3DProfile = lazy(() => import("./Enhanced3DProfile"));
@@ -240,20 +241,20 @@ const AboutSection = () => {
   };
 
   // Style objects
-  const imageStyle = {
+  const imageStyle: MotionStyle = {
     opacity: imageOpacity,
     scale: imageScale,
-  } as CSSProperties;
+  };
 
   const transformStyle = {
     transform: `perspective(1000px) rotateY(${mousePosition.x * 5}deg) rotateX(${-mousePosition.y * 5}deg)`,
     transition: "transform 0.1s ease-out",
   } as CSSProperties;
 
-  const contentStyle = {
+  const contentStyle: MotionStyle = {
     opacity: contentOpacity,
     y: contentY,
-  } as CSSProperties;
+  };
 
   // Interest items data
   const interests = [
