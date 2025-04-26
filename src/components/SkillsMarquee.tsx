@@ -423,9 +423,9 @@ export default function SkillsMarquee() {
         </motion.div>
         
         {/* Enhanced container with cosmic shadow effect */}
-        <div className="relative mb-4 overflow-hidden group">
+        <div className="relative mb-4 overflow-hidden group -mx-24">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 rounded-3xl" style={{ background: '#000' }}></div>
+          <div className="absolute inset-0" style={{ background: '#000' }}></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-blue-500/5 blur-3xl"></div>
@@ -440,13 +440,13 @@ export default function SkillsMarquee() {
           </div>
           
           {/* True fade gradient overlays for smooth logo fade-in/out */}
-          <div className="pointer-events-none absolute top-0 left-0 h-full w-24 z-20" 
+          <div className="pointer-events-none absolute top-0 left-0 h-full w-64 z-20" 
                style={{
-                 background: 'linear-gradient(to right, #0a0a0a 70%, transparent 100%)'
+                 background: 'linear-gradient(to right, #0a0a0a 0%, transparent 100%)'
                }} />
-          <div className="pointer-events-none absolute top-0 right-0 h-full w-24 z-20" 
+          <div className="pointer-events-none absolute top-0 right-0 h-full w-64 z-20" 
                style={{
-                 background: 'linear-gradient(to left, #0a0a0a 70%, transparent 100%)'
+                 background: 'linear-gradient(to left, #0a0a0a 0%, transparent 100%)'
                }} />
           
           <div className="flex py-6 w-min animate-marquee-ltr pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
@@ -460,9 +460,9 @@ export default function SkillsMarquee() {
         </div>
         
         {/* Row 2: Analytics & ML Tools - Right to Left */}
-        <div className="relative overflow-hidden group">
+        <div className="relative overflow-hidden group -mx-24">
           {/* Cosmic gradient background that blends with space */}
-          <div className="absolute inset-0 rounded-3xl" style={{ background: '#000' }}></div>
+          <div className="absolute inset-0" style={{ background: '#000' }}></div>
           
           {/* Nebula-like glow effects */}
           <div className="absolute top-1/3 right-1/4 w-36 h-36 rounded-full bg-purple-500/5 blur-3xl"></div>
@@ -477,13 +477,13 @@ export default function SkillsMarquee() {
           </div>
           
           {/* True fade gradient overlays for smooth logo fade-in/out */}
-          <div className="pointer-events-none absolute top-0 left-0 h-full w-24 z-20" 
+          <div className="pointer-events-none absolute top-0 left-0 h-full w-64 z-20" 
                style={{
-                 background: 'linear-gradient(to right, #0a0a0a 70%, transparent 100%)'
+                 background: 'linear-gradient(to right, #0a0a0a 0%, transparent 100%)'
                }} />
-          <div className="pointer-events-none absolute top-0 right-0 h-full w-24 z-20" 
+          <div className="pointer-events-none absolute top-0 right-0 h-full w-64 z-20" 
                style={{
-                 background: 'linear-gradient(to left, #0a0a0a 70%, transparent 100%)'
+                 background: 'linear-gradient(to left, #0a0a0a 0%, transparent 100%)'
                }} />
           
           <div className="flex py-6 w-min animate-marquee-rtl pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
