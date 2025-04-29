@@ -224,6 +224,23 @@ const Navbar = () => {
               }}
               onClick={() => window.open('https://www.overleaf.com/read/ttjwbtkcfmmd#a64414', '_blank')}
             >
+              {/* Animated background gradient */}
+              <motion.div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                style={{
+                  background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)',
+                }}
+                animate={{ 
+                  scale: [0.8, 1.2],
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity, 
+                  repeatType: "reverse",
+                  ease: "easeInOut",
+                }}
+              />
+              
               {/* Button content with glowing text effect */}
               <span className="mr-2 relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.8)]">Resume</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
@@ -231,6 +248,14 @@ const Navbar = () => {
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
+              
+              {/* Shine effect on hover */}
+              <motion.div 
+                className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                style={{ 
+                  width: '200%',
+                }}
+              />
             </Button>
           </motion.div>
         </div>
@@ -495,6 +520,23 @@ const Navbar = () => {
                     setMobileMenuOpen(false);
                   }}
                 >
+                  {/* Animated background gradient */}
+                  <motion.div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                    style={{
+                      background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)',
+                    }}
+                    animate={{ 
+                      scale: [0.8, 1.2],
+                    }}
+                    transition={{ 
+                      duration: 2, 
+                      repeat: Infinity, 
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                    }}
+                  />
+                  
                   {/* Button content with glowing text effect */}
                   <span className="mr-2 relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.8)]">Resume</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
@@ -502,6 +544,14 @@ const Navbar = () => {
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                   </svg>
+                  
+                  {/* Shine effect on hover */}
+                  <motion.div 
+                    className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    style={{ 
+                      width: '200%',
+                    }}
+                  />
                 </Button>
               </motion.div>
             </div>
