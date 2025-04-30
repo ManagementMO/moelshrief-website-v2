@@ -3,36 +3,42 @@ import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 
 const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+    try {
+      const form = e.currentTarget;
+      const formData = new FormData(form);
       
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    }, 1500);
+      const response = await fetch("https://formspree.io/f/mvgazbyw", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      
+      if (response.ok) {
+        setIsSubmitted(true);
+        form.reset();
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 5000);
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("There was an error sending your message. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (
@@ -134,8 +140,6 @@ const ContactSection = () => {
                         id="name"
                         name="name"
                         required
-                        value={formData.name}
-                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
                         placeholder="John Doe"
                         style={{
@@ -151,8 +155,6 @@ const ContactSection = () => {
                         id="email"
                         name="email"
                         required
-                        value={formData.email}
-                        onChange={handleChange}
                         autoComplete="email"
                         className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
                         placeholder="john@example.com"
@@ -169,8 +171,6 @@ const ContactSection = () => {
                         id="subject"
                         name="subject"
                         required
-                        value={formData.subject}
-                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
                         placeholder="Project Inquiry"
                         style={{
@@ -186,8 +186,6 @@ const ContactSection = () => {
                         name="message"
                         required
                         rows={5}
-                        value={formData.message}
-                        onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors resize-none text-white placeholder:text-white/40"
                         placeholder="I'd like to discuss a data project..."
                         style={{
