@@ -1,45 +1,9 @@
-import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
+import { useForm, ValidationError } from '@formspree/react';
 
 const ContactSection = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const form = e.currentTarget;
-      const formData = new FormData(form);
-      
-      const response = await fetch("https://formspree.io/f/mvgazbyw", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-      
-      if (response.ok) {
-        setIsSubmitted(true);
-        form.reset();
-        
-        // Reset success message after 5 seconds
-        setTimeout(() => {
-          setIsSubmitted(false);
-        }, 5000);
-      } else {
-        throw new Error("Failed to send message");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("There was an error sending your message. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const [state, handleSubmit] = useForm("mvgazbyw");
   
   return (
     <section 
@@ -113,7 +77,7 @@ const ContactSection = () => {
             >
               <h3 className="text-2xl font-bold mb-8 text-white [text-shadow:_0_0_20px_rgba(255,255,255,0.2)]">Send a Message</h3>
               
-              {isSubmitted ? (
+              {state.succeeded ? (
                 <motion.div 
                   className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 p-6 rounded-lg border border-purple-500/30 mb-4"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -146,6 +110,12 @@ const ContactSection = () => {
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
                         }}
                       />
+                      <ValidationError 
+                        prefix="Name" 
+                        field="name"
+                        errors={state.errors}
+                        className="text-red-400 text-sm mt-1"
+                      />
                     </div>
                     
                     <div>
@@ -162,6 +132,12 @@ const ContactSection = () => {
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
                         }}
                       />
+                      <ValidationError 
+                        prefix="Email" 
+                        field="email"
+                        errors={state.errors}
+                        className="text-red-400 text-sm mt-1"
+                      />
                     </div>
                     
                     <div>
@@ -176,6 +152,12 @@ const ContactSection = () => {
                         style={{
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
                         }}
+                      />
+                      <ValidationError 
+                        prefix="Subject" 
+                        field="subject"
+                        errors={state.errors}
+                        className="text-red-400 text-sm mt-1"
                       />
                     </div>
                     
@@ -192,15 +174,21 @@ const ContactSection = () => {
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
                         }}
                       ></textarea>
+                      <ValidationError 
+                        prefix="Message" 
+                        field="message"
+                        errors={state.errors}
+                        className="text-red-400 text-sm mt-1"
+                      />
                     </div>
                     
                     <div>
                       <Button
                         type="submit"
                         className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 rounded-lg px-8 py-6 text-sm font-medium tracking-wide shadow-lg shadow-purple-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:translate-y-[-2px] flex items-center justify-center"
-                        disabled={isSubmitting}
+                        disabled={state.submitting}
                       >
-                        {isSubmitting ? (
+                        {state.submitting ? (
                           <>
                             <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
