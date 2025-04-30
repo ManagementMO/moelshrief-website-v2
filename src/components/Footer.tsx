@@ -1,19 +1,41 @@
 import { motion } from "framer-motion";
 
 const Footer = () => {
-  
   return (
-    <footer className="relative py-8 overflow-hidden bg-transparent">
+    <footer className="relative py-6 overflow-hidden bg-transparent">
       {/* Enhanced decorative elements */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
       
       {/* Background glow effects */}
-      <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-blue-500/5 blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full bg-purple-500/5 blur-3xl pointer-events-none"></div>
+      <motion.div 
+        className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-blue-500/5 blur-3xl pointer-events-none"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      ></motion.div>
+      <motion.div 
+        className="absolute -bottom-20 -right-20 w-60 h-60 rounded-full bg-purple-500/5 blur-3xl pointer-events-none"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      ></motion.div>
       
       {/* Animated particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {Array.from({ length: 8 }).map((_, index) => (
+        {Array.from({ length: 12 }).map((_, index) => (
           <motion.div
             key={index}
             className="absolute rounded-full bg-white/5"
@@ -39,9 +61,8 @@ const Footer = () => {
       
       <div className="container mx-auto px-8 relative z-10">
         <div className="flex justify-center items-center">
-          {/* Logo and copyright in a single row */}
           <div className="text-center">
-            <a 
+            <motion.a 
               href="/" 
               className="text-2xl font-bold group"
               onClick={(e) => {
@@ -49,13 +70,15 @@ const Footer = () => {
                 window.location.href = '/';
                 window.scrollTo(0, 0);
               }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <span className="text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Mohammed</span>
               <span className="text-transparent bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text [text-shadow:_0_0_15px_rgb(168,85,247_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(168,85,247_/_90%)]">.</span>
               <span className="text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Elshrief</span>
-            </a>
+            </motion.a>
             
-            <div className="mt-4 flex justify-center items-center">
+            <div className="mt-3 flex justify-center items-center">
               <p className="text-sm text-white/60 flex items-center">
                 Built with 
                 <span className="inline-block mx-1">
@@ -80,11 +103,32 @@ const Footer = () => {
                   </motion.div>
                 </span>
                 using 
-                <span className="text-blue-400 ml-1 mr-1">TypeScript,</span>
-                <span className="text-cyan-400 mr-1">React,</span>
-                <span className="text-sky-400 mr-1">Tailwind,</span>
-                <span className="text-purple-400">&</span>
-                <span className="text-yellow-400 ml-1">Vite</span>
+                <motion.span 
+                  className="text-[#3178C6] ml-1 mr-1 hover:text-[#4a8fd6] transition-colors duration-300 cursor-pointer relative group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  TypeScript
+                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#3178C6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </motion.span>
+                <span className="text-white/60">,</span>
+                <motion.span 
+                  className="text-[#61DAFB] mx-1 hover:text-[#7de1fc] transition-colors duration-300 cursor-pointer relative group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  React
+                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#61DAFB] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </motion.span>
+                <span className="text-white/60">,</span>
+                <motion.span 
+                  className="text-[#38BDF8] ml-1 hover:text-[#5cc9f9] transition-colors duration-300 cursor-pointer relative group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  & Tailwind
+                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#38BDF8] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                </motion.span>
               </p>
             </div>
           </div>
