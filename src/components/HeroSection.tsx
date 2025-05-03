@@ -460,6 +460,14 @@ const HeroSection = () => {
       ref={containerRef}
       className="relative min-h-[100vh] flex items-center justify-center overflow-hidden pt-16 transition-colors duration-300"
     >
+      {/* Loading screen */}
+      <div className="absolute inset-0 flex items-center justify-center z-50 bg-black">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+          <p className="text-white/80 text-lg">Loading...</p>
+        </div>
+      </div>
+      
       {/* Dynamic background with parallax effect */}
       <motion.div 
         className="absolute inset-0 z-0"
