@@ -452,11 +452,11 @@ const Navbar = () => {
             </div>
             
             {/* Enhanced mobile menu links */}
-            <div className="flex flex-col items-center w-full mt-12 relative z-10">
+            <div className="flex flex-col items-center w-full mt-8 sm:mt-12 relative z-10">
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.id}
-                  className="my-4 relative"
+                  className="my-3 sm:my-4 relative"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -20, opacity: 0 }}
@@ -465,10 +465,10 @@ const Navbar = () => {
                 >
                   <motion.a
                     href={`#${link.id}`}
-                    className="text-3xl font-light text-white/90 hover:text-white transition-all duration-300 px-8 py-4 block rounded-lg relative z-10"
+                    className="text-2xl sm:text-3xl font-light text-white/90 hover:text-white transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 block rounded-lg relative z-10"
                     style={{ 
-                      minHeight: 56, 
-                      minWidth: 150, 
+                      minHeight: 48,
+                      minWidth: 120,
                       textAlign: 'center',
                       textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
                     }}

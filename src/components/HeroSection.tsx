@@ -569,14 +569,14 @@ const HeroSection = () => {
         >
           <div className="relative">
             <motion.div 
-              className="text-xs font-mono tracking-wider text-white/70 uppercase mb-6"
+              className="text-xs font-mono tracking-wider text-white/70 uppercase mb-4 sm:mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="flex items-center">
                 <motion.div 
-                  className="w-10 h-[1px] bg-gradient-to-r from-blue-400 to-purple-500 mr-3"
+                  className="w-8 sm:w-10 h-[1px] bg-gradient-to-r from-blue-400 to-purple-500 mr-3"
                   animate={{
                     width: [0, 40],
                   }}
@@ -593,8 +593,8 @@ const HeroSection = () => {
               </div>
             </motion.div>
             
-            <motion.h1 
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight tracking-tight mb-8"
+            <motion.h1
+              className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight mb-6 sm:mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8 }}

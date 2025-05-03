@@ -1289,3 +1289,38 @@ html {
     --tw-filter: drop-shadow(0 0 8px var(--glow-color, rgba(255, 255, 255, 0.5)));
   }
 }
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    word-break: break-word;
+  }
+  
+  .text-4xl, .text-5xl, .text-6xl, .text-7xl {
+    line-height: 1.2;
+  }
+  
+  .space-y-6 {
+    gap: 1.5rem;
+  }
+  
+  .p-8 {
+    padding: 1.5rem;
+  }
+  
+  .m-8 {
+    margin: 1.5rem;
+  }
+}
+
+/* Ensure text doesn't overflow on mobile */
+.overflow-visible {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}

@@ -44,19 +44,19 @@ const ContactSection = () => {
         ))}
       </div>
       
-      <div className="container mx-auto px-8 relative z-10">
+      <div className="container mx-auto px-4 sm:px-8 relative z-10">
         <motion.div 
-          className="text-center max-w-2xl mx-auto mb-20"
+          className="text-center max-w-2xl mx-auto mb-12 sm:mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-5xl font-bold mb-6 tracking-tight text-white" style={{ textShadow: '0 0 30px rgba(255,255,255,0.8)' }}>
+          <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 tracking-tight text-white" style={{ textShadow: '0 0 30px rgba(255,255,255,0.8)' }}>
             Let's Connect
           </h2>
           
-          <p className="text-white/70 text-lg">
+          <p className="text-white/70 text-base sm:text-lg">
             Have a project in mind or want to discuss a data challenge?
             I'm always open to new opportunities and collaborations.
           </p>
@@ -66,7 +66,7 @@ const ContactSection = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Enhanced contact form */}
             <motion.div 
-              className="p-8 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5"
+              className="p-4 sm:p-8 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5"
               style={{
                 boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(168, 85, 247, 0.1)',
               }}
