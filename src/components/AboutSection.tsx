@@ -456,7 +456,7 @@ const AboutSection = () => {
                       </div>
                       <div className="w-full overflow-visible min-h-[2.5em] sm:min-h-[1.5em] whitespace-nowrap">
                         <AnimatedText 
-                          text="I try to make things that" 
+                          text="I try to make things that:" 
                           className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
                           delay={0.6}
                         />
