@@ -465,6 +465,14 @@ const HeroSection = () => {
         <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-[200px] mx-auto">
           <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
           <p className="text-white/80 text-lg text-center">Loading...</p>
+          <motion.div
+            className="text-2xl sm:text-3xl font-bold text-center text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            Mohammed Elshrief
+          </motion.div>
         </div>
       </div>
       
