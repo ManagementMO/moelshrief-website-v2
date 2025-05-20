@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import NavbarWeatherCard from "./NavbarWeatherCard";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,7 +29,7 @@ const Navbar = () => {
       } else {
         setIsScrolled(false);
       }
-      
+
       // Track active section for menu highlighting
       const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
       const scrollPosition = window.scrollY + 100;
@@ -69,11 +70,11 @@ const Navbar = () => {
   ];
 
   return (
-    <motion.nav 
+    <motion.nav
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-500",
-        isScrolled 
-          ? "backdrop-blur-xl bg-gradient-to-b from-black/70 to-black/50 border-b border-white/10 py-4" 
+        isScrolled
+          ? "backdrop-blur-xl bg-gradient-to-b from-black/70 to-black/50 border-b border-white/10 py-4"
           : "bg-transparent py-6"
       )}
       style={{
@@ -85,66 +86,73 @@ const Navbar = () => {
     >
       {/* Subtle animated gradient border at bottom */}
       {isScrolled && (
-        <motion.div 
+        <motion.div
           className="absolute bottom-0 left-0 right-0 h-[1px] overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div 
+          <motion.div
             className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"
-            animate={{ 
+            animate={{
               x: ['-100%', '100%'],
             }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
+            transition={{
+              duration: 8,
+              repeat: Infinity,
               ease: "linear",
             }}
           />
         </motion.div>
       )}
-      
+
       <div className="container mx-auto px-8 flex justify-between items-center">
-        <motion.a 
-          href="/" 
-          className="text-xl font-medium group relative"
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = '/';
-            window.scrollTo(0, 0);
-          }}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Logo glow effect */}
-          <motion.div 
-            className="absolute -inset-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
-            style={{
-              background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-              filter: 'blur(10px)',
+        <div className="flex items-center">
+          <motion.a
+            href="/"
+            className="text-xl font-medium group relative"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = '/';
+              window.scrollTo(0, 0);
             }}
-            animate={{ 
-              scale: [0.9, 1.1, 0.9],
-            }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-            }}
-          />
-          
-          <span className="relative z-10 text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Mohammed</span>
-          <span className="relative z-10 neon-dot text-white [text-shadow:_0_0_15px_rgb(255_255_255_/_100%),_0_0_25px_rgb(255_255_255_/_100%),_0_0_35px_rgb(255_255_255_/_100%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_100%),_0_0_30px_rgb(255_255_255_/_100%),_0_0_40px_rgb(255_255_255_/_100%)]">.</span>
-          <span className="relative z-10 text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Elshrief</span>
-        </motion.a>
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Logo glow effect */}
+            <motion.div
+              className="absolute -inset-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
+              style={{
+                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                filter: 'blur(10px)',
+              }}
+              animate={{
+                scale: [0.9, 1.1, 0.9],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+
+            <span className="relative z-10 text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Mohammed</span>
+            <span className="relative z-10 neon-dot text-white [text-shadow:_0_0_15px_rgb(255_255_255_/_100%),_0_0_25px_rgb(255_255_255_/_100%),_0_0_35px_rgb(255_255_255_/_100%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_100%),_0_0_30px_rgb(255_255_255_/_100%),_0_0_40px_rgb(255_255_255_/_100%)]">.</span>
+            <span className="relative z-10 text-white font-medium tracking-wide [text-shadow:_0_0_15px_rgb(255_255_255_/_70%)] transition-all duration-300 group-hover:[text-shadow:_0_0_20px_rgb(255_255_255_/_90%)]">Elshrief</span>
+          </motion.a>
+
+          {/* Weather Card (Beside Name) */}
+          <div className="hidden md:block ml-6">
+            <NavbarWeatherCard />
+          </div>
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-4">
           <ul className="flex space-x-10 mr-8">
             {navLinks.map((link) => (
-              <motion.li 
-                key={link.id} 
+              <motion.li
+                key={link.id}
                 className="relative"
                 onHoverStart={() => setHoverLink(link.id)}
                 onHoverEnd={() => setHoverLink(null)}
@@ -153,8 +161,8 @@ const Navbar = () => {
                   href={`#${link.id}`}
                   className={cn(
                     "text-sm font-medium tracking-wide transition-all duration-300 py-2 px-1 relative z-10",
-                    activeSection === link.id 
-                      ? "text-white [text-shadow:_0_0_10px_rgb(255_255_255_/_50%)]" 
+                    activeSection === link.id
+                      ? "text-white [text-shadow:_0_0_10px_rgb(255_255_255_/_50%)]"
                       : "text-white/70 hover:text-white"
                   )}
                   onClick={(e) => {
@@ -163,7 +171,7 @@ const Navbar = () => {
                   }}
                 >
                   {link.label}
-                  
+
                   {/* Active indicator with enhanced animation */}
                   {activeSection === link.id && (
                     <motion.div
@@ -172,24 +180,24 @@ const Navbar = () => {
                       transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500" />
-                      
+
                       {/* Animated shine effect */}
-                      <motion.div 
+                      <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent"
                         style={{ width: '200%' }}
-                        animate={{ 
+                        animate={{
                           x: ['-100%', '100%'],
                         }}
-                        transition={{ 
-                          duration: 2, 
-                          repeat: Infinity, 
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
                           ease: "linear",
                         }}
                       />
                     </motion.div>
                   )}
                 </a>
-                
+
                 {/* Hover glow effect */}
                 <AnimatePresence>
                   {hoverLink === link.id && activeSection !== link.id && (
@@ -209,7 +217,7 @@ const Navbar = () => {
               </motion.li>
             ))}
           </ul>
-          
+
           {/* Enhanced resume button */}
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -225,22 +233,22 @@ const Navbar = () => {
               onClick={() => window.open('https://www.overleaf.com/read/ttjwbtkcfmmd#a64414', '_blank')}
             >
               {/* Animated background gradient */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                 style={{
                   background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)',
                 }}
-                animate={{ 
+                animate={{
                   scale: [0.8, 1.2],
                 }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
                   repeatType: "reverse",
                   ease: "easeInOut",
                 }}
               />
-              
+
               {/* Button content with glowing text effect */}
               <span className="mr-2 relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.8)]">Resume</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
@@ -248,11 +256,11 @@ const Navbar = () => {
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
               </svg>
-              
+
               {/* Shine effect on hover */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                style={{ 
+                style={{
                   width: '200%',
                 }}
               />
@@ -261,9 +269,9 @@ const Navbar = () => {
         </div>
 
         {/* Enhanced Mobile Menu Button */}
-        <motion.button 
+        <motion.button
           className="md:hidden text-white w-12 h-12 relative focus:outline-none z-50 active:scale-95 transition-transform duration-200 rounded-full"
-          style={{ 
+          style={{
             touchAction: 'manipulation',
             background: mobileMenuOpen ? 'rgba(255, 255, 255, 0.05)' : 'transparent',
             boxShadow: mobileMenuOpen ? '0 0 20px rgba(255, 255, 255, 0.1)' : 'none',
@@ -271,7 +279,7 @@ const Navbar = () => {
           }}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
-          whileHover={{ 
+          whileHover={{
             scale: 1.05,
             backgroundColor: 'rgba(255, 255, 255, 0.05)',
           }}
@@ -330,20 +338,20 @@ const Navbar = () => {
               className="absolute top-6 right-6 w-12 h-12 aspect-square rounded-full border border-white/20 bg-black/80 flex items-center justify-center focus:outline-none z-[200] overflow-hidden"
               aria-label="Close menu"
               onClick={() => setMobileMenuOpen(false)}
-              style={{ 
+              style={{
                 boxShadow: '0 0 20px 2px rgba(255,255,255,0.1), 0 0 40px 4px rgba(255,255,255,0.05)',
               }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.1,
                 boxShadow: '0 0 25px 5px rgba(255,255,255,0.15), 0 0 50px 10px rgba(255,255,255,0.1)',
               }}
               whileTap={{ scale: 0.95 }}
             >
               {/* Animated background */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 opacity-0 hover:opacity-100 transition-opacity duration-300"
               />
-              
+
               <span
                 className="text-white text-3xl font-bold select-none flex items-center justify-center w-full h-full relative z-10"
                 style={{
@@ -355,27 +363,27 @@ const Navbar = () => {
               >
                 ×
               </span>
-              
+
               {/* Shine effect */}
-              <motion.div 
+              <motion.div
                 className="absolute inset-0 -translate-x-full hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                style={{ 
+                style={{
                   width: '200%',
                 }}
               />
             </motion.button>
-            
+
             {/* Enhanced mobile menu background effects */}
             <div className="absolute inset-0 z-0 overflow-hidden">
               {/* Animated gradient background */}
-              <div 
+              <div
                 className="absolute inset-0 bg-gradient-to-b from-black/80 to-gray-900/80 opacity-80"
                 style={{
                   backgroundSize: '200% 200%',
                   animation: 'gradientAnimation 15s ease infinite',
                 }}
               />
-              
+
               {/* Animated particles */}
               {Array.from({ length: 15 }).map((_, index) => (
                 <motion.div
@@ -401,9 +409,9 @@ const Navbar = () => {
                   }}
                 />
               ))}
-              
+
               {/* Enhanced floating orbs */}
-              <motion.div 
+              <motion.div
                 className="absolute top-1/4 left-1/4 w-40 h-40 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-md"
                 style={{
                   boxShadow: '0 0 40px rgba(59, 130, 246, 0.1), inset 0 0 20px rgba(59, 130, 246, 0.1)',
@@ -414,14 +422,14 @@ const Navbar = () => {
                   opacity: [0.3, 0.5, 0.3],
                   scale: [1, 1.05, 1],
                 }}
-                transition={{ 
-                  duration: 8, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
                 }}
               />
-              
-              <motion.div 
+
+              <motion.div
                 className="absolute bottom-1/4 right-1/3 w-32 h-32 rounded-full bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-md"
                 style={{
                   boxShadow: '0 0 40px rgba(168, 85, 247, 0.1), inset 0 0 20px rgba(168, 85, 247, 0.1)',
@@ -432,27 +440,32 @@ const Navbar = () => {
                   opacity: [0.2, 0.4, 0.2],
                   scale: [1, 1.05, 1],
                 }}
-                transition={{ 
-                  duration: 7, 
-                  repeat: Infinity, 
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
                   ease: "easeInOut",
                   delay: 1
                 }}
               />
-              
+
               {/* Grid overlay for depth */}
-              <div 
+              <div
                 className="absolute inset-0 pointer-events-none opacity-10"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+                  backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
                   backgroundSize: '40px 40px',
                 }}
               />
             </div>
-            
+
+            {/* Mobile Weather Card */}
+            <div className="flex justify-center w-full mt-8 mb-6 relative z-10 px-4">
+              <NavbarWeatherCard />
+            </div>
+
             {/* Enhanced mobile menu links */}
-            <div className="flex flex-col items-center w-full mt-8 sm:mt-12 relative z-10">
+            <div className="flex flex-col items-center w-full relative z-10">
               {navLinks.map((link, index) => (
                 <motion.div
                   key={link.id}
@@ -466,7 +479,7 @@ const Navbar = () => {
                   <motion.a
                     href={`#${link.id}`}
                     className="text-2xl sm:text-3xl font-light text-white/90 hover:text-white transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 block rounded-lg relative z-10"
-                    style={{ 
+                    style={{
                       minHeight: 48,
                       minWidth: 120,
                       textAlign: 'center',
@@ -485,9 +498,9 @@ const Navbar = () => {
                   >
                     {link.label}
                   </motion.a>
-                  
+
                   {/* Hover background effect */}
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-0 rounded-lg -z-10 opacity-0 hover:opacity-100 transition-opacity duration-300"
                     style={{
                       background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
@@ -498,7 +511,7 @@ const Navbar = () => {
                   />
                 </motion.div>
               ))}
-              
+
               {/* Enhanced resume button */}
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -509,7 +522,7 @@ const Navbar = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button 
+                <Button
                   variant="outline"
                   className="rounded-full border border-white/20 bg-black/50 hover:bg-black/50 px-8 py-6 backdrop-blur-sm transition-all duration-300 relative overflow-hidden group"
                   style={{
@@ -521,22 +534,22 @@ const Navbar = () => {
                   }}
                 >
                   {/* Animated background gradient */}
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                     style={{
                       background: 'radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%)',
                     }}
-                    animate={{ 
+                    animate={{
                       scale: [0.8, 1.2],
                     }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity, 
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
                       repeatType: "reverse",
                       ease: "easeInOut",
                     }}
                   />
-                  
+
                   {/* Button content with glowing text effect */}
                   <span className="mr-2 relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[text-shadow:_0_0_10px_rgba(255,255,255,0.8)]">Resume</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-download relative z-10 text-white/80 group-hover:text-white transition-colors duration-300 group-hover:[filter:_drop-shadow(0_0_5px_rgba(255,255,255,0.8))]">
@@ -544,11 +557,11 @@ const Navbar = () => {
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
                   </svg>
-                  
+
                   {/* Shine effect on hover */}
-                  <motion.div 
+                  <motion.div
                     className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    style={{ 
+                    style={{
                       width: '200%',
                     }}
                   />

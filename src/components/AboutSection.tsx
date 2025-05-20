@@ -14,11 +14,11 @@ const useMouseParallax = (strength: number = 20, resetOnLeave: boolean = false) 
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!isHovering && resetOnLeave) return;
-    
+
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width - 0.5) * strength;
     const y = ((e.clientY - top) / height - 0.5) * strength;
-    
+
     setPosition({ x, y });
   };
 
@@ -41,10 +41,10 @@ const useMouseParallax = (strength: number = 20, resetOnLeave: boolean = false) 
 };
 
 // Animated text component with letter-by-letter animation
-const AnimatedText: React.FC<{ text: string; className?: string; delay?: number }> = ({ 
-  text, 
-  className = "", 
-  delay = 0 
+const AnimatedText: React.FC<{ text: string; className?: string; delay?: number }> = ({
+  text,
+  className = "",
+  delay = 0
 }) => {
   return (
     <span className={`inline-block ${className}`} style={{ lineHeight: 1.2 }}>
@@ -54,12 +54,12 @@ const AnimatedText: React.FC<{ text: string; className?: string; delay?: number 
           className="inline-block"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 0.6, 
+          transition={{
+            duration: 0.6,
             delay: delay + index * 0.04,
             ease: [0.215, 0.61, 0.355, 1]
           }}
-          style={{ 
+          style={{
             display: 'inline-block',
             minHeight: '1.2em'
           }}
@@ -72,24 +72,24 @@ const AnimatedText: React.FC<{ text: string; className?: string; delay?: number 
 };
 
 // Neon glow component
-const NeonGlow: React.FC<{ color: string; intensity?: number; className?: string }> = ({ 
-  color, 
+const NeonGlow: React.FC<{ color: string; intensity?: number; className?: string }> = ({
+  color,
   intensity = 10,
-  className = "" 
+  className = ""
 }) => {
   return (
-    <motion.div 
+    <motion.div
       className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${className}`}
       style={{
         background: `radial-gradient(circle at center, ${color}33 0%, transparent 70%)`,
         boxShadow: `0 0 ${intensity}px ${color}55, 0 0 ${intensity * 2}px ${color}33`,
       }}
-      animate={{ 
+      animate={{
         scale: [0.8, 1.2, 0.8],
       }}
-      transition={{ 
-        duration: 3, 
-        repeat: Infinity, 
+      transition={{
+        duration: 3,
+        repeat: Infinity,
         ease: "easeInOut",
       }}
     />
@@ -97,22 +97,22 @@ const NeonGlow: React.FC<{ color: string; intensity?: number; className?: string
 };
 
 // Holographic card effect component
-const HolographicCard: React.FC<{ 
-  children: React.ReactNode; 
+const HolographicCard: React.FC<{
+  children: React.ReactNode;
   className?: string;
   glowColor?: string;
   strength?: number;
-}> = ({ 
-  children, 
-  className = "", 
+}> = ({
+  children,
+  className = "",
   glowColor = "rgba(255, 255, 255, 0.8)",
   strength = 15
 }) => {
   const { position, handlers } = useMouseParallax(strength, true);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
-    <motion.div 
+    <motion.div
       className={`relative overflow-hidden group ${className}`}
       {...handlers}
       onHoverStart={() => setIsHovered(true)}
@@ -123,7 +123,7 @@ const HolographicCard: React.FC<{
       }}
     >
       {/* Holographic shine effect */}
-      <div 
+      <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{
           background: `linear-gradient(
@@ -141,7 +141,7 @@ const HolographicCard: React.FC<{
           mixBlendMode: 'overlay',
         }}
       />
-      
+
       {/* Content */}
       {children}
     </motion.div>
@@ -149,16 +149,16 @@ const HolographicCard: React.FC<{
 };
 
 // Animated particles component
-const ParticleField: React.FC<{ count?: number; colors?: string[] }> = ({ 
-  count = 30, 
-  colors = ['#60A5FA', '#A855F7', '#EC4899'] 
+const ParticleField: React.FC<{ count?: number; colors?: string[] }> = ({
+  count = 30,
+  colors = ['#60A5FA', '#A855F7', '#EC4899']
 }) => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
       {Array.from({ length: count }).map((_, index) => {
         const size = Math.random() * 4 + 2;
         const color = colors[Math.floor(Math.random() * colors.length)];
-        
+
         return (
           <motion.div
             key={index}
@@ -198,7 +198,7 @@ const AboutSection = () => {
   const [activeWord, setActiveWord] = useState<string | null>(null);
   const [animationComplete, setAnimationComplete] = useState(false);
   const [hoverInterest, setHoverInterest] = useState<string | null>(null);
-  
+
   // Scroll-based animations
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -258,9 +258,9 @@ const AboutSection = () => {
 
   // Interest items data
   const interests = [
-    { 
-      id: "data-science", 
-      name: "Data Science", 
+    {
+      id: "data-science",
+      name: "Data Science",
       icon: (
         <svg viewBox="0 0 256 255" className="w-8 h-8 text-blue-400">
           <path d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072zM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13 11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.13z" fill="currentColor"/>
@@ -270,9 +270,9 @@ const AboutSection = () => {
       color: "#3776AB",
       description: "Transforming raw data into actionable insights through statistical analysis and machine learning."
     },
-    { 
-      id: "gym", 
-      name: "Gym", 
+    {
+      id: "gym",
+      name: "Gym",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-purple-400">
           <path d="M6 7V17M18 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -283,9 +283,9 @@ const AboutSection = () => {
       color: "#A855F7",
       description: "Building strength, discipline, and mental fortitude through consistent physical training."
     },
-    { 
-      id: "boba", 
-      name: "Boba", 
+    {
+      id: "boba",
+      name: "Boba",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-amber-400">
           <path d="M7 4h10l1 16H6L7 4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -296,9 +296,9 @@ const AboutSection = () => {
       color: "#F59E0B",
       description: "Exploring the perfect balance of tea, milk, and chewy tapioca pearls for that ultimate refreshment."
     },
-    { 
-      id: "reading", 
-      name: "Reading", 
+    {
+      id: "reading",
+      name: "Reading",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-green-400">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -311,40 +311,40 @@ const AboutSection = () => {
   ];
 
   return (
-    <section 
-      id="about" 
-      ref={sectionRef} 
+    <section
+      id="about"
+      ref={sectionRef}
       className="relative py-20 lg:py-28 overflow-hidden text-white"
     >
       {/* Dynamic background with parallax effect */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 z-0"
         style={{ y: bgY }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black"></div>
-        
+
         {/* Animated gradient overlay */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute inset-0 bg-gradient-radial from-blue-900/20 via-purple-900/10 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/10 via-purple-900/10 to-pink-900/10"></div>
         </div>
-        
+
         {/* Grid overlay for depth */}
-        <div 
+        <div
           className="absolute inset-0 pointer-events-none opacity-10"
           style={{
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), 
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                              linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
             backgroundSize: '40px 40px',
           }}
         />
       </motion.div>
-      
+
       {/* Animated particles */}
       <ParticleField count={40} />
-      
+
       {/* Floating orbs */}
-      <motion.div 
+      <motion.div
         className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-500/5 blur-3xl"
         animate={{
           y: [0, -30, 0],
@@ -352,8 +352,8 @@ const AboutSection = () => {
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
-      
-      <motion.div 
+
+      <motion.div
         className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-purple-500/5 blur-3xl"
         animate={{
           y: [0, -20, 0],
@@ -361,12 +361,12 @@ const AboutSection = () => {
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 5 }}
       />
-      
+
       <div className="container mx-auto px-8 relative z-10">
         <div className="max-w-screen-xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             {/* Left column - Enhanced 3D image with holographic effects */}
-            <motion.div 
+            <motion.div
               className="lg:col-span-5 relative w-full max-w-md mx-auto"
               style={imageStyle}
             >
@@ -377,15 +377,15 @@ const AboutSection = () => {
                     <div className="w-12 h-12 rounded-full border-2 border-t-transparent border-white/30 animate-spin"></div>
                   </div>
                 }>
-                  <Enhanced3DProfile 
-                    imagePath="/images/profile.jpg" 
+                  <Enhanced3DProfile
+                    imagePath="/images/profile.jpg"
                     alt="Mohammed Elshrief"
                   />
                 </Suspense>
-                
+
                 {/* Holographic border with animated glow */}
-                <motion.div 
-                  className="absolute inset-0 border border-white/20 rounded-xl pointer-events-none" 
+                <motion.div
+                  className="absolute inset-0 border border-white/20 rounded-xl pointer-events-none"
                   animate={{
                     boxShadow: [
                       '0 0 20px rgba(168,85,247,0.2), inset 0 0 10px rgba(168,85,247,0.1)',
@@ -399,31 +399,31 @@ const AboutSection = () => {
                     repeatType: "reverse"
                   }}
                 />
-                
+
                 {/* Futuristic corner accents */}
                 <div className="absolute top-0 left-0 w-12 h-12">
-                  <motion.div 
+                  <motion.div
                     className="absolute top-0 left-0 w-full h-full border-t-2 border-l-2 border-blue-400/60 rounded-tl-xl"
                     animate={{ opacity: [0.4, 0.8, 0.4] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   />
                 </div>
                 <div className="absolute top-0 right-0 w-12 h-12">
-                  <motion.div 
+                  <motion.div
                     className="absolute top-0 right-0 w-full h-full border-t-2 border-r-2 border-purple-400/60 rounded-tr-xl"
                     animate={{ opacity: [0.4, 0.8, 0.4] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                   />
                 </div>
                 <div className="absolute bottom-0 left-0 w-12 h-12">
-                  <motion.div 
+                  <motion.div
                     className="absolute bottom-0 left-0 w-full h-full border-b-2 border-l-2 border-purple-400/60 rounded-bl-xl"
                     animate={{ opacity: [0.4, 0.8, 0.4] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                   />
                 </div>
                 <div className="absolute bottom-0 right-0 w-12 h-12">
-                  <motion.div 
+                  <motion.div
                     className="absolute bottom-0 right-0 w-full h-full border-b-2 border-r-2 border-blue-400/60 rounded-br-xl"
                     animate={{ opacity: [0.4, 0.8, 0.4] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
@@ -433,10 +433,10 @@ const AboutSection = () => {
 
 
             </motion.div>
-          
+
             {/* Right column - Enhanced content with animated typography */}
-            <motion.div 
-              className="lg:col-span-7" 
+            <motion.div
+              className="lg:col-span-7"
               style={contentStyle}
             >
               <div className="space-y-6 mb-12">
@@ -448,15 +448,15 @@ const AboutSection = () => {
                   <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight w-full">
                     <div className="flex flex-col items-start justify-center space-y-6 relative">
                       <div className="w-full overflow-visible">
-                        <AnimatedText 
-                          text="Hi, I'm Mohammed." 
+                        <AnimatedText
+                          text="Hi, I'm Mohammed."
                           className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
                           delay={0.2}
                         />
                       </div>
                       <div className="w-full overflow-visible min-h-[2.5em] sm:min-h-[1.5em] whitespace-nowrap">
-                        <AnimatedText 
-                          text="I try to make things that:" 
+                        <AnimatedText
+                          text="I try to make things that:"
                           className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
                           delay={0.6}
                         />
@@ -464,15 +464,15 @@ const AboutSection = () => {
                       <div className="w-full h-[1.5em] overflow-visible relative">
                         <AnimatePresence mode="wait">
                           {activeWord && animationComplete && (
-                            <motion.span 
+                            <motion.span
                               key={activeWord}
                               className="absolute text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text [text-shadow:_0_0_30px_rgba(168,85,247,0.5)]"
                               initial={{ y: 40, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               exit={{ y: -40, opacity: 0 }}
-                              transition={{ 
-                                duration: 0.5, 
-                                ease: [0.215, 0.61, 0.355, 1] 
+                              transition={{
+                                duration: 0.5,
+                                ease: [0.215, 0.61, 0.355, 1]
                               }}
                             >
                               {activeWord}.
@@ -483,7 +483,7 @@ const AboutSection = () => {
                     </div>
                   </h2>
                 </motion.div>
-                
+
                 <motion.div
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -498,7 +498,7 @@ const AboutSection = () => {
                     transformOrigin: 'left',
                   }}
                 />
-                <motion.p 
+                <motion.p
                   className="text-xl text-white/80 leading-relaxed max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -510,8 +510,8 @@ const AboutSection = () => {
                   Hey, I'm Mohammed, I'm a <span className="vibrant-ds">data scientist</span> and <br /><span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and pretending Python doesn't scare me.
                 </motion.p>
               </div>
-              
-              <motion.h3 
+
+              <motion.h3
                 className="text-2xl font-semibold mb-6 text-white"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -522,7 +522,7 @@ const AboutSection = () => {
               >
                 My Interests:
               </motion.h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {interests.map((interest, index) => (
                   <motion.div
@@ -547,35 +547,35 @@ const AboutSection = () => {
                       }
                     }
                   >
-                    <div 
+                    <div
                       className="relative p-6 rounded-xl border border-white/10 backdrop-blur-md bg-white/5 transition-all duration-300 group overflow-hidden"
                       style={{
-                        boxShadow: hoverInterest === interest.id 
-                          ? `0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px ${interest.color}33` 
+                        boxShadow: hoverInterest === interest.id
+                          ? `0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px ${interest.color}33`
                           : '0 10px 30px rgba(0, 0, 0, 0.2)',
                       }}
                     >
-                      
+
                       {/* Content */}
                       <div className="relative z-10">
                         <div className="flex items-center gap-5 mb-4">
-                          <div 
+                          <div
                             className="w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center border transition-all duration-300 shadow-lg"
                             style={{
                               background: `linear-gradient(135deg, ${interest.color}30, ${interest.color}10)`,
                               borderColor: `${interest.color}30`,
-                              boxShadow: hoverInterest === interest.id 
-                                ? `0 0 20px ${interest.color}40` 
+                              boxShadow: hoverInterest === interest.id
+                                ? `0 0 20px ${interest.color}40`
                                 : `0 0 15px ${interest.color}20`,
                             }}
                           >
                             <motion.div
-                              animate={hoverInterest === interest.id ? { 
+                              animate={hoverInterest === interest.id ? {
                                 scale: [1, 1.1, 1],
                                 rotate: [0, 5, 0],
                               } : {}}
-                              transition={{ 
-                                duration: 2, 
+                              transition={{
+                                duration: 2,
                                 repeat: hoverInterest === interest.id ? Infinity : 0,
                                 repeatType: "reverse",
                               }}
@@ -583,19 +583,19 @@ const AboutSection = () => {
                               {interest.icon}
                             </motion.div>
                           </div>
-                          <h3 
+                          <h3
                             className="text-xl font-semibold transition-colors duration-300"
                             style={{
                               color: hoverInterest === interest.id ? 'white' : 'rgba(255, 255, 255, 0.9)',
-                              textShadow: hoverInterest === interest.id 
-                                ? `0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px ${interest.color}33` 
+                              textShadow: hoverInterest === interest.id
+                                ? `0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px ${interest.color}33`
                                 : 'none',
                             }}
                           >
                             {interest.name}
                           </h3>
                         </div>
-                        
+
                         {/* Description with animated reveal */}
                         <AnimatePresence>
                           {hoverInterest === interest.id && (
@@ -611,11 +611,11 @@ const AboutSection = () => {
                           )}
                         </AnimatePresence>
                       </div>
-                      
+
                       {/* Animated shine effect */}
-                      <motion.div 
+                      <motion.div
                         className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1500 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                        style={{ 
+                        style={{
                           width: '200%',
                         }}
                       />
@@ -627,12 +627,12 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Enhanced decorative elements */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
-      
+
       {/* Animated glow orbs */}
-      <motion.div 
+      <motion.div
         className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl pointer-events-none"
         animate={{
           scale: [1, 1.2, 1],
@@ -640,8 +640,8 @@ const AboutSection = () => {
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
-      
-      <motion.div 
+
+      <motion.div
         className="absolute -bottom-40 -right-20 w-96 h-96 rounded-full bg-purple-500/10 blur-3xl pointer-events-none"
         animate={{
           scale: [1, 1.3, 1],

@@ -19,21 +19,21 @@ const Index = () => {
   // Scroll reveal functionality
   useEffect(() => {
     const revealElements = document.querySelectorAll('.reveal, .reveal-sequential');
-    
+
     const reveal = () => {
       revealElements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const elementVisible = 150;
-        
+
         if (elementTop < window.innerHeight - elementVisible) {
           element.classList.add('active');
         }
       });
     };
-    
+
     window.addEventListener('scroll', reveal);
     reveal();
-    
+
     return () => window.removeEventListener('scroll', reveal);
   }, []);
 
