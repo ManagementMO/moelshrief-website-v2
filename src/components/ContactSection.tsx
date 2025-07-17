@@ -283,6 +283,32 @@ const ContactSection = () => {
               transition={{ duration: 0.8 }}
             >
               <div>
+                {/* Enhanced availability box - Moved to the top */}
+                <motion.div
+                  className="p-6 rounded-xl border border-white/10 backdrop-blur-md bg-gradient-to-r from-gray-600/10 to-gray-700/10 mb-8"
+                  whileHover={{
+                    y: -5,
+                    boxShadow:
+                      "0 15px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.1)",
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0 w-4 h-4 bg-green-500 rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white text-lg">
+                        Currently Available
+                      </h4>
+                      <p className="text-white/60 mt-1">
+                        Open to freelance projects and part-time opportunities
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+
                 <h3 className="text-2xl font-bold mb-8 text-white [text-shadow:_0_0_20px_rgba(255,255,255,0.2)]">
                   Contact Information
                 </h3>
@@ -375,7 +401,7 @@ const ContactSection = () => {
                   </motion.div>
                 </div>
 
-                {/* Enhanced social links */}
+                {/* Enhanced social links - Kept at the bottom */}
                 <div className="mt-12">
                   <h4 className="font-semibold text-lg mb-6 text-white [text-shadow:_0_0_10px_rgba(255,255,255,0.2)]">
                     Connect with Me
@@ -460,32 +486,6 @@ const ContactSection = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Enhanced availability box */}
-              <motion.div
-                className="mt-12 p-6 rounded-xl border border-white/10 backdrop-blur-md bg-gradient-to-r from-gray-600/10 to-gray-700/10"
-                whileHover={{
-                  y: -5,
-                  boxShadow:
-                    "0 15px 30px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.1)",
-                }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
-                    <div className="absolute inset-0 w-4 h-4 bg-green-500 rounded-full animate-ping opacity-75"></div>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white text-lg">
-                      Currently Available
-                    </h4>
-                    <p className="text-white/60 mt-1">
-                      Open to freelance projects and part-time opportunities
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
             </motion.div>
           </div>
         </div>
