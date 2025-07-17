@@ -10,13 +10,14 @@ const ContactSection = () => {
       id="contact" 
       className="relative py-14 overflow-hidden bg-black"
     >
-      {/* Enhanced decorative elements that match the space theme */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
+      {/* Enhanced decorative elements with glassmorphic theme */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
       
-      {/* Space-themed background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900/50 via-black to-black"></div>
-      <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      {/* Glassmorphic background elements */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800/40 via-gray-900/80 to-black"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gray-400/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gray-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-gray-600/3 rounded-full blur-2xl"></div>
       
       {/* Animated particles */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -68,7 +69,7 @@ const ContactSection = () => {
             <motion.div 
               className="p-4 sm:p-8 rounded-2xl border border-white/10 backdrop-blur-md bg-white/5"
               style={{
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(168, 85, 247, 0.1)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.05)',
               }}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -79,13 +80,13 @@ const ContactSection = () => {
               
               {state.succeeded ? (
                 <motion.div 
-                  className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 p-6 rounded-lg border border-purple-500/30 mb-4"
+                  className="bg-gradient-to-r from-gray-600/10 to-gray-400/10 p-6 rounded-lg border border-gray-400/30 mb-4"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4 }}
                 >
                   <div className="flex items-center justify-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300">
                       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                       <polyline points="22 4 12 14.01 9 11.01"></polyline>
                     </svg>
@@ -104,7 +105,7 @@ const ContactSection = () => {
                         id="name"
                         name="name"
                         required
-                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
+                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors text-white placeholder:text-white/40"
                         placeholder="John Doe"
                         style={{
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -126,7 +127,7 @@ const ContactSection = () => {
                         name="email"
                         required
                         autoComplete="email"
-                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
+                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors text-white placeholder:text-white/40"
                         placeholder="john@example.com"
                         style={{
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -147,7 +148,7 @@ const ContactSection = () => {
                         id="subject"
                         name="subject"
                         required
-                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors text-white placeholder:text-white/40"
+                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors text-white placeholder:text-white/40"
                         placeholder="Project Inquiry"
                         style={{
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -168,7 +169,7 @@ const ContactSection = () => {
                         name="message"
                         required
                         rows={5}
-                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 transition-colors resize-none text-white placeholder:text-white/40"
+                        className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors resize-none text-white placeholder:text-white/40"
                         placeholder="I'd like to discuss a data project..."
                         style={{
                           boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
@@ -185,7 +186,7 @@ const ContactSection = () => {
                     <div>
                       <Button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 rounded-lg px-8 py-6 text-sm font-medium tracking-wide shadow-lg shadow-purple-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:translate-y-[-2px] flex items-center justify-center"
+                        className="w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:from-gray-700 hover:to-gray-800 rounded-lg px-8 py-6 text-sm font-medium tracking-wide shadow-lg shadow-gray-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-gray-500/30 hover:translate-y-[-2px] flex items-center justify-center"
                         disabled={state.submitting}
                       >
                         {state.submitting ? (
