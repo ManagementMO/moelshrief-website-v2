@@ -11,6 +11,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import { lazy, Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // Lazy load the cybernetic cursor for better performance
 const CyberneticCursor = lazy(() => import("./components/CyberneticCursor"));
@@ -23,6 +25,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      {/* Vercel Analytics and Speed Insights */}
+      <Analytics />
+      <SpeedInsights />
       {/* Cybernetic cursor with fallback */}
       <Suspense fallback={null}>
         <CyberneticCursor />
