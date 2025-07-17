@@ -414,10 +414,7 @@ export default function SkillsMarquee() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              A blend of programming, visualization, and modelling tools that help me turn raw data into 
-              <span className="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text ml-1 font-medium">
-                real-world impact.
-              </span>
+              {/* Description removed as requested */}
             </motion.p>
           </div>
         </motion.div>
