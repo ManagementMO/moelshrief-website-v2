@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import JsonLd from "@/components/JsonLd"
-
+import { Analytics } from "@vercel/analytics/next"
 import { Analytics } from "@vercel/analytics/react"
+
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -106,7 +107,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <JsonLd />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>{children}
+      <Analytics />
+      </body>
     </html>
   )
 } 
