@@ -65,14 +65,11 @@ const LoadingScreen = () => {
           {robotText[step]}
         </motion.div>
         <motion.div
-          className="mt-8 flex flex-col items-center gap-2"
+          className="mt-8 flex flex-col items-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.5, duration: 1 }}
         >
-          <span className="text-sm text-white/70 tracking-wider font-mono">
-            "A journey through data, code, and curiosity awaits."
-          </span>
           <span className="text-xs text-cyan-300/70 font-mono">
             Loading Portfolio
           </span>
