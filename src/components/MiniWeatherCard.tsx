@@ -73,6 +73,9 @@ const MiniWeatherCard: React.FC = () => {
 
     try {
       setLoading(true);
+      if (!ENV.WEATHER_API_KEY) {
+        throw new Error('Missing OpenWeatherMap API key (VITE_WEATHER_API_KEY)');
+      }
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=metric&appid=${ENV.WEATHER_API_KEY}`
       );

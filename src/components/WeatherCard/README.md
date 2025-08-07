@@ -12,18 +12,15 @@ This component displays a beautiful, glossy weather card that shows real-time we
 
 ## Setup Instructions
 
-To use this component, you need to get an API key from OpenWeatherMap:
+To use the OpenWeatherMap-backed components (MiniWeatherCard and NavbarWeatherCard), you need an API key:
 
-1. Go to [OpenWeatherMap](https://openweathermap.org/) and create a free account
+1. Go to OpenWeatherMap and create a free account
 2. After signing up, go to your API keys section
 3. Copy your API key
-4. Open `src/config/env.ts` and replace `YOUR_OPENWEATHERMAP_API_KEY` with your actual API key
+4. Create a .env file at the project root (or copy .env.example to .env)
+5. Add your key as VITE_WEATHER_API_KEY=your_actual_key
 
-```typescript
-export const ENV = {
-  WEATHER_API_KEY: "your-actual-api-key-here",
-};
-```
+No need to edit src/config/env.ts — it automatically reads VITE_WEATHER_API_KEY via import.meta.env.
 
 ## Usage
 
@@ -40,10 +37,11 @@ You can customize the appearance of the weather card by modifying the CSS classe
 
 ## API Information
 
-This component uses the [OpenWeatherMap API](https://openweathermap.org/api) to fetch weather data. The free tier allows up to 1,000 API calls per day, which should be sufficient for most personal websites.
+- MiniWeatherCard and NavbarWeatherCard use the OpenWeatherMap API.
+- WeatherCard (full card) currently fetches from wttr.in and does not require an API key.
 
 ## Credits
 
-- Weather icons from [Lucide React](https://lucide.dev/)
+- Weather icons from Lucide React
 - UI components from Shadcn UI
 - Animations powered by Framer Motion

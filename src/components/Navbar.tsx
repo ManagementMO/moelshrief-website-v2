@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+// import OpenMeteoWeatherCard from "./OpenMeteoWeatherCard";
 import NavbarWeatherCard from "./NavbarWeatherCard";
 
 const Navbar = () => {
