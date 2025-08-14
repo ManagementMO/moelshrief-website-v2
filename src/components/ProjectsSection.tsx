@@ -23,7 +23,7 @@ const ProjectsSection = () => {
     {
       id: 1,
       title: "MO-Planner",
-      description: "Developed a financial planning tool that utilizes Excel/VBA Formula to forecast student budgets with 90% accuracy to provide consistent and accessible insights. Incorporating features such as automated expense categorization, interactive visualization of spending patterns, and savings calculator.",
+      description: "Built a comprehensive financial planning application using Excel/VBA with automated calculations, data validation, and user-friendly interfaces. Features include expense tracking, budget forecasting, and dynamic financial reporting with 90% accuracy in predictions.",
       image: "/images/projects/vba-finance-tool.jpg",
       category: "finance",
       technologies: ["Microsoft Excel", "VBA", "Python"],
@@ -35,7 +35,7 @@ const ProjectsSection = () => {
     {
       id: 2,
       title: "FocusForge",
-      description: "Engineered a comprehensive Time Management DSS in Excel/VBA, integrating assignment management with deadline conflict resolution, a dynamic calendar, study tracker, journaling, Kanban board, and automated GPA calculator.",
+      description: "Developed a full-stack productivity suite in Excel/VBA with modern UI/UX principles. Features include dynamic calendar integration, task management system, automated calculations, and AI-powered insights using Gemini API.",
       image: "/images/projects/focusforge.jpg",
       category: "productivity",
       technologies: ["Microsoft Excel", "VBA", "Gemini API"],
@@ -46,7 +46,7 @@ const ProjectsSection = () => {
     {
       id: 3,
       title: "Scam-Mah",
-      description: "Engineered an AI-powered spam detection system using StandardScaler and IsolationForest ML algorithms to analyze call patterns and identify potential scams, achieving 90% accuracy in flagging suspicious calls during testing.",
+      description: "Built a real-time spam detection web application using Flask backend and machine learning algorithms. Features include pattern analysis, API integration, and a responsive frontend interface, achieving 90% accuracy in scam detection.",
       image: "/images/projects/scam-mah.jpg",
       category: "ai",
       technologies: ["Python", "Flask", "Machine Learning", "HTML/CSS/JS", "Gemini API"],

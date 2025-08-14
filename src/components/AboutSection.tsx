@@ -259,20 +259,19 @@ const AboutSection = () => {
   // Interest items data
   const interests = [
     {
-      id: "data-science",
-      name: "Data Science",
+      id: "software",
+      name: "Software",
       icon: (
-        <svg viewBox="0 0 256 255" className="w-8 h-8 text-blue-400">
-          <path d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072zM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13 11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.13z" fill="currentColor"/>
-          <path d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13 11.12 11.12 0 0 1 11.13-11.131 11.12 11.12 0 0 1 11.13 11.13 11.12 11.12 0 0 1-11.13 11.13z" fill="currentColor"/>
+        <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-blue-400">
+          <path d="M16 18L22 12L16 6M8 6L2 12L8 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       ),
-      color: "#3776AB",
-      description: "Transforming raw data into actionable insights through statistical analysis and machine learning."
+      color: "#61DAFB",
+      description: "I code stuff. Sometimes it works, sometimes it doesn't. My friends ask me to build them apps and I usually say yes because why not."
     },
     {
-      id: "gym",
-      name: "Gym",
+      id: "exercise",
+      name: "Exercise",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-purple-400">
           <path d="M6 7V17M18 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -281,20 +280,18 @@ const AboutSection = () => {
         </svg>
       ),
       color: "#A855F7",
-      description: "Building strength, discipline, and mental fortitude through consistent physical training."
+      description: "I lift weights and pretend I know what I'm doing. It keeps me sane."
     },
     {
-      id: "boba",
-      name: "Boba",
+      id: "music",
+      name: "Music",
       icon: (
         <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-amber-400">
-          <path d="M7 4h10l1 16H6L7 4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M10 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2M14 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2" fill="currentColor"/>
-          <path d="M8 14c2.5 1.5 5.5 1.5 8 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          <path d="M9 18V5l12-2v13M9 18c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM21 16c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       ),
       color: "#F59E0B",
-      description: "Exploring the perfect balance of tea, milk, and chewy tapioca pearls for that ultimate refreshment."
+      description: "Music keeps me focused while coding. Also prevents me from losing my mind during debugging."
     },
     {
       id: "reading",
@@ -507,7 +504,7 @@ const AboutSection = () => {
                     textShadow: '0 2px 10px rgba(0,0,0,0.3)',
                   }}
                 >
-                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">data scientist</span> and <br /><span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and pretending Python doesn't scare me.
+                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">Software Engineer</span> and <br /><span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and building things that hopefully don't break in production.
                 </motion.p>
               </div>
 

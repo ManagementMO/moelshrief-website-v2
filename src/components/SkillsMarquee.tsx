@@ -8,35 +8,35 @@ interface Skill {
   color: string;
 }
 
-// FIRST ROW SKILLS (data engineering/infrastructure focus)
+// FIRST ROW SKILLS (frontend/web development focus)
 const firstRowSkills: Skill[] = [
-  { name: "Python", icon: "python", color: "#3776AB" },
-  { name: "SQL", icon: "mysql", color: "#4479A1" },
-  { name: "Pandas", icon: "pandas", color: "#150458" },
-
-  { name: "Kafka", icon: "apachekafka", color: "#231F20" },
-  { name: "AWS", icon: "amazonaws", color: "#FF9900" },
-  { name: "Docker", icon: "docker", color: "#2496ED" },
-  { name: "Kubernetes", icon: "kubernetes", color: "#326CE5" },
-  { name: "Airflow", icon: "apacheairflow", color: "#017A9B" },
-  { name: "Hadoop", icon: "apachehadoop", color: "#D22128" },
-  { name: "Redis", icon: "redis", color: "#DC382D" },
-  { name: "PostgreSQL", icon: "postgresql", color: "#336791" },
+  { name: "React", icon: "react", color: "#61DAFB" },
+  { name: "TypeScript", icon: "typescript", color: "#3178C6" },
+  { name: "JavaScript", icon: "javascript", color: "#F7DF1E" },
+  { name: "Next.js", icon: "nextjs", color: "#000000" },
+  { name: "Svelte", icon: "svelte", color: "#FF3E00" },
+  { name: "HTML5", icon: "html5", color: "#E34F26" },
+  { name: "CSS3", icon: "css3", color: "#1572B6" },
+  { name: "Sass", icon: "sass", color: "#CC6699" },
+  { name: "Vue.js", icon: "vuejs", color: "#4FC08D" },
+  { name: "Figma", icon: "figma", color: "#F24E1E" },
+  { name: "Git", icon: "git", color: "#F05032" },
 ];
 
-// SECOND ROW SKILLS (analytics/visualization/ML focus)
+// SECOND ROW SKILLS (backend/infrastructure focus)
 const secondRowSkills: Skill[] = [
-  { name: "TensorFlow", icon: "tensorflow", color: "#FF6F00" },
-  { name: "PyTorch", icon: "pytorch", color: "#EE4C2C" },
-  { name: "NumPy", icon: "numpy", color: "#013243" },
-  { name: "Power BI", icon: "powerbi", color: "#F2C811" },
-  { name: "Tableau", icon: "tableau", color: "#E97627" },
-  { name: "Excel", icon: "microsoftexcel", color: "#217346" },
-  { name: "R", icon: "r", color: "#276DC3" },
-  { name: "SciKit Learn", icon: "scikitlearn", color: "#F7931E" },
-  { name: "Azure", icon: "microsoftazure", color: "#0078D4" },
-
-  { name: "Git", icon: "git", color: "#F05032" },
+  { name: "Node.js", icon: "nodejs", color: "#339933" },
+  { name: "Python", icon: "python", color: "#3776AB" },
+  { name: "Express.js", icon: "express", color: "#FFFFFF" },
+  { name: "FastAPI", icon: "fastapi", color: "#009688" },
+  { name: "Django", icon: "django", color: "#0C4B33" },
+  { name: "Go", icon: "go", color: "#00ADD8" },
+  { name: "MongoDB", icon: "mongodb", color: "#47A248" },
+  { name: "PostgreSQL", icon: "postgresql", color: "#336791" },
+  { name: "AWS", icon: "amazonaws", color: "#FF9900" },
+  { name: "Docker", icon: "docker", color: "#2496ED" },
+  { name: "Redis", icon: "redis", color: "#DC382D" },
+  { name: "GraphQL", icon: "graphql", color: "#E10098" },
   { name: "VS Code", icon: "visualstudiocode", color: "#007ACC" },
 ];
 
@@ -95,50 +95,59 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
   const getIconUrl = (icon: string) => {
     // Robust mapping for colored logos
     switch (icon) {
+      // Frontend Technologies
+      case 'react':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg';
+      case 'typescript':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg';
+      case 'javascript':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg';
+      case 'nextjs':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg';
+      case 'tailwindcss':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg';
+      case 'html5':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg';
+      case 'css3':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg';
+      case 'sass':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg';
+      case 'vuejs':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg';
+      case 'svelte':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg';
+      case 'figma':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg';
+      
+      // Backend Technologies
+      case 'nodejs':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original-wordmark.svg';
       case 'python':
         return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg';
-      case 'mysql':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg';
-      case 'pandas':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg';
-      case 'apachespark':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apache/apache-original-wordmark.svg';
-      case 'apachekafka':
-        return '/icons/kafka-colored.svg';
+      case 'express':
+        return 'https://cdn.simpleicons.org/express/FFFFFF';
+      case 'fastapi':
+        return 'https://cdn.simpleicons.org/fastapi/009688';
+      case 'django':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain-wordmark.svg';
+      case 'go':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg';
+      case 'mongodb':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg';
+      case 'postgresql':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg';
+      case 'graphql':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg';
+      case 'firebase':
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg';
+      
+      // Infrastructure & Tools
       case 'amazonaws':
         return '/icons/aws-colored.svg';
       case 'docker':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg';
-      case 'kubernetes':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg';
-      case 'apacheairflow':
-        return '/icons/airflow-colored.svg';
-      case 'apachehadoop':
-        return '/icons/hadoop-colored.svg';
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain-wordmark.svg';
       case 'redis':
         return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg';
-      case 'postgresql':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg';
-      case 'tensorflow':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg';
-      case 'pytorch':
-        return '/icons/pytorch-colored.svg';
-      case 'numpy':
-        return '/icons/numpy-colored.svg';
-      case 'powerbi':
-        return '/icons/powerbi-colored.svg';
-      case 'tableau':
-        return '/icons/tableau-colored.svg';
-      case 'microsoftexcel':
-        return '/icons/excel-colored.svg';
-      case 'r':
-        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/r/r-original.svg';
-      case 'scikitlearn':
-        return '/icons/scikitlearn-colored.svg';
-      case 'microsoftazure':
-        return '/icons/azure-colored.svg';
-      case 'googleanalytics':
-        return '/icons/analytics-colored.svg';
       case 'git':
         return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg';
       case 'visualstudiocode':
