@@ -212,7 +212,7 @@ const NavbarWeatherCard: React.FC = () => {
 
   return (
     <motion.div
-      className="w-[360px] mx-auto"
+      className="w-[420px] mx-auto"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.5 }}
@@ -239,7 +239,7 @@ const NavbarWeatherCard: React.FC = () => {
               <div className="h-5 w-5 bg-white/10 rounded-full"></div>
               <div className="h-3 w-12 bg-white/10 rounded"></div>
             </div>
-            <div className="animate-pulse min-w-[80px] mx-4">
+            <div className="animate-pulse min-w-[100px] mx-6">
               <div className="h-3 w-20 bg-white/10 rounded mx-auto"></div>
             </div>
             <div className="animate-pulse flex items-center gap-8 min-w-[150px] justify-end pr-2">
@@ -261,7 +261,7 @@ const NavbarWeatherCard: React.FC = () => {
               </span>
             </div>
 
-            <span className="text-white/70 text-sm mx-4 whitespace-nowrap min-w-[80px] text-center">
+            <span className="text-white/70 text-sm mx-6 whitespace-nowrap min-w-[100px] text-center">
               {weatherData.locationName}
             </span>
 
