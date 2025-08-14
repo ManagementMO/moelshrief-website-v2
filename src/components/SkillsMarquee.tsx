@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { useTheme } from "@/hooks/use-theme";
-import { motion, useScroll, useTransform, AnimatePresence, useAnimation } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useAnimation, useDragControls, PanInfo } from "framer-motion";
 
 interface Skill {
   name: string;
@@ -291,32 +291,81 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
 
 export default function SkillsMarquee() {
   const theme = useTheme();
+  const [firstRowX, setFirstRowX] = useState(0);
+  const [secondRowX, setSecondRowX] = useState(0);
+  const [firstRowIsDragging, setFirstRowIsDragging] = useState(false);
+  const [secondRowIsDragging, setSecondRowIsDragging] = useState(false);
+  
   const firstRowDuration = `${firstRowSkills.length * 10}s`;
   const secondRowDuration = `${secondRowSkills.length * 10}s`;
   
-  const keyframes = `
-    @keyframes marquee-rtl {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-130px * ${secondRowSkills.length})); }
+  // Animation controls for auto-scrolling
+  const firstRowControls = useAnimation();
+  const secondRowControls = useAnimation();
+  
+  // Auto-scroll animation when not dragging
+  React.useEffect(() => {
+    if (!firstRowIsDragging) {
+      firstRowControls.start({
+        x: [firstRowX, firstRowX - (130 * firstRowSkills.length)],
+        transition: {
+          duration: parseFloat(firstRowDuration),
+          repeat: Infinity,
+          ease: "linear"
+        }
+      });
+    } else {
+      firstRowControls.stop();
     }
-    @keyframes marquee-ltr {
-      0% { transform: translateX(calc(-130px * ${firstRowSkills.length})); }
-      100% { transform: translateX(0); }
+  }, [firstRowIsDragging, firstRowX, firstRowControls, firstRowDuration]);
+  
+  React.useEffect(() => {
+    if (!secondRowIsDragging) {
+      secondRowControls.start({
+        x: [secondRowX, secondRowX + (130 * secondRowSkills.length)],
+        transition: {
+          duration: parseFloat(secondRowDuration),
+          repeat: Infinity,
+          ease: "linear"
+        }
+      });
+    } else {
+      secondRowControls.stop();
     }
-    .animate-marquee-rtl {
-      animation: marquee-rtl linear infinite;
-    }
-    .animate-marquee-ltr {
-      animation: marquee-ltr linear infinite;
-    }
-    .group:hover .pause-on-hover {
-      animation-play-state: paused;
-    }
-  `;
+  }, [secondRowIsDragging, secondRowX, secondRowControls, secondRowDuration]);
+
+  const handleDrag = (
+    info: PanInfo, 
+    currentX: number, 
+    setX: React.Dispatch<React.SetStateAction<number>>,
+    skillsLength: number
+  ) => {
+    const newX = currentX + info.delta.x;
+    setX(newX);
+  };
+
+  const handleDragEnd = (
+    info: PanInfo,
+    currentX: number,
+    setX: React.Dispatch<React.SetStateAction<number>>,
+    setIsDragging: React.Dispatch<React.SetStateAction<boolean>>,
+    skillsLength: number
+  ) => {
+    // Add smooth momentum based on velocity
+    const velocity = info.velocity.x;
+    const momentum = velocity * 0.1; // Momentum for smooth feel
+    const finalX = currentX + momentum;
+    
+    // Set the final position where the user released + momentum
+    setX(finalX);
+    
+    // Stop dragging state - this will trigger the useEffect to restart animation from new position
+    setIsDragging(false);
+  };
+  
 
   return (
     <section className="py-20 overflow-hidden relative reveal" id="skills">
-      <style>{keyframes}</style>
       <style>{SHINE_CSS}</style>
 
       {/* Transparent background to blend with the page background */}
@@ -455,13 +504,26 @@ export default function SkillsMarquee() {
                  background: 'linear-gradient(to left, #0a0a0a 0%, transparent 100%)'
                }} />
           
-          <div className="flex py-6 w-min animate-marquee-ltr pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
-               style={{ animationDuration: firstRowDuration, scrollBehavior: 'smooth' }}
-               id="skills-row-1">
-            {[...firstRowSkills, ...firstRowSkills].map((skill, i) => (
+          <motion.div 
+            className={`flex py-6 w-min relative z-10 cursor-grab`}
+            animate={firstRowControls}
+            style={{ 
+              x: firstRowX,
+            }}
+            drag="x"
+            dragConstraints={false}
+            dragElastic={0}
+            dragMomentum={false}
+            onDragStart={() => setFirstRowIsDragging(true)}
+            onDrag={(event, info) => handleDrag(info, firstRowX, setFirstRowX, firstRowSkills.length)}
+            onDragEnd={(event, info) => handleDragEnd(info, firstRowX, setFirstRowX, setFirstRowIsDragging, firstRowSkills.length)}
+            whileDrag={{ cursor: 'grabbing' }}
+            id="skills-row-1"
+          >
+            {[...firstRowSkills, ...firstRowSkills, ...firstRowSkills].map((skill, i) => (
               <GlassSkillItem key={`ltr-${i}`} skill={skill} index={i} />
             ))}
-          </div>
+          </motion.div>
 
         </div>
         
@@ -492,13 +554,26 @@ export default function SkillsMarquee() {
                  background: 'linear-gradient(to left, #0a0a0a 0%, transparent 100%)'
                }} />
           
-          <div className="flex py-6 w-min animate-marquee-rtl pause-on-hover relative z-10 overflow-x-auto scrollbar-hide" 
-               style={{ animationDuration: secondRowDuration, scrollBehavior: 'smooth' }}
-               id="skills-row-2">
-            {[...secondRowSkills, ...secondRowSkills].map((skill, i) => (
+          <motion.div 
+            className={`flex py-6 w-min relative z-10 cursor-grab`}
+            animate={secondRowControls}
+            style={{ 
+              x: secondRowX,
+            }}
+            drag="x"
+            dragConstraints={false}
+            dragElastic={0}
+            dragMomentum={false}
+            onDragStart={() => setSecondRowIsDragging(true)}
+            onDrag={(event, info) => handleDrag(info, secondRowX, setSecondRowX, secondRowSkills.length)}
+            onDragEnd={(event, info) => handleDragEnd(info, secondRowX, setSecondRowX, setSecondRowIsDragging, secondRowSkills.length)}
+            whileDrag={{ cursor: 'grabbing' }}
+            id="skills-row-2"
+          >
+            {[...secondRowSkills, ...secondRowSkills, ...secondRowSkills].map((skill, i) => (
               <GlassSkillItem key={`rtl-${i}`} skill={skill} index={i} />
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </div>
