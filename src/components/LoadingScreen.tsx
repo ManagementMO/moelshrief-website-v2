@@ -228,7 +228,7 @@ const LoadingScreen = () => {
 
       {/* Toothed Gear - Bottom Left */}
       <motion.div
-        className="absolute bottom-24 left-32 w-20 h-20 border border-pink-400/40 rounded-full relative"
+        className="absolute bottom-16 left-12 w-20 h-20 border border-pink-400/40 rounded-full relative"
         style={{
           background: 'conic-gradient(from 90deg, transparent, rgba(255,100,200,0.15), transparent)'
         }}
