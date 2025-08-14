@@ -292,7 +292,7 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
 export default function SkillsMarquee() {
   const theme = useTheme();
   const [firstRowX, setFirstRowX] = useState(0);
-  const [secondRowX, setSecondRowX] = useState(0);
+  const [secondRowX, setSecondRowX] = useState(-(130 * secondRowSkills.length));
   const [firstRowIsDragging, setFirstRowIsDragging] = useState(false);
   const [secondRowIsDragging, setSecondRowIsDragging] = useState(false);
   
@@ -306,8 +306,10 @@ export default function SkillsMarquee() {
   // Auto-scroll animation when not dragging
   React.useEffect(() => {
     if (!firstRowIsDragging) {
+      const itemWidth = 130;
+      const totalWidth = itemWidth * firstRowSkills.length;
       firstRowControls.start({
-        x: [firstRowX, firstRowX - (130 * firstRowSkills.length)],
+        x: [0, -totalWidth],
         transition: {
           duration: parseFloat(firstRowDuration),
           repeat: Infinity,
@@ -317,12 +319,14 @@ export default function SkillsMarquee() {
     } else {
       firstRowControls.stop();
     }
-  }, [firstRowIsDragging, firstRowX, firstRowControls, firstRowDuration]);
+  }, [firstRowIsDragging, firstRowControls, firstRowDuration]);
   
   React.useEffect(() => {
     if (!secondRowIsDragging) {
+      const itemWidth = 130;
+      const totalWidth = itemWidth * secondRowSkills.length;
       secondRowControls.start({
-        x: [secondRowX, secondRowX + (130 * secondRowSkills.length)],
+        x: [-totalWidth, 0],
         transition: {
           duration: parseFloat(secondRowDuration),
           repeat: Infinity,
@@ -332,7 +336,7 @@ export default function SkillsMarquee() {
     } else {
       secondRowControls.stop();
     }
-  }, [secondRowIsDragging, secondRowX, secondRowControls, secondRowDuration]);
+  }, [secondRowIsDragging, secondRowControls, secondRowDuration]);
 
   const handleDrag = (
     info: PanInfo, 
