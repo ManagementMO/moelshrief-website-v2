@@ -125,9 +125,9 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
       case 'python':
         return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg';
       case 'express':
-        return 'https://cdn.simpleicons.org/express/FFFFFF';
+        return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original-wordmark.svg';
       case 'fastapi':
-        return 'https://cdn.simpleicons.org/fastapi/009688';
+        return 'https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg';
       case 'django':
         return 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain-wordmark.svg';
       case 'go':
@@ -233,18 +233,22 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
         <motion.div 
           className="w-14 h-14 relative z-10"
           style={{ 
-            filter: isHovered 
-              ? `drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 5px rgba(255,255,255,0.5))`
-              : `drop-shadow(0 5px 10px rgba(0,0,0,${isDark ? '0.5' : '0.3'}))`
+            filter: skill.icon === 'express'
+              ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+              : isHovered 
+                ? `drop-shadow(0 0 10px rgba(255,255,255,0.7)) drop-shadow(0 0 5px rgba(255,255,255,0.5))`
+                : `drop-shadow(0 5px 10px rgba(0,0,0,${isDark ? '0.5' : '0.3'}))`
           }}
         >
           <div className="w-full h-full rounded-full flex items-center justify-center">
             <motion.img
               src={iconUrl}
               alt={`${skill.name} logo`}
-              className="w-12 h-12 object-contain"
+              className={skill.icon === 'express' ? "w-14 h-14 object-contain" : "w-12 h-12 object-contain"}
               style={{
-                filter: isHovered ? 'brightness(1.2)' : 'brightness(1)',
+                filter: skill.icon === 'express' 
+                  ? isHovered ? 'brightness(1.2) invert(1)' : 'brightness(1) invert(1)'
+                  : isHovered ? 'brightness(1.2)' : 'brightness(1)',
                 transition: 'filter 0.5s ease',
               }}
               loading="lazy"
