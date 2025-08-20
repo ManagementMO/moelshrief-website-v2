@@ -368,19 +368,6 @@ const LoadingScreen = () => {
               ))}
             </motion.div>
             
-            {/* Beautiful Cup Handle */}
-            <motion.div 
-              className="absolute -right-5 top-6 w-7 h-14 border-4 border-t-0 border-l-0 rounded-r-full backdrop-blur-sm"
-              style={{ 
-                borderColor: '#94e2d5',
-                background: 'linear-gradient(45deg, rgba(148, 226, 213, 0.1), rgba(203, 166, 247, 0.05))',
-                boxShadow: '0 4px 16px rgba(148, 226, 213, 0.2)'
-              }}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1, duration: 1.5, ease: "easeOut" }}
-            />
-            
             {/* Dreamy Steam Animation */}
             {[...Array(5)].map((_, i) => (
               <motion.div
