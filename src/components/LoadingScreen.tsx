@@ -2,12 +2,14 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 const lofiText = [
-  'Getting things ready...',
-  'Almost there...',
+  'Brewing something special...',
+  'Warming up the vibes...',
+  'Getting cozy...',
+  'Almost ready...',
   'Welcome.'
 ];
 
-const stepDuration = 1200; // ms
+const stepDuration = 1000; // ms
 
 const LoadingScreen = () => {
   const [step, setStep] = useState(0);
