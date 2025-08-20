@@ -13,7 +13,8 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 3500);
+    // Ensure loading screen shows for at least 5 seconds so people can see more coffee cups and appreciate the beautiful loading screen
+    const timer = setTimeout(() => setLoading(false), 5000);
     return () => clearTimeout(timer);
   }, []);
   // Scroll reveal functionality
