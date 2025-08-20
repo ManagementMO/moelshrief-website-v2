@@ -101,21 +101,6 @@ const LoadingScreen = () => {
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 4 }}
       />
 
-      {/* Subtle Animated Background Overlay */}
-      <motion.div 
-        className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(45deg, transparent, rgba(203, 166, 247, 0.02), transparent)',
-        }}
-        animate={{ 
-          background: [
-            'linear-gradient(45deg, transparent, rgba(203, 166, 247, 0.02), transparent)',
-            'linear-gradient(225deg, transparent, rgba(250, 179, 135, 0.015), transparent)',
-            'linear-gradient(45deg, transparent, rgba(203, 166, 247, 0.02), transparent)'
-          ]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      />
 
       {/* Progressive Coffee Cups */}
       {[
