@@ -353,30 +353,59 @@ const LoadingScreen = () => {
               ))}
             </motion.div>
             
-            {/* Dreamy Steam Animation */}
-            {[...Array(5)].map((_, i) => (
+            {/* Enhanced Dreamy Steam Animation */}
+            {[...Array(7)].map((_, i) => (
               <motion.div
                 key={`steam-${i}`}
                 className="absolute rounded-full"
                 style={{
-                  width: `${1 + Math.random()}px`,
-                  left: `${8 + i * 4}px`,
-                  top: '-16px',
-                  background: `rgba(${i % 2 === 0 ? '203, 166, 247' : '250, 179, 135'}, 0.4)`,
-                  filter: 'blur(1px)'
+                  width: `${2 + Math.random() * 1.5}px`,
+                  left: `${6 + i * 3.5}px`,
+                  top: '-20px',
+                  background: `rgba(${i % 3 === 0 ? '203, 166, 247' : i % 3 === 1 ? '250, 179, 135' : '245, 194, 231'}, 0.6)`,
+                  filter: 'blur(1.5px)',
+                  boxShadow: `0 0 6px rgba(${i % 3 === 0 ? '203, 166, 247' : i % 3 === 1 ? '250, 179, 135' : '245, 194, 231'}, 0.3)`
                 }}
                 initial={{ opacity: 0, height: 0 }}
                 animate={{
-                  y: [0, -20, -40],
-                  opacity: [0, 0.7, 0],
-                  height: [0, 8, 12],
-                  scale: [1, 1.2, 0.8]
+                  y: [0, -30, -60],
+                  opacity: [0, 0.8, 0],
+                  height: [0, 12, 18],
+                  scale: [1, 1.3, 0.7],
+                  x: [0, Math.sin(i * 0.5) * 4, Math.sin(i * 0.5) * 8]
                 }}
                 transition={{
-                  duration: 3,
+                  duration: 4,
                   repeat: Infinity,
-                  delay: 1.8 + i * 0.3,
+                  delay: 1.5 + i * 0.4,
                   ease: "easeOut"
+                }}
+              />
+            ))}
+
+            {/* Additional Wispy Steam Trails */}
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={`wispy-steam-${i}`}
+                className="absolute"
+                style={{
+                  width: '1px',
+                  left: `${10 + i * 5}px`,
+                  top: '-15px',
+                  background: `linear-gradient(to top, rgba(203, 166, 247, 0.4), transparent)`,
+                  filter: 'blur(0.8px)'
+                }}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{
+                  height: [0, 25, 35],
+                  opacity: [0, 0.6, 0],
+                  x: [0, Math.sin(i) * 3, Math.sin(i) * 6]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  delay: 2 + i * 0.6,
+                  ease: "easeInOut"
                 }}
               />
             ))}
