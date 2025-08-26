@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import LoadingScreen from '@/components/LoadingScreen';
 
 const Index = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Ensure loading screen shows for at least 5 seconds so people can see more coffee cups and appreciate the beautiful loading screen
