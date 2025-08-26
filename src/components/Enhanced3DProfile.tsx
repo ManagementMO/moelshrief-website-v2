@@ -15,11 +15,22 @@ const Enhanced3DProfile: React.FC<Enhanced3DProfileProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [currentRotation, setCurrentRotation] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
-  // Handle mouse move for rotation effect
+  // Handle mouse move for rotation effect (desktop only)
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
+    if (isMobile || !containerRef.current) return;
     
     const { left, top, width, height } = containerRef.current.getBoundingClientRect();
     
@@ -30,20 +41,55 @@ const Enhanced3DProfile: React.FC<Enhanced3DProfileProps> = ({
       
       // Apply rotation with some damping
       setRotation({
-        x: currentRotation.x + deltaY * 0.5,
-        y: currentRotation.y - deltaX * 0.5
+        x: Math.max(-30, Math.min(30, currentRotation.x + deltaY * 0.3)),
+        y: Math.max(-30, Math.min(30, currentRotation.y - deltaX * 0.3))
       });
     } else {
       // Subtle hover effect
-      const x = ((e.clientX - left) / width - 0.5) * 10;
-      const y = ((e.clientY - top) / height - 0.5) * 10;
+      const x = ((e.clientX - left) / width - 0.5) * 8;
+      const y = ((e.clientY - top) / height - 0.5) * 8;
       
       setRotation({ x: y, y: -x });
     }
   };
+
+  // Handle touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isMobile) return;
+    const touch = e.touches[0];
+    setIsPressed(true);
+    setIsDragging(true);
+    setStartPosition({ x: touch.clientX, y: touch.clientY });
+    setCurrentRotation({ ...rotation });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isMobile || !isDragging) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startPosition.x;
+    const deltaY = touch.clientY - startPosition.y;
+    
+    setRotation({
+      x: Math.max(-20, Math.min(20, currentRotation.x + deltaY * 0.2)),
+      y: Math.max(-20, Math.min(20, currentRotation.y - deltaX * 0.2))
+    });
+  };
+
+  const handleTouchEnd = () => {
+    if (!isMobile) return;
+    setIsPressed(false);
+    setIsDragging(false);
+    
+    // Spring back to neutral position on mobile
+    setTimeout(() => {
+      setRotation({ x: 0, y: 0 });
+    }, 300);
+  };
   
-  // Handle mouse down for press effect and rotation start
+  // Handle mouse down for press effect and rotation start (desktop only)
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     setIsPressed(true);
     setIsDragging(true);
     setStartPosition({ x: e.clientX, y: e.clientY });
@@ -88,7 +134,7 @@ const Enhanced3DProfile: React.FC<Enhanced3DProfileProps> = ({
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', handleGlobalMouseMove);
     };
-  }, []);
+  }, [handleMouseUp, handleGlobalMouseMove]);
   
   return (
     <div className="w-full h-full relative">
@@ -117,13 +163,16 @@ const Enhanced3DProfile: React.FC<Enhanced3DProfileProps> = ({
       {/* Interactive 3D container */}
       <motion.div
         ref={containerRef}
-        className="w-full h-full relative cursor-grab active:cursor-grabbing z-10"
+        className={`w-full h-full relative z-10 ${!isMobile ? 'cursor-grab active:cursor-grabbing' : ''}`}
         onMouseMove={handleMouseMove}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        onMouseLeave={() => !isDragging && setRotation({ x: 0, y: 0 })}
+        onMouseLeave={() => !isMobile && !isDragging && setRotation({ x: 0, y: 0 })}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
-          perspective: '1000px'
+          perspective: isMobile ? '600px' : '1000px'
         }}
       >
         <motion.div

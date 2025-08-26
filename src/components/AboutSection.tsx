@@ -442,8 +442,8 @@ const AboutSection = () => {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8 }}
                 >
-                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight w-full">
-                    <div className="flex flex-col items-start justify-center space-y-6 relative">
+                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight w-full">
+                    <div className="flex flex-col items-start justify-center space-y-4 lg:space-y-6 relative">
                       <div className="w-full overflow-visible">
                         <AnimatedText
                           text="Hi, I'm Mohammed."
@@ -451,7 +451,7 @@ const AboutSection = () => {
                           delay={0.2}
                         />
                       </div>
-                      <div className="w-full overflow-visible min-h-[2.5em] sm:min-h-[1.5em] whitespace-nowrap">
+                      <div className="w-full overflow-visible min-h-[1.5em] sm:min-h-[1.5em] whitespace-nowrap">
                         <AnimatedText
                           text="I try to make things that:"
                           className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
@@ -496,7 +496,7 @@ const AboutSection = () => {
                   }}
                 />
                 <motion.p
-                  className="text-xl text-white/80 leading-relaxed max-w-2xl"
+                  className="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2, duration: 0.8 }}
@@ -504,7 +504,7 @@ const AboutSection = () => {
                     textShadow: '0 2px 10px rgba(0,0,0,0.3)',
                   }}
                 >
-                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">Software Engineer</span> and <br /><span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and building things that hopefully don't break in production.
+                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">Software Engineer</span> and <span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and building things that hopefully don't break in production.
                 </motion.p>
               </div>
 
@@ -520,7 +520,7 @@ const AboutSection = () => {
                 My Interests:
               </motion.h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 {interests.map((interest, index) => (
                   <motion.div
                     key={interest.id}

@@ -198,16 +198,9 @@ const NavbarWeatherCard: React.FC = () => {
 
   const getWeatherIcon = () => mapWmoToIcon(weatherData?.code ?? null, weatherData?.isDay ?? true);
 
-  // Get background gradient based on weather and time
+  // Get background gradient - consistent dark theme with subtle lighting
   const getBackgroundGradient = () => {
-    if (!weatherData) return 'from-blue-500/20 to-purple-500/20';
-    const code = weatherData.code ?? 3; // default cloudy
-    const isDay = weatherData.isDay;
-    if ([95,96,99].includes(code)) return 'from-gray-700/30 to-gray-900/30'; // thunder
-    if ([61,63,65,66,67,80,81,82].includes(code)) return 'from-blue-600/30 to-blue-800/30'; // rain
-    if ([71,73,75,77,85,86].includes(code)) return 'from-blue-200/30 to-blue-400/30'; // snow
-    if (code === 0) return isDay ? 'from-blue-400/20 to-cyan-300/20' : 'from-indigo-900/30 to-purple-900/30';
-    return isDay ? 'from-blue-500/20 to-gray-400/20' : 'from-gray-700/30 to-gray-900/30';
+    return 'from-gray-800/60 via-gray-900/70 to-black/80';
   };
 
   return (
@@ -222,7 +215,7 @@ const NavbarWeatherCard: React.FC = () => {
     >
       <div
         className={cn(
-          "overflow-hidden backdrop-blur-md border border-white/10 rounded-lg py-1 px-2.5",
+          "overflow-hidden backdrop-blur-md border border-white/10 rounded-xl py-1 px-2.5",
           "bg-gradient-to-br",
           getBackgroundGradient()
         )}

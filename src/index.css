@@ -1299,6 +1299,7 @@ html {
   
   h1, h2, h3, h4, h5, h6 {
     word-break: break-word;
+    hyphens: auto;
   }
   
   .text-4xl, .text-5xl, .text-6xl, .text-7xl {
@@ -1315,6 +1316,41 @@ html {
   
   .m-8 {
     margin: 1.5rem;
+  }
+
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Optimize animations for mobile */
+  .animate-spin,
+  .animate-pulse,
+  .animate-bounce {
+    animation-duration: 1s;
+  }
+
+  /* Reduce blur effects on mobile for performance */
+  .backdrop-blur-xl {
+    backdrop-filter: blur(8px);
+  }
+  
+  .backdrop-blur-lg {
+    backdrop-filter: blur(6px);
+  }
+
+  /* Mobile-friendly text selections */
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 }
 

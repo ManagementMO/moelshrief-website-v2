@@ -460,21 +460,6 @@ const HeroSection = () => {
       ref={containerRef}
       className="relative min-h-[100vh] w-full flex items-center justify-center overflow-hidden pt-16 transition-colors duration-300"
     >
-      {/* Loading screen */}
-      <div className="fixed inset-0 w-full h-full flex items-center justify-center z-50 bg-black">
-        <div className="flex flex-col items-center justify-center space-y-4 w-full max-w-[200px] mx-auto">
-          <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-          <p className="text-white/80 text-lg text-center">Loading...</p>
-          <motion.div
-            className="text-2xl sm:text-3xl font-bold text-center text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            Mohammed Elshrief
-          </motion.div>
-        </div>
-      </div>
       
       {/* Dynamic background with parallax effect */}
       <motion.div 
@@ -610,7 +595,7 @@ const HeroSection = () => {
             </motion.div>
             
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight tracking-tight mb-6 sm:mb-8"
+              className="text-3xl sm:text-4xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight mb-6 sm:mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
@@ -691,7 +676,7 @@ const HeroSection = () => {
             </motion.h1>
             
             <motion.p 
-              className="text-xl text-white/80 max-w-xl mb-10 leading-relaxed"
+              className="text-lg sm:text-xl text-white/80 max-w-xl mb-10 leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.2 }}

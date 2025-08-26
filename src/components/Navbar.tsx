@@ -328,7 +328,7 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            className="md:hidden fixed inset-0 top-0 left-0 w-screen h-screen bg-gradient-to-b from-black/95 to-black/90 backdrop-blur-xl z-[100] flex flex-col justify-center items-center overflow-y-auto"
+            className="md:hidden fixed inset-0 top-0 left-0 w-screen h-[100dvh] bg-gradient-to-b from-black/95 to-black/90 backdrop-blur-xl z-[100] flex flex-col justify-center items-center overflow-hidden"
             initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
             animate={{ opacity: 1, backdropFilter: "blur(16px)" }}
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
@@ -336,7 +336,7 @@ const Navbar = () => {
           >
             {/* Enhanced X Close Button */}
             <motion.button
-              className="absolute top-6 right-6 w-12 h-12 aspect-square rounded-full border border-white/20 bg-black/80 flex items-center justify-center focus:outline-none z-[200] overflow-hidden"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 aspect-square rounded-full border border-white/20 bg-black/80 flex items-center justify-center focus:outline-none z-[200] overflow-hidden"
               aria-label="Close menu"
               onClick={() => setMobileMenuOpen(false)}
               style={{
@@ -354,7 +354,7 @@ const Navbar = () => {
               />
 
               <span
-                className="text-white text-3xl font-bold select-none flex items-center justify-center w-full h-full relative z-10"
+                className="text-white text-2xl sm:text-3xl font-bold select-none flex items-center justify-center w-full h-full relative z-10"
                 style={{
                   textShadow: '0 0 8px #fff, 0 0 16px #fff',
                   color: '#fff',
@@ -461,7 +461,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Weather Card */}
-            <div className="flex justify-center w-full mt-8 mb-6 relative z-10 px-4">
+            <div className="flex justify-center w-full mt-4 mb-4 sm:mt-8 sm:mb-6 relative z-10 px-4">
               <NavbarWeatherCard />
             </div>
 
@@ -479,11 +479,10 @@ const Navbar = () => {
                 >
                   <motion.a
                     href={`#${link.id}`}
-                    className="text-2xl sm:text-3xl font-light text-white/90 hover:text-white transition-all duration-300 px-6 sm:px-8 py-3 sm:py-4 block rounded-lg relative z-10"
+                    className="text-xl sm:text-2xl font-light text-white/90 hover:text-white transition-all duration-300 px-4 sm:px-6 py-2 sm:py-3 block rounded-lg relative z-10 text-center"
                     style={{
-                      minHeight: 48,
-                      minWidth: 120,
-                      textAlign: 'center',
+                      minHeight: 40,
+                      minWidth: 100,
                       textShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
                     }}
                     onClick={(e) => {

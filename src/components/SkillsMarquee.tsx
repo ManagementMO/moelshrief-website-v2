@@ -486,7 +486,7 @@ export default function SkillsMarquee() {
         </motion.div>
         
         {/* Enhanced container with cosmic shadow effect */}
-        <div className="relative mb-4 overflow-hidden group -mx-24">
+        <div className="relative mb-4 overflow-hidden group -mx-8 sm:-mx-16 lg:-mx-24">
           {/* Cosmic gradient background that blends with space */}
           <div className="absolute inset-0" style={{ background: '#000' }}></div>
           
@@ -536,7 +536,7 @@ export default function SkillsMarquee() {
         </div>
         
         {/* Row 2: Analytics & ML Tools - Right to Left */}
-        <div className="relative overflow-hidden group -mx-24">
+        <div className="relative overflow-hidden group -mx-8 sm:-mx-16 lg:-mx-24">
           {/* Cosmic gradient background that blends with space */}
           <div className="absolute inset-0" style={{ background: '#000' }}></div>
           
