@@ -220,7 +220,7 @@ const AboutSection = () => {
     const cycleWords = () => {
       setActiveWord(words[currentIndex]);
       currentIndex = (currentIndex + 1) % words.length;
-      timeout = setTimeout(cycleWords, 3000);
+      timeout = setTimeout(cycleWords, 1800);
     };
 
     // Start after initial delay
@@ -464,12 +464,12 @@ const AboutSection = () => {
                             <motion.span
                               key={activeWord}
                               className="absolute text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text [text-shadow:_0_0_30px_rgba(168,85,247,0.5)]"
-                              initial={{ y: 40, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: -40, opacity: 0 }}
+                              initial={{ y: 20, opacity: 0, scale: 0.95 }}
+                              animate={{ y: 0, opacity: 1, scale: 1 }}
+                              exit={{ y: -20, opacity: 0, scale: 1.05 }}
                               transition={{
-                                duration: 0.5,
-                                ease: [0.215, 0.61, 0.355, 1]
+                                duration: 0.35,
+                                ease: [0.25, 0.46, 0.45, 0.94]
                               }}
                             >
                               {activeWord}.
@@ -526,23 +526,20 @@ const AboutSection = () => {
                     key={interest.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.6 + index * 0.1, duration: 0.8 }}
                     onHoverStart={() => setHoverInterest(interest.id)}
                     onHoverEnd={() => setHoverInterest(null)}
                     whileHover={{ scale: [1, 1.06, 1] }}
                     whileTap={{ scale: 1.04 }}
-                    transition={
-                      {
-                        delay: 1.6 + index * 0.1,
-                        duration: 0.8,
-                        scale: {
-                          duration: 1.6,
-                          repeat: Infinity,
-                          repeatType: 'reverse',
-                          ease: 'easeInOut',
-                        }
+                    transition={{
+                      delay: 1.6 + index * 0.1,
+                      duration: 0.8,
+                      scale: {
+                        duration: 1.6,
+                        repeat: Infinity,
+                        repeatType: 'reverse',
+                        ease: 'easeInOut',
                       }
-                    }
+                    }}
                   >
                     <div
                       className="relative p-6 rounded-xl border border-white/10 backdrop-blur-md bg-white/5 transition-all duration-300 group overflow-hidden"
