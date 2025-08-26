@@ -9,6 +9,7 @@ import BackToTop from "@/components/BackToTop";
 import { motion } from "framer-motion";
 import LoadingScreen from '@/components/LoadingScreen';
 
+// set useState to true to show loading screen
 const Index = () => {
   const [loading, setLoading] = useState(false);
 
