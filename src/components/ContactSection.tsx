@@ -1,13 +1,6 @@
 import { motion } from 'framer-motion';
 import { useForm, ValidationError } from '@formspree/react';
-import { Github, Linkedin, ExternalLink, Mail, Send } from 'lucide-react';
-
-const socials = [
-  { label: 'linkedin', href: 'https://www.linkedin.com/in/mohammed-elshrief/', icon: Linkedin },
-  { label: 'github', href: 'https://github.com/ManagementMO', icon: Github },
-  { label: 'devpost', href: 'https://devpost.com/ManagementMO', icon: ExternalLink },
-  { label: 'email', href: 'mailto:mkelshri@uwaterloo.ca', icon: Mail },
-];
+import { Send } from 'lucide-react';
 
 const ContactSection = () => {
   const [state, handleSubmit] = useForm('mvgazbyw');
@@ -119,25 +112,6 @@ const ContactSection = () => {
           </form>
         )}
 
-        <div className="mt-10 pt-8 border-t border-stone-200/80">
-          <p className="text-xs text-stone-400 font-medium mb-4">find me here</p>
-          <div className="flex items-center gap-5">
-            {socials.map(({ label, href, icon: Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith('mailto') ? undefined : '_blank'}
-                rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                className="group flex items-center gap-2 text-stone-400 hover:text-teal-700 transition-all duration-300"
-              >
-                <Icon size={15} className="transition-transform group-hover:scale-110" />
-                <span className="text-sm font-light hidden sm:inline-block sm:max-w-0 sm:overflow-hidden sm:group-hover:max-w-[80px] sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-500 ease-out whitespace-nowrap">
-                  {label}
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
       </motion.div>
     </section>
   );

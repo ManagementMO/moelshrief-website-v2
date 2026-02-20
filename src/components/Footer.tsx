@@ -8,8 +8,6 @@ const socialLinks = [
 ];
 
 const Footer = () => {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="section-container py-10 border-t border-stone-200/80">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -30,9 +28,6 @@ const Footer = () => {
           ))}
         </div>
 
-        <p className="text-xs text-stone-400 font-light font-serif italic">
-          {year} Mohammed Elshrief
-        </p>
       </div>
     </footer>
   );

@@ -11,22 +11,28 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
-    role: 'Co-Founder & Developer',
-    company: 'Paybridge Technologies',
-    period: 'oct 2024 — present',
-    description: 'Building a full-stack platform to streamline cross-border money transfers. Leading frontend development with React and integrating with payment APIs.',
+    role: 'Data Scientist Intern',
+    company: 'Altas Partners',
+    period: 'jan 2026 — present',
+    description: 'Architected distributed web scraping infrastructure processing 100K+ daily data points with 99.9% uptime. Built fault-tolerant ETL pipelines with Airflow, reducing analyst query latency by 40% across 5M+ records.',
   },
   {
-    role: 'Software Developer',
-    company: 'NewHacks 2024',
-    period: 'nov 2024',
-    description: 'Won 3rd place building Scam-Mah, a real-time scam detection app using Flask, ML, and the Gemini API. Achieved 90% detection accuracy in 24 hours.',
+    role: 'Machine Learning Engineer',
+    company: 'WAT.ai',
+    period: 'sep 2025 — present',
+    description: 'Built a production hybrid-search RAG pipeline with <200ms P95 latency. Developed real-time computer vision hazard detection at 15 FPS with 98% precision using Gemini 2.5 Flash.',
   },
   {
-    role: 'Management Engineering Student',
-    company: 'University of Waterloo',
-    period: 'sep 2023 — present',
-    description: 'Studying at the intersection of software engineering, data science, and business systems. Coursework in optimization, data structures, and statistics.',
+    role: 'Software Engineer Intern',
+    company: 'LiftWerx',
+    period: 'may 2025 — aug 2025',
+    description: 'Led development of LiftWerx GPT, a RAG system indexing 50K+ pages that reduced technician search time by 75%. Built a multi-agent orchestration system cutting operational planning from 2 days to 3 hours.',
+  },
+  {
+    role: 'Machine Learning Engineer Intern',
+    company: 'Themis AI (UTMIST)',
+    period: 'may 2025 — aug 2025',
+    description: 'Designed an active learning annotation platform improving training efficiency by 50% and reducing labeling costs by 35%. Contributed to an open-source toolkit that gained 500+ GitHub stars.',
   },
 ];
 
