@@ -100,11 +100,11 @@ const AboutSection = () => {
         >
           <Link
             to="/projects"
-            className="text-sm font-medium text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition-colors group"
+            className="text-sm font-medium text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition-colors"
           >
             see what i've built
-            <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">→</span>
           </Link>
+          <span className="text-xs text-stone-300 dark:text-stone-600 font-light italic">or</span>
           <Link
             to="/contact"
             className="text-sm text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 transition-colors font-light"

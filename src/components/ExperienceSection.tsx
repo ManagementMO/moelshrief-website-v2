@@ -33,7 +33,7 @@ const experiences: Experience[] = [
     logo: '/logos/liftwerx.png',
   },
   {
-    role: 'Machine Learning Engineer Intern',
+    role: 'Machine Learning Developer',
     company: 'Themis AI (UTMIST)',
     period: 'may 2025 — aug 2025',
     description: 'Made data labeling less soul-crushing.',
