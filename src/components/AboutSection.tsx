@@ -8,12 +8,12 @@ const highlights = [
     suffix: '.',
   },
   {
-    text: 'Built tools used by students and developers — from AI-powered apps to financial automation.',
+    text: 'Built tools used by students and developers.',
     link: null,
     suffix: '',
   },
   {
-    text: 'Slightly too obsessed with hackathons — see the damage at',
+    text: 'Slightly too obsessed with hackathons — see the damage on',
     link: { label: 'devpost', href: 'https://devpost.com/ManagementMO', external: true },
     suffix: '.',
   },
