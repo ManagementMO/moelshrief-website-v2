@@ -49,7 +49,7 @@ const AboutSection = () => {
 
         <p className="text-stone-600 dark:text-stone-300 font-light text-[15px] leading-[1.7] mb-10">
           I build things at the intersection of software, data, and business — then ship
-          them. Currently exploring full-stack development, ML, and scalable systems.
+          them. Currently exploring full-stack development, agents in production, and scalable systems.
         </p>
 
         <div className="mb-10">
