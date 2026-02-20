@@ -1,634 +1,114 @@
-import { Button } from "./ui/button";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect, lazy, Suspense } from "react";
-import type { CSSProperties } from "react";
-import type { MotionStyle } from "framer-motion";
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
-// Lazy load the enhanced 3D profile component
-const Enhanced3DProfile = lazy(() => import("./Enhanced3DProfile"));
+const highlights = [
+  {
+    text: 'Software Engineer & Management Engineering student at the',
+    link: { label: 'University of Waterloo', href: 'https://uwaterloo.ca', external: true },
+    suffix: '.',
+  },
+  {
+    text: 'Built tools used by students and developers — from AI-powered apps to financial automation.',
+    link: null,
+    suffix: '',
+  },
+  {
+    text: '3rd Place at',
+    link: { label: 'NewHacks 2024', href: 'https://devpost.com/ManagementMO', external: true },
+    suffix: ' with a real-time scam detection app achieving 90% accuracy.',
+  },
+  {
+    text: 'Currently co-building',
+    link: { label: 'Paybridge Technologies', href: 'https://paybridgetech.com/', external: true },
+    suffix: ' — simplifying cross-border money transfers.',
+  },
+  {
+    text: 'Open to freelance work and meaningful collaborations.',
+    link: null,
+    suffix: '',
+  },
+];
 
-// Custom hook for mouse parallax effect
-const useMouseParallax = (strength: number = 20, resetOnLeave: boolean = false) => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!isHovering && resetOnLeave) return;
-
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - left) / width - 0.5) * strength;
-    const y = ((e.clientY - top) / height - 0.5) * strength;
-
-    setPosition({ x, y });
-  };
-
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => {
-    if (resetOnLeave) {
-      setPosition({ x: 0, y: 0 });
-    }
-    setIsHovering(false);
-  };
-
-  return {
-    position,
-    handlers: {
-      onMouseMove: handleMouseMove,
-      onMouseEnter: handleMouseEnter,
-      onMouseLeave: handleMouseLeave,
-    }
-  };
-};
-
-// Animated text component with letter-by-letter animation
-const AnimatedText: React.FC<{ text: string; className?: string; delay?: number }> = ({
-  text,
-  className = "",
-  delay = 0
-}) => {
-  return (
-    <span className={`inline-block ${className}`} style={{ lineHeight: 1.2 }}>
-      {text.split("").map((char, index) => (
-        <motion.span
-          key={index}
-          className="inline-block"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: delay + index * 0.04,
-            ease: [0.215, 0.61, 0.355, 1]
-          }}
-          style={{
-            display: 'inline-block',
-            minHeight: '1.2em'
-          }}
-        >
-          {char === " " ? "\u00A0" : char}
-        </motion.span>
-      ))}
-    </span>
-  );
-};
-
-// Neon glow component
-const NeonGlow: React.FC<{ color: string; intensity?: number; className?: string }> = ({
-  color,
-  intensity = 10,
-  className = ""
-}) => {
-  return (
-    <motion.div
-      className={`absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 ${className}`}
-      style={{
-        background: `radial-gradient(circle at center, ${color}33 0%, transparent 70%)`,
-        boxShadow: `0 0 ${intensity}px ${color}55, 0 0 ${intensity * 2}px ${color}33`,
-      }}
-      animate={{
-        scale: [0.8, 1.2, 0.8],
-      }}
-      transition={{
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    />
-  );
-};
-
-// Holographic card effect component
-const HolographicCard: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-  glowColor?: string;
-  strength?: number;
-}> = ({
-  children,
-  className = "",
-  glowColor = "rgba(255, 255, 255, 0.8)",
-  strength = 15
-}) => {
-  const { position, handlers } = useMouseParallax(strength, true);
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className={`relative overflow-hidden group ${className}`}
-      {...handlers}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      style={{
-        transform: `perspective(1000px) rotateX(${-position.y}deg) rotateY(${position.x}deg) scale(${isHovered ? 1.02 : 1})`,
-        transition: "transform 0.2s ease-out",
-      }}
-    >
-      {/* Holographic shine effect */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: `linear-gradient(
-            135deg,
-            transparent 0%,
-            transparent 35%,
-            ${glowColor} 45%,
-            ${glowColor} 55%,
-            transparent 65%,
-            transparent 100%
-          )`,
-          backgroundSize: '200% 200%',
-          backgroundPosition: isHovered ? '100% 100%' : '0% 0%',
-          transition: 'background-position 0.5s ease-out',
-          mixBlendMode: 'overlay',
-        }}
-      />
-
-      {/* Content */}
-      {children}
-    </motion.div>
-  );
-};
-
-// Animated particles component
-const ParticleField: React.FC<{ count?: number; colors?: string[] }> = ({
-  count = 30,
-  colors = ['#60A5FA', '#A855F7', '#EC4899']
-}) => {
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: count }).map((_, index) => {
-        const size = Math.random() * 4 + 2;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-
-        return (
-          <motion.div
-            key={index}
-            className="absolute rounded-full"
-            style={{
-              width: size + 'px',
-              height: size + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              background: color,
-              boxShadow: `0 0 ${size * 2}px ${color}`,
-              opacity: Math.random() * 0.5 + 0.2,
-            }}
-            animate={{
-              y: [0, -Math.random() * 100 - 50],
-              x: [0, (Math.random() - 0.5) * 50],
-              opacity: [0.1, 0.7, 0],
-              scale: [0, 1, 0.5],
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 5,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
-// Main component
 const AboutSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeWord, setActiveWord] = useState<string | null>(null);
-  const [animationComplete, setAnimationComplete] = useState(false);
-  const [hoverInterest, setHoverInterest] = useState<string | null>(null);
-
-  // Scroll-based animations
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-
-  const imageOpacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.2, 1], [0.8, 1, 1]);
-  const contentOpacity = useTransform(scrollYProgress, [0.1, 0.3, 1], [0, 1, 1]);
-  const contentY = useTransform(scrollYProgress, [0.1, 0.3, 1], [50, 0, 0]);
-  const bgY = useTransform(scrollYProgress, [0, 1], [0, -100]);
-
-  // Typewriter effect
-  useEffect(() => {
-    const words = ["work", "matter", "inspire", "impact"];
-    let currentIndex = 0;
-    let timeout: NodeJS.Timeout;
-
-    const cycleWords = () => {
-      setActiveWord(words[currentIndex]);
-      currentIndex = (currentIndex + 1) % words.length;
-      timeout = setTimeout(cycleWords, 1800);
-    };
-
-    // Start after initial delay
-    setTimeout(() => {
-      setAnimationComplete(true);
-      cycleWords();
-    }, 2000);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
-  // Mouse movement handler for 3D effect
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - left) / width - 0.5) * 2;  // -1 to 1
-    const y = ((event.clientY - top) / height - 0.5) * 2;  // -1 to 1
-    setMousePosition({ x, y });
-  };
-
-  // Style objects
-  const imageStyle: MotionStyle = {
-    opacity: imageOpacity,
-    scale: imageScale,
-  };
-
-  const transformStyle = {
-    transform: `perspective(1000px) rotateY(${mousePosition.x * 5}deg) rotateX(${-mousePosition.y * 5}deg)`,
-    transition: "transform 0.1s ease-out",
-  } as CSSProperties;
-
-  const contentStyle: MotionStyle = {
-    opacity: contentOpacity,
-    y: contentY,
-  };
-
-  // Interest items data
-  const interests = [
-    {
-      id: "software",
-      name: "Software",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-blue-400">
-          <path d="M16 18L22 12L16 6M8 6L2 12L8 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      color: "#61DAFB",
-      description: "I code stuff. Sometimes it works, sometimes it doesn't. My friends ask me to build them apps and I usually say yes because why not."
-    },
-    {
-      id: "exercise",
-      name: "Exercise",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-purple-400">
-          <path d="M6 7V17M18 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8 7H4V17H8M16 7H20V17H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8 9V15M16 9V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      color: "#A855F7",
-      description: "I lift weights and pretend I know what I'm doing. It keeps me sane."
-    },
-    {
-      id: "music",
-      name: "Music",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-amber-400">
-          <path d="M9 18V5l12-2v13M9 18c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zM21 16c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      color: "#F59E0B",
-      description: "Music keeps me focused while coding. Also prevents me from losing my mind during debugging."
-    },
-    {
-      id: "reading",
-      name: "Reading",
-      icon: (
-        <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 text-green-400">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      ),
-      color: "#10B981",
-      description: "Expanding my knowledge and perspective through books on technology, psychology, and philosophy."
-    }
-  ];
-
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative py-20 lg:py-28 overflow-hidden text-white"
-    >
-      {/* Dynamic background with parallax effect */}
+    <section id="about" className="section-container py-16 md:py-20">
       <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: bgY }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black"></div>
+        <p className="text-xs text-stone-400 uppercase tracking-widest mb-6 font-medium">
+          about
+        </p>
 
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-gradient-radial from-blue-900/20 via-purple-900/10 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/10 via-purple-900/10 to-pink-900/10"></div>
-        </div>
+        <h1 className="text-3xl font-semibold text-stone-900 mb-8 leading-tight">
+          hi, i'm mohammed.
+        </h1>
 
-        {/* Grid overlay for depth */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-10"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                             linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </motion.div>
-
-      {/* Animated particles */}
-      <ParticleField count={40} />
-
-      {/* Floating orbs */}
-      <motion.div
-        className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-500/5 blur-3xl"
-        animate={{
-          y: [0, -30, 0],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <motion.div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-purple-500/5 blur-3xl"
-        animate={{
-          y: [0, -20, 0],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 5 }}
-      />
-
-      <div className="container mx-auto px-8 relative z-10">
-        <div className="max-w-screen-xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            {/* Left column - Enhanced 3D image with holographic effects */}
-            <motion.div
-              className="lg:col-span-5 relative w-full max-w-md mx-auto"
-              style={imageStyle}
+        <ul className="space-y-3 mb-10">
+          {highlights.map((item, i) => (
+            <motion.li
+              key={i}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.06, duration: 0.35 }}
+              className="list-item-hover flex items-start gap-3 text-stone-600 font-light leading-relaxed"
             >
-              <div className="rounded-xl overflow-hidden aspect-[4/5] relative">
-                {/* Enhanced 3D profile image with rotation and press effects */}
-                <Suspense fallback={
-                  <div className="w-full h-full flex items-center justify-center bg-black/20 backdrop-blur-sm">
-                    <div className="w-12 h-12 rounded-full border-2 border-t-transparent border-white/30 animate-spin"></div>
-                  </div>
-                }>
-                  <Enhanced3DProfile
-                    imagePath="/images/profile.jpg"
-                    alt="Mohammed Elshrief"
-                  />
-                </Suspense>
-
-                {/* Holographic border with animated glow */}
-                <motion.div
-                  className="absolute inset-0 border border-white/20 rounded-xl pointer-events-none"
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(168,85,247,0.2), inset 0 0 10px rgba(168,85,247,0.1)',
-                      '0 0 30px rgba(168,85,247,0.3), inset 0 0 15px rgba(168,85,247,0.2)',
-                      '0 0 20px rgba(168,85,247,0.2), inset 0 0 10px rgba(168,85,247,0.1)'
-                    ]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                />
-
-                {/* Futuristic corner accents */}
-                <div className="absolute top-0 left-0 w-12 h-12">
-                  <motion.div
-                    className="absolute top-0 left-0 w-full h-full border-t-2 border-l-2 border-blue-400/60 rounded-tl-xl"
-                    animate={{ opacity: [0.4, 0.8, 0.4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                </div>
-                <div className="absolute top-0 right-0 w-12 h-12">
-                  <motion.div
-                    className="absolute top-0 right-0 w-full h-full border-t-2 border-r-2 border-purple-400/60 rounded-tr-xl"
-                    animate={{ opacity: [0.4, 0.8, 0.4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  />
-                </div>
-                <div className="absolute bottom-0 left-0 w-12 h-12">
-                  <motion.div
-                    className="absolute bottom-0 left-0 w-full h-full border-b-2 border-l-2 border-purple-400/60 rounded-bl-xl"
-                    animate={{ opacity: [0.4, 0.8, 0.4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  />
-                </div>
-                <div className="absolute bottom-0 right-0 w-12 h-12">
-                  <motion.div
-                    className="absolute bottom-0 right-0 w-full h-full border-b-2 border-r-2 border-blue-400/60 rounded-br-xl"
-                    animate={{ opacity: [0.4, 0.8, 0.4] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                  />
-                </div>
-              </div>
-
-
-            </motion.div>
-
-            {/* Right column - Enhanced content with animated typography */}
-            <motion.div
-              className="lg:col-span-7"
-              style={contentStyle}
-            >
-              <div className="space-y-6 mb-12">
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                >
-                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight w-full">
-                    <div className="flex flex-col items-start justify-center space-y-4 lg:space-y-6 relative">
-                      <div className="w-full overflow-visible">
-                        <AnimatedText
-                          text="Hi, I'm Mohammed."
-                          className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
-                          delay={0.2}
-                        />
-                      </div>
-                      <div className="w-full overflow-visible min-h-[1.5em] sm:min-h-[1.5em] whitespace-nowrap">
-                        <AnimatedText
-                          text="I try to make things that:"
-                          className="text-white [text-shadow:_0_0_30px_rgba(255,255,255,0.3)]"
-                          delay={0.6}
-                        />
-                      </div>
-                      <div className="w-full h-[1.5em] overflow-visible relative">
-                        <AnimatePresence mode="wait">
-                          {activeWord && animationComplete && (
-                            <motion.span
-                              key={activeWord}
-                              className="absolute text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-400 bg-clip-text [text-shadow:_0_0_30px_rgba(168,85,247,0.5)]"
-                              initial={{ y: 20, opacity: 0, scale: 0.95 }}
-                              animate={{ y: 0, opacity: 1, scale: 1 }}
-                              exit={{ y: -20, opacity: 0, scale: 1.05 }}
-                              transition={{
-                                duration: 0.35,
-                                ease: [0.25, 0.46, 0.45, 0.94]
-                              }}
-                            >
-                              {activeWord}.
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </div>
-                  </h2>
-                </motion.div>
-
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ duration: 1.6, ease: [0.4, 0.01, 0.2, 1] }}
-                  style={{
-                    width: '100%',
-                    height: '3px',
-                    background: 'linear-gradient(90deg, #4fa3ff 0%, #d26bcb 100%)',
-                    margin: '2.5rem 0 1.5rem 0',
-                    borderRadius: '2px',
-                    boxShadow: '0 0 8px 0 #4fa3ff44, 0 0 8px 0 #d26bcb33',
-                    transformOrigin: 'left',
-                  }}
-                />
-                <motion.p
-                  className="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.8 }}
-                  style={{
-                    textShadow: '0 2px 10px rgba(0,0,0,0.3)',
-                  }}
-                >
-                  Hey, I'm Mohammed, I'm a <span className="vibrant-ds">Software Engineer</span> and <span className="vibrant-me">Management Engineering</span> student at the University of Waterloo (yes, that's a real program). I spend most of my time going to the gym and building things that hopefully don't break in production.
-                </motion.p>
-              </div>
-
-              <motion.h3
-                className="text-2xl font-semibold mb-6 text-white"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.4, duration: 0.8 }}
-                style={{
-                  textShadow: '0 0 20px rgba(255,255,255,0.2)',
-                }}
-              >
-                My Interests:
-              </motion.h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                {interests.map((interest, index) => (
-                  <motion.div
-                    key={interest.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    onHoverStart={() => setHoverInterest(interest.id)}
-                    onHoverEnd={() => setHoverInterest(null)}
-                    whileHover={{ scale: [1, 1.06, 1] }}
-                    whileTap={{ scale: 1.04 }}
-                    transition={{
-                      delay: 1.6 + index * 0.1,
-                      duration: 0.8,
-                      scale: {
-                        duration: 1.6,
-                        repeat: Infinity,
-                        repeatType: 'reverse',
-                        ease: 'easeInOut',
-                      }
-                    }}
-                  >
-                    <div
-                      className="relative p-6 rounded-xl border border-white/10 backdrop-blur-md bg-white/5 transition-all duration-300 group overflow-hidden"
-                      style={{
-                        boxShadow: hoverInterest === interest.id
-                          ? `0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px ${interest.color}33`
-                          : '0 10px 30px rgba(0, 0, 0, 0.2)',
-                      }}
+              <span className="bullet-hover mt-[7px] w-[5px] h-[5px] flex-shrink-0 bg-stone-400 block" />
+              <span>
+                {item.text}{' '}
+                {item.link && (
+                  item.link.external ? (
+                    <a
+                      href={item.link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-stone-900 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-600 transition-colors"
                     >
+                      {item.link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={item.link.href}
+                      className="text-stone-900 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-600 transition-colors"
+                    >
+                      {item.link.label}
+                    </Link>
+                  )
+                )}
+                {item.suffix}
+              </span>
+            </motion.li>
+          ))}
+        </ul>
 
-                      {/* Content */}
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-5 mb-4">
-                          <div
-                            className="w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center border transition-all duration-300 shadow-lg"
-                            style={{
-                              background: `linear-gradient(135deg, ${interest.color}30, ${interest.color}10)`,
-                              borderColor: `${interest.color}30`,
-                              boxShadow: hoverInterest === interest.id
-                                ? `0 0 20px ${interest.color}40`
-                                : `0 0 15px ${interest.color}20`,
-                            }}
-                          >
-                            <motion.div
-                              animate={hoverInterest === interest.id ? {
-                                scale: [1, 1.1, 1],
-                                rotate: [0, 5, 0],
-                              } : {}}
-                              transition={{
-                                duration: 2,
-                                repeat: hoverInterest === interest.id ? Infinity : 0,
-                                repeatType: "reverse",
-                              }}
-                            >
-                              {interest.icon}
-                            </motion.div>
-                          </div>
-                          <h3
-                            className="text-xl font-semibold transition-colors duration-300"
-                            style={{
-                              color: hoverInterest === interest.id ? 'white' : 'rgba(255, 255, 255, 0.9)',
-                              textShadow: hoverInterest === interest.id
-                                ? `0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px ${interest.color}33`
-                                : 'none',
-                            }}
-                          >
-                            {interest.name}
-                          </h3>
-                        </div>
-
-                      </div>
-
-                      {/* Animated shine effect */}
-                      <motion.div
-                        className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1500 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                        style={{
-                          width: '200%',
-                        }}
-                      />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="pt-8 border-t border-stone-200"
+        >
+          <p className="text-stone-500 font-light text-sm leading-relaxed mb-6">
+            I'm in my second year studying Management Engineering at UWaterloo — a program at the
+            intersection of software, systems, and business. I spend most of my time building
+            things, lifting weights, and listening to music while debugging at 2am.
+          </p>
+          <div className="flex items-center gap-5">
+            <Link
+              to="/projects"
+              className="text-sm text-stone-900 font-medium underline underline-offset-2 decoration-stone-300 hover:decoration-stone-700 transition-colors"
+            >
+              view projects →
+            </Link>
+            <Link
+              to="/contact"
+              className="text-sm text-stone-500 hover:text-stone-900 transition-colors font-light"
+            >
+              get in touch
+            </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Enhanced decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
-
-      {/* Animated glow orbs */}
-      <motion.div
-        className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl pointer-events-none"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <motion.div
-        className="absolute -bottom-40 -right-20 w-96 h-96 rounded-full bg-purple-500/10 blur-3xl pointer-events-none"
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
