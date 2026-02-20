@@ -7,6 +7,7 @@ interface Experience {
   company: string;
   period: string;
   description: string;
+  logo: string;
 }
 
 const experiences: Experience[] = [
@@ -15,24 +16,28 @@ const experiences: Experience[] = [
     company: 'Altas Partners',
     period: 'jan 2026 — present',
     description: 'Turns out private equity needs a lot of data scraped from the internet.',
+    logo: '/logos/altas.png',
   },
   {
     role: 'Machine Learning Engineer',
     company: 'WAT.ai',
     period: 'sep 2025 — present',
     description: 'Building AI at Waterloo\'s AI club. Yes, the recursion is intentional.',
+    logo: '/logos/watai.png',
   },
   {
     role: 'Software Engineer Intern',
     company: 'LiftWerx',
     period: 'may 2025 — aug 2025',
     description: 'Gave aircraft technicians their own GPT and a fleet of AI agents.',
+    logo: '/logos/liftwerx.png',
   },
   {
     role: 'Machine Learning Engineer Intern',
     company: 'Themis AI (UTMIST)',
     period: 'may 2025 — aug 2025',
     description: 'Made data labeling less soul-crushing.',
+    logo: '/logos/utmist.svg',
   },
 ];
 
@@ -85,9 +90,18 @@ const ExperienceSection = () => {
               transition={{ duration: 0.25 }}
               className="p-5"
             >
-              <div className="mb-4">
-                <p className="font-serif text-[15px] font-medium text-stone-900 dark:text-stone-100">{exp.company}</p>
-                <p className="text-xs text-stone-400 dark:text-stone-500 font-light">{exp.period}</p>
+              <div className="flex items-start gap-3.5 mb-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5 bg-stone-200/70 dark:bg-stone-700/50">
+                  <img
+                    src={exp.logo}
+                    alt={`${exp.company} logo`}
+                    className="w-full h-full object-contain rounded-md dark:brightness-150"
+                  />
+                </div>
+                <div>
+                  <p className="font-serif text-[15px] font-medium text-stone-900 dark:text-stone-100">{exp.company}</p>
+                  <p className="text-xs text-stone-400 dark:text-stone-500 font-light">{exp.period}</p>
+                </div>
               </div>
 
               <p className="text-[15px] text-stone-600 dark:text-stone-300 font-light mb-3">
