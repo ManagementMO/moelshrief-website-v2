@@ -101,28 +101,21 @@ const AboutSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.4 }}
-          className="pt-8 border-t border-stone-200/60"
+          className="flex items-center gap-6 pt-2"
         >
-          <p className="text-stone-500 font-light text-sm leading-[1.75] mb-6">
-            Second-year Management Engineering at UWaterloo — a program at the intersection of
-            software, systems, and business. I spend most of my time building things, lifting
-            weights, and listening to music while debugging at 2am.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              to="/projects"
-              className="text-sm font-medium text-teal-700 hover:text-teal-900 transition-colors group"
-            >
-              see what i've built
-              <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">→</span>
-            </Link>
-            <Link
-              to="/contact"
-              className="text-sm text-stone-400 hover:text-stone-700 transition-colors font-light"
-            >
-              get in touch
-            </Link>
-          </div>
+          <Link
+            to="/projects"
+            className="text-sm font-medium text-teal-700 hover:text-teal-900 transition-colors group"
+          >
+            see what i've built
+            <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">→</span>
+          </Link>
+          <Link
+            to="/contact"
+            className="text-sm text-stone-400 hover:text-stone-700 transition-colors font-light"
+          >
+            get in touch
+          </Link>
         </motion.div>
       </motion.div>
     </section>

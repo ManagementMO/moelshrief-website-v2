@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import NavSignature from './NavSignature';
 
 const navLinks = [
   { href: '/', label: 'about' },
@@ -37,9 +38,10 @@ const Navbar = () => {
         <nav className="section-container flex items-center justify-between h-14">
           <Link
             to="/"
-            className="font-serif text-[15px] font-semibold text-stone-900 hover:text-teal-700 transition-colors duration-200 tracking-tight"
+            className="text-stone-900 hover:text-teal-700 transition-colors duration-300 flex items-center"
+            aria-label="Home"
           >
-            mohammed elshrief
+            <NavSignature />
           </Link>
 
           <div className="hidden md:flex items-center gap-7">

@@ -14,25 +14,25 @@ const experiences: Experience[] = [
     role: 'Data Scientist Intern',
     company: 'Altas Partners',
     period: 'jan 2026 — present',
-    description: 'Architected distributed web scraping infrastructure processing 100K+ daily data points with 99.9% uptime. Built fault-tolerant ETL pipelines with Airflow, reducing analyst query latency by 40% across 5M+ records.',
+    description: 'Scraping the internet so private equity analysts don\'t have to. Built pipelines that turn a firehose of messy data into something actually useful.',
   },
   {
     role: 'Machine Learning Engineer',
     company: 'WAT.ai',
     period: 'sep 2025 — present',
-    description: 'Built a production hybrid-search RAG pipeline with <200ms P95 latency. Developed real-time computer vision hazard detection at 15 FPS with 98% precision using Gemini 2.5 Flash.',
+    description: 'Building AI that\'s fast, doesn\'t hallucinate (too much), and can tell when something sketchy is happening on camera. Part research, part duct tape.',
   },
   {
     role: 'Software Engineer Intern',
     company: 'LiftWerx',
     period: 'may 2025 — aug 2025',
-    description: 'Led development of LiftWerx GPT, a RAG system indexing 50K+ pages that reduced technician search time by 75%. Built a multi-agent orchestration system cutting operational planning from 2 days to 3 hours.',
+    description: 'Taught a GPT to know everything about aircraft maintenance so technicians wouldn\'t have to dig through manuals. Also wrangled a fleet of AI agents to do planning work that used to take days.',
   },
   {
     role: 'Machine Learning Engineer Intern',
     company: 'Themis AI (UTMIST)',
     period: 'may 2025 — aug 2025',
-    description: 'Designed an active learning annotation platform improving training efficiency by 50% and reducing labeling costs by 35%. Contributed to an open-source toolkit that gained 500+ GitHub stars.',
+    description: 'Made labeling data less painful and more intelligent. Shipped an open-source tool that apparently people actually use — which is always a pleasant surprise.',
   },
 ];
 
