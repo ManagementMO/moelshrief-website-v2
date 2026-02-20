@@ -14,25 +14,25 @@ const experiences: Experience[] = [
     role: 'Data Scientist Intern',
     company: 'Altas Partners',
     period: 'jan 2026 — present',
-    description: 'Turns out private equity needs a lot of data scraped from the internet. Built pipelines to quietly do that — so humans don\'t have to.',
+    description: 'Turns out private equity needs a lot of data scraped from the internet.',
   },
   {
     role: 'Machine Learning Engineer',
     company: 'WAT.ai',
     period: 'sep 2025 — present',
-    description: 'Building AI at Waterloo\'s AI club. Yes, the recursion is intentional. Fast RAG pipelines, computer vision, and enough guardrails to make it behave (mostly).',
+    description: 'Building AI at Waterloo\'s AI club. Yes, the recursion is intentional.',
   },
   {
     role: 'Software Engineer Intern',
     company: 'LiftWerx',
     period: 'may 2025 — aug 2025',
-    description: 'Gave aircraft technicians their own GPT and a fleet of AI agents that automated weeks of planning. Somehow shipped it all in one summer.',
+    description: 'Gave aircraft technicians their own GPT and a fleet of AI agents.',
   },
   {
     role: 'Machine Learning Engineer Intern',
     company: 'Themis AI (UTMIST)',
     period: 'may 2025 — aug 2025',
-    description: 'Made data labeling less soul-crushing. Open-sourced the tool, posted it on GitHub, and watched strangers actually use it — which never gets old.',
+    description: 'Made data labeling less soul-crushing.',
   },
 ];
 

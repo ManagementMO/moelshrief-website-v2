@@ -4,7 +4,7 @@ const socialLinks = [
   { icon: Github, label: 'github', href: 'https://github.com/ManagementMO' },
   { icon: Linkedin, label: 'linkedin', href: 'https://www.linkedin.com/in/mohammed-elshrief/' },
   { icon: Mail, label: 'email', href: 'mailto:mkelshri@uwaterloo.ca' },
-  { icon: Code2, label: 'source', href: 'https://github.com/ManagementMO/portfolio' },
+  { icon: Code2, label: 'source', href: 'https://github.com/ManagementMO/moelshrief-website-v2' },
 ];
 
 const Footer = () => {
