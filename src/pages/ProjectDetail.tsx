@@ -1,9 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { FuturisticButton } from '@/components/ui/futuristic-button';
-import { ChevronLeft, ExternalLink, Github, Award, BarChart, Code, BookOpen } from 'lucide-react';
+import { ChevronLeft, ExternalLink, Github, Award } from 'lucide-react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { TechIcon } from '@/components/TechIcon';
 
@@ -135,10 +133,7 @@ const ProjectDetail: React.FC = () => {
   }
   
   return (
-    <div className="min-h-screen bg-cyber-bg text-cyber-text">
-      <Navbar />
-      
-      <main className="pt-20 pb-32">
+    <main className="pt-20 pb-32">
         <div className="container mx-auto px-4">
           <motion.div
             className="mb-8"
@@ -339,10 +334,7 @@ const ProjectDetail: React.FC = () => {
             </motion.div>
           </div>
         </div>
-      </main>
-      
-      <Footer />
-    </div>
+    </main>
   );
 };
 
