@@ -27,7 +27,7 @@ const projects: Project[] = [
     id: 'scam-mah',
     title: 'Scam-Mah',
     description: 'Real-time spam detection web app using Flask and machine learning with pattern analysis and API integration. Built in 24 hours at NewHacks 2024.',
-    tags: ['Python', 'Flask', 'ML', 'Gemini API'],
+    tags: ['Python', 'Flask', 'Gemini API'],
     image: '/images/projects/scam-mah.jpg',
     live: 'https://devpost.com/software/scam-mah',
     stats: ['90% accuracy', '3rd Place @ NewHacks'],
@@ -47,8 +47,7 @@ const tagColors: Record<string, string> = {
   Python: 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
   React: 'text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800',
   Flask: 'text-stone-700 dark:text-stone-300 bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700',
-  ML: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800',
-  'Gemini API': 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800',
+  'Gemini API': 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
   Excel: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
   VBA: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
   PostgreSQL: 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
@@ -77,14 +76,9 @@ const tagIcons: Record<string, React.ReactNode> = {
       <path d="M9 3h6M12 3v7m-5 4c-1.5 2-2 4-2 6h14c0-2-.5-4-2-6l-3-4H10l-3 4z"/>
     </svg>
   ),
-  ML: (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V12m-2-2.6A4 4 0 1 0 8 6M10 12H7a4 4 0 0 0 0 8h3m4 0h3a4 4 0 0 0 0-8h-3m-2 0v8"/>
-    </svg>
-  ),
-  'Gemini API': (
+'Gemini API': (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-      <path d="M12 2L14.5 9.5 22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z" fill="currentColor" opacity="0.8"/>
+      <path d="M12 2L14.5 9.5 22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z" fill="#4285F4" opacity="0.9"/>
     </svg>
   ),
   Excel: (
