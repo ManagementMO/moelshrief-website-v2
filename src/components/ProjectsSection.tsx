@@ -15,15 +15,6 @@ interface Project {
 
 const projects: Project[] = [
   {
-    id: 'vba-finance-tool',
-    title: 'MO-Planner',
-    description: 'Comprehensive financial planning application built with Excel/VBA featuring automated calculations, expense tracking, budget forecasting, and dynamic financial reporting.',
-    tags: ['Excel', 'VBA', 'Python'],
-    image: '/images/projects/vba-finance-tool.jpg',
-    github: 'https://github.com/ManagementMO/VBA-Financial-Planning-Tool',
-    stats: ['90% accuracy', '100+ users'],
-  },
-  {
     id: 'focusforge',
     title: 'FocusForge',
     description: 'Full-stack productivity suite with dynamic calendar integration, task management, automated calculations, and AI-powered insights via the Gemini API.',
@@ -65,6 +56,69 @@ const tagColors: Record<string, string> = {
 };
 
 const defaultTagColor = 'text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700';
+
+const tagIcons: Record<string, React.ReactNode> = {
+  Python: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <path d="M11.75,2.5c-5.69,0-5.32,2.46-5.32,2.46l.01,2.55h5.42v.77H4.11s-3.69-.4-3.69,5.38,3.22,5.58,3.22,5.58h1.92V16.4s-.1-3.22,3.17-3.22h5.47s3.07.05,3.07-2.97V5.43s.51-2.93-5.52-2.93m-3.03,1.7a.98.98,0,1,1-.98.98.98.98,0,0,1,.98-.98" fill="#366A96"/>
+      <path d="M12.22,21.5c5.69,0,5.32-2.46,5.32-2.46l-.01-2.55H12.11v-.77h7.76s3.69.4,3.69-5.38S20.33,4.75,20.33,4.75H18.4V7.6s.1,3.22-3.17,3.22H9.77s-3.07-.05-3.07,2.97v4.78s-.51,2.93,5.52,2.93m3.03-1.7a.98.98,0,1,1,.98-.98.98.98,0,0,1-.98.98" fill="#FFC331"/>
+    </svg>
+  ),
+  React: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="2.5" fill="#61DAFB"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" fill="none"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" fill="none" transform="rotate(60 12 12)"/>
+      <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" strokeWidth="1.2" fill="none" transform="rotate(120 12 12)"/>
+    </svg>
+  ),
+  Flask: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M9 3h6M12 3v7m-5 4c-1.5 2-2 4-2 6h14c0-2-.5-4-2-6l-3-4H10l-3 4z"/>
+    </svg>
+  ),
+  ML: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V12m-2-2.6A4 4 0 1 0 8 6M10 12H7a4 4 0 0 0 0 8h3m4 0h3a4 4 0 0 0 0-8h-3m-2 0v8"/>
+    </svg>
+  ),
+  'Gemini API': (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L14.5 9.5 22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z" fill="currentColor" opacity="0.8"/>
+    </svg>
+  ),
+  Excel: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="2" fill="#107C41"/>
+      <path d="M7 8l4 4-4 4M13 8l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  VBA: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <polyline points="16 18 22 12 16 6"/>
+      <polyline points="8 6 2 12 8 18"/>
+    </svg>
+  ),
+  PostgreSQL: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <ellipse cx="12" cy="8" rx="8" ry="4" stroke="#336791" strokeWidth="1.5" fill="none"/>
+      <path d="M4 8v8c0 2.2 3.6 4 8 4s8-1.8 8-4V8" stroke="#336791" strokeWidth="1.5" fill="none"/>
+      <path d="M4 12c0 2.2 3.6 4 8 4s8-1.8 8-4" stroke="#336791" strokeWidth="1.5" fill="none"/>
+    </svg>
+  ),
+  Docker: (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <rect x="13" y="4" width="3" height="3" fill="#2496ED"/>
+      <rect x="8" y="4" width="3" height="3" fill="#2496ED"/>
+      <rect x="3" y="4" width="3" height="3" fill="#2496ED"/>
+      <rect x="8" y="8" width="3" height="3" fill="#2496ED"/>
+      <rect x="3" y="8" width="3" height="3" fill="#2496ED"/>
+      <rect x="13" y="8" width="3" height="3" fill="#2496ED"/>
+      <rect x="18" y="8" width="3" height="3" fill="#2496ED"/>
+      <path d="M1 14c0 0 1.5 5 8.5 5s9.5-3 11-5c-1 .5-2.5 1-4 1-3 0-4-1.5-4-1.5" stroke="#2496ED" strokeWidth="1.5" fill="none"/>
+    </svg>
+  ),
+};
 
 const ProjectsSection = () => {
   const [search, setSearch] = useState('');
@@ -217,8 +271,9 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
           {project.tags.map(tag => (
             <span
               key={tag}
-              className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${tagColors[tag] || defaultTagColor}`}
+              className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border ${tagColors[tag] || defaultTagColor}`}
             >
+              {tagIcons[tag] && <span className="flex-shrink-0">{tagIcons[tag]}</span>}
               {tag}
             </span>
           ))}
