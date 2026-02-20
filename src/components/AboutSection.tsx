@@ -40,12 +40,9 @@ const AboutSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-serif text-[1.75rem] md:text-[2rem] font-semibold text-stone-900 dark:text-stone-100 mb-1.5 leading-[1.2] tracking-tight">
-          Mohammed Elshrief
+        <h1 className="font-serif text-[1.85rem] md:text-[2.15rem] font-semibold italic text-stone-900 dark:text-stone-100 mb-8 leading-[1.2] tracking-tight">
+          Hey, I'm Mohammed
         </h1>
-        <p className="text-stone-400 dark:text-stone-500 font-light text-sm mb-8">
-          Waterloo, ON
-        </p>
 
         <p className="text-stone-600 dark:text-stone-300 font-light text-[15px] leading-[1.7] mb-10">
           I build things at the intersection of software, data, and business — then ship
