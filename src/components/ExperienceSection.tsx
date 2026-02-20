@@ -29,7 +29,7 @@ const experiences: Experience[] = [
     role: 'Software Engineer Intern',
     company: 'LiftWerx',
     period: 'may 2025 — aug 2025',
-    description: 'Gave aircraft technicians their own GPT and a fleet of AI agents.',
+    description: 'Gave wind turbine technicians their own GPT and a fleet of AI agents.',
     logo: '/logos/liftwerx.png',
   },
   {
