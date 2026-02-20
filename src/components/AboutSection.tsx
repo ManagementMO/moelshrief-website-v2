@@ -53,7 +53,7 @@ const AboutSection = () => {
         </p>
 
         <div className="mb-10">
-          <p className="section-heading mb-5">what i've been building</p>
+          <p className="section-heading mb-5">a little about me</p>
           <motion.ul
             variants={container}
             initial="hidden"
