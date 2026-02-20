@@ -13,7 +13,7 @@ const highlights = [
     suffix: '',
   },
   {
-    text: 'Slightly too obsessed with hackathons — see the damage on',
+    text: 'Slightly too obsessed with hackathons, see the damage on',
     link: { label: 'devpost', href: 'https://devpost.com/ManagementMO', external: true },
     suffix: '.',
   },
