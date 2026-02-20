@@ -2,63 +2,79 @@ import { motion } from 'framer-motion';
 
 const skillCategories = [
   {
-    label: 'Languages',
+    label: 'languages',
+    color: 'bg-blue-500',
     skills: ['Python', 'SQL', 'JavaScript', 'TypeScript', 'VBA', 'HTML/CSS'],
   },
   {
-    label: 'Frameworks & Libraries',
+    label: 'frameworks & libraries',
+    color: 'bg-teal-500',
     skills: ['React', 'Flask', 'NumPy', 'Scikit-learn', 'PyTorch'],
   },
   {
-    label: 'Data & Cloud',
+    label: 'data & cloud',
+    color: 'bg-amber-500',
     skills: ['PostgreSQL', 'MongoDB', 'Spark', 'Airflow', 'Kafka', 'AWS', 'Azure'],
   },
   {
-    label: 'Tools & Platforms',
+    label: 'tools & platforms',
+    color: 'bg-emerald-500',
     skills: ['Docker', 'Kubernetes', 'Tableau', 'Power BI', 'Git', 'Excel'],
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+};
+
+const categoryVariant = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
+
 const SkillsSection = () => {
   return (
-    <section id="skills" className="section-container py-16 md:py-20 border-t border-stone-200">
+    <section id="skills" className="section-container py-12 md:py-16 border-t border-stone-200/80">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
       >
-        <p className="text-xs text-stone-400 uppercase tracking-widest mb-6 font-medium">
+        <p className="text-xs text-stone-400 uppercase tracking-widest mb-8 font-medium">
           skills
         </p>
 
-        <div className="space-y-6">
-          {skillCategories.map((category, ci) => (
-            <motion.div
-              key={category.label}
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: ci * 0.08 }}
-            >
-              <p className="text-xs text-stone-400 font-light mb-2">{category.label}</p>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="space-y-6"
+        >
+          {skillCategories.map((category) => (
+            <motion.div key={category.label} variants={categoryVariant}>
+              <div className="flex items-center gap-2 mb-2.5">
+                <div className={`w-1.5 h-1.5 rounded-full ${category.color}`} />
+                <p className="text-xs text-stone-400 font-medium">{category.label}</p>
+              </div>
               <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill, si) => (
-                  <motion.span
+                {category.skills.map((skill) => (
+                  <span
                     key={skill}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: ci * 0.08 + si * 0.03 }}
-                    className="text-sm text-stone-600 font-light border border-stone-200 px-2.5 py-1 rounded hover:border-stone-400 hover:text-stone-900 transition-colors cursor-default"
+                    className="text-[13px] text-stone-600 font-light border border-stone-200 bg-white px-3 py-1 rounded-full hover:border-teal-300 hover:text-teal-800 hover:bg-teal-50/50 transition-all duration-200 cursor-default"
                   >
                     {skill}
-                  </motion.span>
+                  </span>
                 ))}
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );

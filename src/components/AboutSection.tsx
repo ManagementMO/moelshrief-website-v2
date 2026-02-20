@@ -29,80 +29,105 @@ const highlights = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.15 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
+};
+
 const AboutSection = () => {
   return (
-    <section id="about" className="section-container py-16 md:py-20">
+    <section id="about" className="section-container pt-16 pb-12 md:pt-24 md:pb-16">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.45 }}
       >
-        <p className="text-xs text-stone-400 uppercase tracking-widest mb-6 font-medium">
-          about
+        <div className="flex items-center gap-2.5 mb-8">
+          <div className="w-2 h-2 rounded-full bg-teal-500 relative">
+            <span className="absolute inset-0 rounded-full bg-teal-400 animate-ping opacity-50" />
+          </div>
+          <span className="text-xs text-stone-400 tracking-widest uppercase font-medium">
+            available for work
+          </span>
+        </div>
+
+        <h1 className="text-[2rem] md:text-[2.5rem] font-semibold text-stone-900 mb-3 leading-[1.15] tracking-tight">
+          hey, i'm mohammed.
+        </h1>
+        <p className="text-stone-500 font-light text-[15px] leading-relaxed mb-10 max-w-[440px]">
+          i build things at the intersection of software, data, and business
+          — then ship them.
         </p>
 
-        <h1 className="text-3xl font-semibold text-stone-900 mb-8 leading-tight">
-          hi, i'm mohammed.
-        </h1>
-
-        <ul className="space-y-3 mb-10">
-          {highlights.map((item, i) => (
+        <motion.ul
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="space-y-3.5 mb-12"
+        >
+          {highlights.map((h, i) => (
             <motion.li
               key={i}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + i * 0.06, duration: 0.35 }}
-              className="list-item-hover flex items-start gap-3 text-stone-600 font-light leading-relaxed"
+              variants={item}
+              className="list-item-hover flex items-start gap-3 text-stone-600 font-light leading-relaxed text-[15px]"
             >
-              <span className="bullet-hover mt-[7px] w-[5px] h-[5px] flex-shrink-0 bg-stone-400 block" />
+              <span className="bullet-hover mt-[8px] w-[5px] h-[5px] flex-shrink-0 bg-stone-300 block" />
               <span>
-                {item.text}{' '}
-                {item.link && (
-                  item.link.external ? (
+                {h.text}{' '}
+                {h.link && (
+                  h.link.external ? (
                     <a
-                      href={item.link.href}
+                      href={h.link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-stone-900 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-600 transition-colors"
+                      className="accent-link"
                     >
-                      {item.link.label}
+                      {h.link.label}
                     </a>
                   ) : (
-                    <Link
-                      to={item.link.href}
-                      className="text-stone-900 underline underline-offset-2 decoration-stone-300 hover:decoration-stone-600 transition-colors"
-                    >
-                      {item.link.label}
+                    <Link to={h.link.href} className="accent-link">
+                      {h.link.label}
                     </Link>
                   )
                 )}
-                {item.suffix}
+                {h.suffix}
               </span>
             </motion.li>
           ))}
-        </ul>
+        </motion.ul>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="pt-8 border-t border-stone-200"
+          transition={{ delay: 0.6, duration: 0.4 }}
+          className="pt-8 border-t border-stone-200/80"
         >
-          <p className="text-stone-500 font-light text-sm leading-relaxed mb-6">
-            I'm in my second year studying Management Engineering at UWaterloo — a program at the
-            intersection of software, systems, and business. I spend most of my time building
-            things, lifting weights, and listening to music while debugging at 2am.
+          <p className="text-stone-500 font-light text-sm leading-[1.7] mb-6">
+            Second-year Management Engineering at UWaterloo — a program at the intersection of
+            software, systems, and business. I spend most of my time building things, lifting
+            weights, and listening to music while debugging at 2am.
           </p>
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-6">
             <Link
               to="/projects"
-              className="text-sm text-stone-900 font-medium underline underline-offset-2 decoration-stone-300 hover:decoration-stone-700 transition-colors"
+              className="text-sm font-medium text-teal-700 hover:text-teal-900 transition-colors group"
             >
-              view projects →
+              see what i've built
+              <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">
+                →
+              </span>
             </Link>
             <Link
               to="/contact"
-              className="text-sm text-stone-500 hover:text-stone-900 transition-colors font-light"
+              className="text-sm text-stone-400 hover:text-stone-700 transition-colors font-light"
             >
               get in touch
             </Link>

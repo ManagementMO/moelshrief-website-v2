@@ -5,7 +5,7 @@ import BackToTop from '@/components/BackToTop';
 
 const ContactPage = () => {
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen">
       <Navbar />
       <main>
         <ContactSection />
