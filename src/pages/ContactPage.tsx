@@ -1,17 +1,17 @@
 import Navbar from '@/components/Navbar';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
-import BackToTop from '@/components/BackToTop';
+import CursorGlow from '@/components/CursorGlow';
 
 const ContactPage = () => {
   return (
     <div className="min-h-screen">
+      <CursorGlow />
       <Navbar />
       <main>
         <ContactSection />
       </main>
       <Footer />
-      <BackToTop />
     </div>
   );
 };

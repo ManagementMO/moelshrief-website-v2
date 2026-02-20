@@ -37,7 +37,7 @@ const Navbar = () => {
         <nav className="section-container flex items-center justify-between h-14">
           <Link
             to="/"
-            className="text-[15px] font-semibold text-stone-900 hover:text-teal-700 transition-colors duration-200 tracking-tight"
+            className="font-serif text-[15px] font-semibold text-stone-900 hover:text-teal-700 transition-colors duration-200 tracking-tight"
           >
             mohammed elshrief
           </Link>
@@ -87,7 +87,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={link.href}
-                    className={`block py-3 text-2xl font-extralight tracking-tight transition-colors duration-200 ${
+                    className={`block py-3 font-serif text-2xl font-light tracking-tight transition-colors duration-200 ${
                       isActive(link.href)
                         ? 'text-stone-900'
                         : 'text-stone-400 hover:text-teal-700'

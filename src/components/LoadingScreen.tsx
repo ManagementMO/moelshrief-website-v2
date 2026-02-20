@@ -9,7 +9,7 @@ const LoadingScreen = () => {
       className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{
         backgroundColor: '#fafaf9',
-        backgroundImage: 'radial-gradient(circle, rgba(168, 162, 158, 0.3) 1px, transparent 1px)',
+        backgroundImage: 'radial-gradient(circle, rgba(168, 162, 158, 0.2) 1px, transparent 1px)',
         backgroundSize: '20px 20px',
       }}
     >
@@ -25,7 +25,7 @@ const LoadingScreen = () => {
           ))}
         </div>
         <motion.span
-          className="text-xs text-stone-400 font-light tracking-wider"
+          className="text-xs text-stone-400 font-serif italic tracking-wider"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}

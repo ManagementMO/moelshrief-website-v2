@@ -1,21 +1,19 @@
 import Navbar from '@/components/Navbar';
 import AboutSection from '@/components/AboutSection';
 import ExperienceSection from '@/components/ExperienceSection';
-import SkillsSection from '@/components/SkillsSection';
 import Footer from '@/components/Footer';
-import BackToTop from '@/components/BackToTop';
+import CursorGlow from '@/components/CursorGlow';
 
 const AboutPage = () => {
   return (
     <div className="min-h-screen">
+      <CursorGlow />
       <Navbar />
       <main>
         <AboutSection />
         <ExperienceSection />
-        <SkillsSection />
       </main>
       <Footer />
-      <BackToTop />
     </div>
   );
 };

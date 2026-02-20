@@ -7,7 +7,6 @@ interface Experience {
   company: string;
   period: string;
   description: string;
-  color: string;
 }
 
 const experiences: Experience[] = [
@@ -16,21 +15,18 @@ const experiences: Experience[] = [
     company: 'Paybridge Technologies',
     period: 'oct 2024 — present',
     description: 'Building a full-stack platform to streamline cross-border money transfers. Leading frontend development with React and integrating with payment APIs.',
-    color: 'bg-teal-500',
   },
   {
     role: 'Software Developer',
     company: 'NewHacks 2024',
     period: 'nov 2024',
     description: 'Won 3rd place building Scam-Mah, a real-time scam detection app using Flask, ML, and the Gemini API. Achieved 90% detection accuracy in 24 hours.',
-    color: 'bg-amber-500',
   },
   {
     role: 'Management Engineering Student',
     company: 'University of Waterloo',
     period: 'sep 2023 — present',
     description: 'Studying at the intersection of software engineering, data science, and business systems. Coursework in optimization, data structures, and statistics.',
-    color: 'bg-blue-500',
   },
 ];
 
@@ -51,9 +47,7 @@ const ExperienceSection = () => {
         transition={{ duration: 0.4 }}
       >
         <div className="flex items-center justify-between mb-8">
-          <p className="text-xs text-stone-400 uppercase tracking-widest font-medium">
-            recently
-          </p>
+          <p className="section-heading">where i've been</p>
           <div className="flex items-center gap-1">
             <button
               onClick={prev}
@@ -85,15 +79,12 @@ const ExperienceSection = () => {
               transition={{ duration: 0.25 }}
               className="p-5"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-2.5 h-2.5 rounded-full ${exp.color}`} />
-                <div>
-                  <p className="text-sm font-medium text-stone-900">{exp.company}</p>
-                  <p className="text-xs text-stone-400 font-light">{exp.period}</p>
-                </div>
+              <div className="mb-4">
+                <p className="font-serif text-[15px] font-medium text-stone-900">{exp.company}</p>
+                <p className="text-xs text-stone-400 font-light">{exp.period}</p>
               </div>
 
-              <p className="text-[15px] text-stone-700 font-light mb-3">
+              <p className="text-[15px] text-stone-600 font-light mb-3">
                 {exp.role}
               </p>
 
@@ -118,10 +109,6 @@ const ExperienceSection = () => {
             ))}
           </div>
         </div>
-
-        <p className="text-xs text-stone-400 font-light mt-4 text-center">
-          swipe or click arrows to see more
-        </p>
       </motion.div>
     </section>
   );

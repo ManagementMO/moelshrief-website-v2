@@ -30,7 +30,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <p className="text-xs text-stone-400 font-light">
+        <p className="text-xs text-stone-400 font-light font-serif italic">
           {year} Mohammed Elshrief
         </p>
       </div>
