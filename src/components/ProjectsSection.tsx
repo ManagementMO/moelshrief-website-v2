@@ -39,7 +39,7 @@ const projects: Project[] = [
     tags: ['Python', 'React', 'PostgreSQL', 'Docker'],
     image: '/images/projects/pay-bridge.jpg',
     live: 'https://paybridgetech.com/',
-    stats: ['50+ beta users', '$1,000+ transactions'],
+    stats: ['$1,000+ transaction volume'],
   },
 ];
 
