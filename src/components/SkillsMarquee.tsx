@@ -182,7 +182,7 @@ const GlassSkillItem: React.FC<{ skill: Skill; index: number }> = ({ skill, inde
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
   }, [skill.color]);
 
-  const isDark = theme.mode === 'dark';
+  const isDark = theme.theme === 'dark';
 
   return (
     <motion.div 

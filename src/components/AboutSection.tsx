@@ -13,14 +13,9 @@ const highlights = [
     suffix: '',
   },
   {
-    text: '3rd Place at',
-    link: { label: 'NewHacks 2024', href: 'https://devpost.com/ManagementMO', external: true },
-    suffix: ' with a real-time scam detection app achieving 90% accuracy.',
-  },
-  {
-    text: 'Currently co-building',
-    link: { label: 'Paybridge Technologies', href: 'https://paybridgetech.com/', external: true },
-    suffix: ' — simplifying cross-border money transfers.',
+    text: 'Slightly too obsessed with hackathons — see the damage at',
+    link: { label: 'devpost', href: 'https://devpost.com/ManagementMO', external: true },
+    suffix: '.',
   },
 ];
 
@@ -45,14 +40,14 @@ const AboutSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-serif text-[1.75rem] md:text-[2rem] font-semibold text-stone-900 mb-1.5 leading-[1.2] tracking-tight">
+        <h1 className="font-serif text-[1.75rem] md:text-[2rem] font-semibold text-stone-900 dark:text-stone-100 mb-1.5 leading-[1.2] tracking-tight">
           Mohammed Elshrief
         </h1>
-        <p className="text-stone-400 font-light text-sm mb-8">
+        <p className="text-stone-400 dark:text-stone-500 font-light text-sm mb-8">
           Waterloo, ON
         </p>
 
-        <p className="text-stone-600 font-light text-[15px] leading-[1.7] mb-10">
+        <p className="text-stone-600 dark:text-stone-300 font-light text-[15px] leading-[1.7] mb-10">
           I build things at the intersection of software, data, and business — then ship
           them. Currently exploring full-stack development, ML, and scalable systems.
         </p>
@@ -69,7 +64,7 @@ const AboutSection = () => {
               <motion.li
                 key={i}
                 variants={item}
-                className="list-item-hover flex items-start gap-3 text-stone-600 font-light leading-relaxed text-[15px]"
+                className="list-item-hover flex items-start gap-3 text-stone-600 dark:text-stone-300 font-light leading-relaxed text-[15px]"
               >
                 <span className="diamond-bullet mt-[9px]" />
                 <span>
@@ -105,14 +100,14 @@ const AboutSection = () => {
         >
           <Link
             to="/projects"
-            className="text-sm font-medium text-teal-700 hover:text-teal-900 transition-colors group"
+            className="text-sm font-medium text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition-colors group"
           >
             see what i've built
             <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">→</span>
           </Link>
           <Link
             to="/contact"
-            className="text-sm text-stone-400 hover:text-stone-700 transition-colors font-light"
+            className="text-sm text-stone-400 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 transition-colors font-light"
           >
             get in touch
           </Link>

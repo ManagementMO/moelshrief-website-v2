@@ -20,7 +20,7 @@ const AnimatedPhotoSphere = ({ strength = 0.3, scale = 1.5, speed = 0.3, profile
   
   // Create animated material colors based on theme
   const materialProps = {
-    color: new THREE.Color(`hsl(${theme.primaryHue}, ${theme.primarySaturation}%, ${theme.primaryLightness}%)`),
+    color: new THREE.Color(`hsl(172, 66%, ${theme.theme === 'dark' ? '40%' : '50%'})`),
     distort: hovered ? strength * 1.5 : strength,
     speed: 1.5,
     roughness: 0.2,

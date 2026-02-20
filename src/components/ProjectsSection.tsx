@@ -53,18 +53,18 @@ const projects: Project[] = [
 ];
 
 const tagColors: Record<string, string> = {
-  Python: 'text-blue-700 bg-blue-50 border-blue-200',
-  React: 'text-sky-700 bg-sky-50 border-sky-200',
-  Flask: 'text-stone-700 bg-stone-50 border-stone-200',
-  ML: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  'Gemini API': 'text-amber-700 bg-amber-50 border-amber-200',
-  Excel: 'text-green-700 bg-green-50 border-green-200',
-  VBA: 'text-green-700 bg-green-50 border-green-200',
-  PostgreSQL: 'text-blue-700 bg-blue-50 border-blue-200',
-  Docker: 'text-sky-700 bg-sky-50 border-sky-200',
+  Python: 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
+  React: 'text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800',
+  Flask: 'text-stone-700 dark:text-stone-300 bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700',
+  ML: 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800',
+  'Gemini API': 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800',
+  Excel: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+  VBA: 'text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+  PostgreSQL: 'text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
+  Docker: 'text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800',
 };
 
-const defaultTagColor = 'text-stone-600 bg-stone-50 border-stone-200';
+const defaultTagColor = 'text-stone-600 dark:text-stone-300 bg-stone-50 dark:bg-stone-800 border-stone-200 dark:border-stone-700';
 
 const ProjectsSection = () => {
   const [search, setSearch] = useState('');
@@ -80,25 +80,25 @@ const ProjectsSection = () => {
   });
 
   return (
-    <section id="projects" className="section-container py-12 md:py-16 border-t border-stone-200/80">
+    <section id="projects" className="section-container py-12 md:py-16 border-t border-stone-200/80 dark:border-stone-800/60">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
       >
-        <p className="text-xs text-stone-400 uppercase tracking-widest mb-8 font-medium">
+        <p className="text-xs text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-8 font-medium">
           projects
         </p>
 
         <div className="relative mb-6">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 dark:text-stone-500" />
           <input
             type="text"
             placeholder="search projects..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 placeholder-stone-400 font-light transition-all"
+            className="w-full pl-9 pr-4 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 dark:text-stone-200 placeholder-stone-400 dark:placeholder-stone-600 font-light transition-all"
           />
         </div>
 
@@ -117,7 +117,7 @@ const ProjectsSection = () => {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-stone-400 text-sm font-light py-6 text-center"
+                className="text-stone-400 dark:text-stone-500 text-sm font-light py-6 text-center"
               >
                 no projects match "{search}"
               </motion.p>
@@ -130,13 +130,13 @@ const ProjectsSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="mt-8 pt-6 border-t border-stone-200/80"
+          className="mt-8 pt-6 border-t border-stone-200/80 dark:border-stone-800/60"
         >
           <a
             href="https://github.com/ManagementMO"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-teal-700 hover:text-teal-900 transition-colors font-medium group"
+            className="text-sm text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition-colors font-medium group"
           >
             more on github
             <span className="inline-block ml-1 transition-transform group-hover:translate-x-1">→</span>
@@ -180,7 +180,7 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
 
       <div className="p-4 sm:p-5">
         <div className="flex items-start justify-between gap-3 mb-2.5">
-          <h3 className="text-[15px] font-medium text-stone-900 group-hover:text-teal-800 transition-colors">
+          <h3 className="text-[15px] font-medium text-stone-900 dark:text-stone-100 group-hover:text-teal-800 dark:group-hover:text-teal-400 transition-colors">
             {project.title}
           </h3>
           <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -189,7 +189,7 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 text-stone-400 hover:text-stone-800 transition-colors hover:bg-stone-100 rounded"
+                className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
                 aria-label="GitHub"
               >
                 <Github size={14} />
@@ -200,7 +200,7 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-1.5 text-stone-400 hover:text-stone-800 transition-colors hover:bg-stone-100 rounded"
+                className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
                 aria-label="Live link"
               >
                 <ExternalLink size={14} />
@@ -209,7 +209,7 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
           </div>
         </div>
 
-        <p className="text-sm text-stone-500 font-light leading-relaxed mb-3.5">
+        <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed mb-3.5">
           {project.description}
         </p>
 
@@ -224,9 +224,9 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
           ))}
           {project.stats && project.stats.length > 0 && (
             <>
-              <span className="text-stone-200 mx-0.5">|</span>
+              <span className="text-stone-200 dark:text-stone-700 mx-0.5">|</span>
               {project.stats.map(stat => (
-                <span key={stat} className="text-[11px] text-stone-500 font-light">
+                <span key={stat} className="text-[11px] text-stone-500 dark:text-stone-400 font-light">
                   {stat}
                 </span>
               ))}

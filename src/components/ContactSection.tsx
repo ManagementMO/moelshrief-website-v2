@@ -6,22 +6,22 @@ const ContactSection = () => {
   const [state, handleSubmit] = useForm('mvgazbyw');
 
   return (
-    <section id="contact" className="section-container py-12 md:py-16 border-t border-stone-200/80">
+    <section id="contact" className="section-container py-12 md:py-16 border-t border-stone-200/80 dark:border-stone-800/60">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
       >
-        <p className="text-xs text-stone-400 uppercase tracking-widest mb-8 font-medium">
+        <p className="text-xs text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-8 font-medium">
           contact
         </p>
 
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-stone-900 mb-2 tracking-tight">
+          <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-2 tracking-tight">
             let's work together.
           </h2>
-          <p className="text-stone-500 font-light text-[15px] leading-relaxed">
+          <p className="text-stone-500 dark:text-stone-400 font-light text-[15px] leading-relaxed">
             Have a project in mind or want to connect? My inbox is always open.
           </p>
         </div>
@@ -34,9 +34,9 @@ const ContactSection = () => {
           >
             <div className="flex items-center gap-3 mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <p className="text-sm font-medium text-stone-800">message sent</p>
+              <p className="text-sm font-medium text-stone-800 dark:text-stone-200">message sent</p>
             </div>
-            <p className="text-sm text-stone-500 font-light">
+            <p className="text-sm text-stone-500 dark:text-stone-400 font-light">
               thanks for reaching out — i'll get back to you soon.
             </p>
           </motion.div>
@@ -44,7 +44,7 @@ const ContactSection = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="name" className="block text-xs text-stone-400 font-medium mb-1.5">
+                <label htmlFor="name" className="block text-xs text-stone-400 dark:text-stone-500 font-medium mb-1.5">
                   name
                 </label>
                 <input
@@ -52,12 +52,12 @@ const ContactSection = () => {
                   type="text"
                   name="name"
                   required
-                  className="w-full px-3.5 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 placeholder-stone-300 font-light transition-all"
+                  className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-600 font-light transition-all"
                   placeholder="your name"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-xs text-stone-400 font-medium mb-1.5">
+                <label htmlFor="email" className="block text-xs text-stone-400 dark:text-stone-500 font-medium mb-1.5">
                   email
                 </label>
                 <input
@@ -65,7 +65,7 @@ const ContactSection = () => {
                   type="email"
                   name="email"
                   required
-                  className="w-full px-3.5 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 placeholder-stone-300 font-light transition-all"
+                  className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-600 font-light transition-all"
                   placeholder="you@example.com"
                 />
                 <ValidationError prefix="Email" field="email" errors={state.errors} className="text-xs text-red-500 mt-1" />
@@ -73,7 +73,7 @@ const ContactSection = () => {
             </div>
 
             <div>
-              <label htmlFor="subject" className="block text-xs text-stone-400 font-medium mb-1.5">
+              <label htmlFor="subject" className="block text-xs text-stone-400 dark:text-stone-500 font-medium mb-1.5">
                 subject
               </label>
               <input
@@ -81,13 +81,13 @@ const ContactSection = () => {
                 type="text"
                 name="subject"
                 required
-                className="w-full px-3.5 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 placeholder-stone-300 font-light transition-all"
+                className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-600 font-light transition-all"
                 placeholder="what's this about?"
               />
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-xs text-stone-400 font-medium mb-1.5">
+              <label htmlFor="message" className="block text-xs text-stone-400 dark:text-stone-500 font-medium mb-1.5">
                 message
               </label>
               <textarea
@@ -95,7 +95,7 @@ const ContactSection = () => {
                 name="message"
                 required
                 rows={4}
-                className="w-full px-3.5 py-2.5 text-sm bg-white border border-stone-200 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 placeholder-stone-300 font-light transition-all resize-none"
+                className="w-full px-3.5 py-2.5 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-lg focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-400/20 text-stone-700 dark:text-stone-200 placeholder-stone-300 dark:placeholder-stone-600 font-light transition-all resize-none"
                 placeholder="tell me about your project..."
               />
               <ValidationError prefix="Message" field="message" errors={state.errors} className="text-xs text-red-500 mt-1" />
