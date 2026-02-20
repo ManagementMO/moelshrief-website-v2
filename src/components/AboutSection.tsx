@@ -40,7 +40,7 @@ const AboutSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-serif text-[1.85rem] md:text-[2.15rem] font-semibold italic text-stone-900 dark:text-stone-100 mb-8 leading-[1.2] tracking-tight">
+        <h1 className="font-serif text-[1.85rem] md:text-[2.15rem] font-semibold italic text-stone-900 dark:text-stone-100 mb-8 leading-[1.2] tracking-tight" style={{ fontStyle: 'oblique 14deg' }}>
           Hey, I'm Mohammed
         </h1>
 
