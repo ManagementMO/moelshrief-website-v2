@@ -518,16 +518,16 @@ void main(){
   vec2 vel = texture2D(velocity, uv).xy;
   float speed = length(vel);
   // Sharper mapping for more defined swirl tendrils
-  float lenv = pow(clamp(speed * 2.0, 0.0, 1.0), 0.6);
+  float lenv = pow(clamp(speed * 1.8, 0.0, 1.0), 0.65);
   vec3 c = texture2D(palette, vec2(lenv, 0.5)).rgb;
-  // Enhanced ethereal glow on swirl tendrils
-  float glow = smoothstep(0.2, 0.75, lenv) * 0.3;
-  // Hot-core highlight for brightest swirl centers
-  float hotCore = smoothstep(0.7, 1.0, lenv) * 0.15;
+  // Ethereal glow on swirl tendrils — dialed back for readability
+  float glow = smoothstep(0.25, 0.8, lenv) * 0.22;
+  // Subtle hot-core highlight for swirl centers
+  float hotCore = smoothstep(0.7, 1.0, lenv) * 0.1;
   c += glow + hotCore;
   vec3 outRGB = mix(bgColor.rgb, c, lenv);
-  // Slightly higher peak opacity for more nebula presence
-  float outA = mix(bgColor.a, 0.8, lenv);
+  // Tamed opacity so foreground text stays readable
+  float outA = mix(bgColor.a, 0.7, lenv);
   gl_FragColor = vec4(outRGB, outA);
 }`;
 
