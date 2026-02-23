@@ -57,8 +57,8 @@ interface CosmicNebulaWebGL {
 const defaultColors = ['#2E1065', '#7C3AED', '#A855F7', '#D8B4FE', '#F3E8FF'];
 
 export default function CosmicNebula({
-  mouseForce = 18,
-  cursorSize = 85,
+  mouseForce = 15,
+  cursorSize = 70,
   isViscous = true,
   viscous = 50,
   iterationsViscous = 32,
@@ -72,7 +72,7 @@ export default function CosmicNebula({
   className = '',
   autoDemo = true,
   autoSpeed = 0.4,
-  autoIntensity = 1.8,
+  autoIntensity = 1.6,
   takeoverDuration = 0.25,
   autoResumeDelay = 1000,
   autoRampDuration = 0.6,
@@ -305,6 +305,7 @@ export default function CosmicNebula({
     const Mouse = new MouseClass();
 
     // ── Autonomous cursor driver ──────────────────────────────────
+    // Spiral-orbit auto driver — creates twirling nebula tendrils
     class AutoDriver {
       mouse: MouseClass;
       manager: WebGLManager;
@@ -313,12 +314,22 @@ export default function CosmicNebula({
       resumeDelay: number;
       rampDurationMs: number;
       active = false;
-      current = new THREE.Vector2(0, 0);
-      target = new THREE.Vector2();
       lastTime = performance.now();
       activationTime = 0;
-      margin = 0.2;
-      private _tmpDir = new THREE.Vector2();
+
+      // Spiral state: orbiting center drifts slowly while the cursor spirals around it
+      angle = Math.random() * Math.PI * 2;
+      radius = 0.25 + Math.random() * 0.2;
+      centerX = (Math.random() - 0.5) * 0.4;
+      centerY = (Math.random() - 0.5) * 0.4;
+      // Drift target for the orbit center
+      driftTargetX = (Math.random() - 0.5) * 0.6;
+      driftTargetY = (Math.random() - 0.5) * 0.6;
+      driftSpeed = 0.04;
+      // Spiral wobble — radius oscillates for organic feel
+      radiusBase = 0.25;
+      radiusWobble = 0.12;
+      wobblePhase = Math.random() * Math.PI * 2;
 
       constructor(
         mouse: MouseClass,
@@ -331,11 +342,11 @@ export default function CosmicNebula({
         this.speed = opts.speed;
         this.resumeDelay = opts.resumeDelay || 3000;
         this.rampDurationMs = (opts.rampDuration || 0) * 1000;
-        this.pickNewTarget();
+        this.radiusBase = 0.2 + Math.random() * 0.15;
       }
-      pickNewTarget() {
-        const r = Math.random;
-        this.target.set((r() * 2 - 1) * (1 - this.margin), (r() * 2 - 1) * (1 - this.margin));
+      pickNewDriftTarget() {
+        this.driftTargetX = (Math.random() - 0.5) * 0.6;
+        this.driftTargetY = (Math.random() - 0.5) * 0.6;
       }
       forceStop() {
         this.active = false;
@@ -349,7 +360,6 @@ export default function CosmicNebula({
         if (this.mouse.isHoverInside) { if (this.active) this.forceStop(); return; }
         if (!this.active) {
           this.active = true;
-          this.current.copy(this.mouse.coords);
           this.lastTime = now;
           this.activationTime = now;
         }
@@ -358,19 +368,37 @@ export default function CosmicNebula({
         let dtSec = (now - this.lastTime) / 1000;
         this.lastTime = now;
         if (dtSec > 0.2) dtSec = 0.016;
-        const dir = this._tmpDir.subVectors(this.target, this.current);
-        const dist = dir.length();
-        if (dist < 0.01) { this.pickNewTarget(); return; }
-        dir.normalize();
+
+        // Ramp in
         let ramp = 1;
         if (this.rampDurationMs > 0) {
           const t = Math.min(1, (now - this.activationTime) / this.rampDurationMs);
           ramp = t * t * (3 - 2 * t);
         }
-        const step = this.speed * dtSec * ramp;
-        const move = Math.min(step, dist);
-        this.current.addScaledVector(dir, move);
-        this.mouse.setNormalized(this.current.x, this.current.y);
+
+        // Advance the spiral angle — this is the twirl
+        this.angle += this.speed * dtSec * 2.5 * ramp;
+
+        // Wobble the radius for organic spiraling
+        this.wobblePhase += dtSec * 0.7;
+        this.radius = this.radiusBase + Math.sin(this.wobblePhase) * this.radiusWobble;
+
+        // Slowly drift the orbit center across the canvas
+        const dx = this.driftTargetX - this.centerX;
+        const dy = this.driftTargetY - this.centerY;
+        const driftDist = Math.sqrt(dx * dx + dy * dy);
+        if (driftDist < 0.05) this.pickNewDriftTarget();
+        this.centerX += dx * this.driftSpeed * dtSec;
+        this.centerY += dy * this.driftSpeed * dtSec;
+
+        // Compute spiral position
+        const x = this.centerX + Math.cos(this.angle) * this.radius;
+        const y = this.centerY + Math.sin(this.angle) * this.radius;
+
+        // Clamp to bounds
+        const cx = Math.max(-0.85, Math.min(0.85, x));
+        const cy = Math.max(-0.85, Math.min(0.85, y));
+        this.mouse.setNormalized(cx, cy);
       }
     }
 
@@ -820,8 +848,8 @@ void main(){
 
       constructor(options?: Partial<SimOptions>) {
         this.options = {
-          iterations_poisson: 32, iterations_viscous: 32, mouse_force: 18,
-          resolution: 0.5, cursor_size: 85, viscous: 50, isBounce: false,
+          iterations_poisson: 32, iterations_viscous: 32, mouse_force: 15,
+          resolution: 0.5, cursor_size: 70, viscous: 50, isBounce: false,
           dt: 0.015, isViscous: true, BFECC: true, ...options,
         };
         this.init();
