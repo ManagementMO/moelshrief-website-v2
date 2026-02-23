@@ -10,18 +10,23 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import CursorGlow from "./components/CursorGlow";
+import CosmicNebula from "./components/CosmicNebula";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient();
 
 const Layout = () => (
-  <div className="min-h-screen">
-    <CursorGlow />
-    <Navbar />
-    <Outlet />
-    <Footer />
+  <div className="min-h-screen relative">
+    {/* Cosmic nebula fluid background — fixed behind all content */}
+    <div className="fixed inset-0 -z-10 pointer-events-auto">
+      <CosmicNebula />
+    </div>
+    <div className="relative z-10">
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </div>
   </div>
 );
 
