@@ -52,9 +52,9 @@ interface CosmicNebulaWebGL {
   dispose: () => void;
 }
 
-// Nebula Gauntlet–inspired cosmic palette:
-// deep void → grape → vivid purple → fuchsia-pink → pale stardust white
-const defaultColors = ['#2E1065', '#7C3AED', '#A855F7', '#D8B4FE', '#F3E8FF'];
+// Nebula Gauntlet palette:
+// deep void → magenta-grape → pink-purple → hot pink-white → bright stardust
+const defaultColors = ['#2E1065', '#9333EA', '#C026D3', '#F0ABFC', '#FDF4FF'];
 
 export default function CosmicNebula({
   mouseForce = 15,
@@ -317,19 +317,23 @@ export default function CosmicNebula({
       lastTime = performance.now();
       activationTime = 0;
 
-      // Spiral state: orbiting center drifts slowly while the cursor spirals around it
+      // Spiral state — tighter, faster orbits with a second harmonic for spirograph twirls
       angle = Math.random() * Math.PI * 2;
-      radius = 0.25 + Math.random() * 0.2;
-      centerX = (Math.random() - 0.5) * 0.4;
-      centerY = (Math.random() - 0.5) * 0.4;
-      // Drift target for the orbit center
-      driftTargetX = (Math.random() - 0.5) * 0.6;
-      driftTargetY = (Math.random() - 0.5) * 0.6;
-      driftSpeed = 0.04;
-      // Spiral wobble — radius oscillates for organic feel
-      radiusBase = 0.25;
-      radiusWobble = 0.12;
+      angle2 = Math.random() * Math.PI * 2; // second orbit layer
+      radius = 0.18;
+      centerX = (Math.random() - 0.5) * 0.3;
+      centerY = (Math.random() - 0.5) * 0.3;
+      driftTargetX = (Math.random() - 0.5) * 0.5;
+      driftTargetY = (Math.random() - 0.5) * 0.5;
+      driftSpeed = 0.06;
+      // Primary orbit
+      radiusBase = 0.18;
+      radiusWobble = 0.08;
       wobblePhase = Math.random() * Math.PI * 2;
+      // Secondary smaller orbit layered on top (spirograph effect)
+      radius2 = 0.07;
+      radius2Wobble = 0.03;
+      wobble2Phase = Math.random() * Math.PI * 2;
 
       constructor(
         mouse: MouseClass,
@@ -342,7 +346,7 @@ export default function CosmicNebula({
         this.speed = opts.speed;
         this.resumeDelay = opts.resumeDelay || 3000;
         this.rampDurationMs = (opts.rampDuration || 0) * 1000;
-        this.radiusBase = 0.2 + Math.random() * 0.15;
+        this.radiusBase = 0.15 + Math.random() * 0.08;
       }
       pickNewDriftTarget() {
         this.driftTargetX = (Math.random() - 0.5) * 0.6;
@@ -376,14 +380,18 @@ export default function CosmicNebula({
           ramp = t * t * (3 - 2 * t);
         }
 
-        // Advance the spiral angle — this is the twirl
-        this.angle += this.speed * dtSec * 2.5 * ramp;
+        // Primary orbit — fast twirl
+        this.angle += this.speed * dtSec * 4.5 * ramp;
+        // Secondary orbit — spins opposite direction, faster (spirograph)
+        this.angle2 -= this.speed * dtSec * 7.0 * ramp;
 
-        // Wobble the radius for organic spiraling
-        this.wobblePhase += dtSec * 0.7;
+        // Wobble both radii for organic pulsing
+        this.wobblePhase += dtSec * 1.2;
+        this.wobble2Phase += dtSec * 1.8;
         this.radius = this.radiusBase + Math.sin(this.wobblePhase) * this.radiusWobble;
+        this.radius2 = 0.07 + Math.sin(this.wobble2Phase) * this.radius2Wobble;
 
-        // Slowly drift the orbit center across the canvas
+        // Drift the orbit center
         const dx = this.driftTargetX - this.centerX;
         const dy = this.driftTargetY - this.centerY;
         const driftDist = Math.sqrt(dx * dx + dy * dy);
@@ -391,11 +399,14 @@ export default function CosmicNebula({
         this.centerX += dx * this.driftSpeed * dtSec;
         this.centerY += dy * this.driftSpeed * dtSec;
 
-        // Compute spiral position
-        const x = this.centerX + Math.cos(this.angle) * this.radius;
-        const y = this.centerY + Math.sin(this.angle) * this.radius;
+        // Dual-orbit spirograph position
+        const x = this.centerX
+          + Math.cos(this.angle) * this.radius
+          + Math.cos(this.angle2) * this.radius2;
+        const y = this.centerY
+          + Math.sin(this.angle) * this.radius
+          + Math.sin(this.angle2) * this.radius2;
 
-        // Clamp to bounds
         const cx = Math.max(-0.85, Math.min(0.85, x));
         const cy = Math.max(-0.85, Math.min(0.85, y));
         this.mouse.setNormalized(cx, cy);
