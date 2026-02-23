@@ -10,6 +10,7 @@ export interface CosmicNebulaProps {
   iterationsPoisson?: number;
   dt?: number;
   BFECC?: boolean;
+  vorticityStrength?: number;
   resolution?: number;
   isBounce?: boolean;
   colors?: string[];
@@ -34,6 +35,7 @@ interface SimOptions {
   dt: number;
   isViscous: boolean;
   BFECC: boolean;
+  vorticityStrength: number;
 }
 
 interface CosmicNebulaWebGL {
@@ -65,6 +67,7 @@ export default function CosmicNebula({
   iterationsPoisson = 32,
   dt = 0.015,
   BFECC = true,
+  vorticityStrength = 0.4,
   resolution = 0.5,
   isBounce = false,
   colors = defaultColors,
@@ -317,23 +320,31 @@ export default function CosmicNebula({
       lastTime = performance.now();
       activationTime = 0;
 
-      // Spiral state — tighter, faster orbits with a second harmonic for spirograph twirls
+      // Multi-harmonic spiral state — 4 layered orbits for spirograph twirls
       angle = Math.random() * Math.PI * 2;
-      angle2 = Math.random() * Math.PI * 2; // second orbit layer
+      angle2 = Math.random() * Math.PI * 2;
+      angle3 = Math.random() * Math.PI * 2;
+      angle4 = Math.random() * Math.PI * 2;
       radius = 0.18;
       centerX = (Math.random() - 0.5) * 0.3;
       centerY = (Math.random() - 0.5) * 0.3;
       driftTargetX = (Math.random() - 0.5) * 0.5;
       driftTargetY = (Math.random() - 0.5) * 0.5;
-      driftSpeed = 0.06;
+      driftSpeed = 0.08;
       // Primary orbit
       radiusBase = 0.18;
       radiusWobble = 0.08;
       wobblePhase = Math.random() * Math.PI * 2;
-      // Secondary smaller orbit layered on top (spirograph effect)
+      // Secondary orbit (spirograph layer)
       radius2 = 0.07;
       radius2Wobble = 0.03;
       wobble2Phase = Math.random() * Math.PI * 2;
+      // Tertiary orbit — tight swirl detail
+      radius3 = 0.04;
+      radius3Wobble = 0.015;
+      wobble3Phase = Math.random() * Math.PI * 2;
+      // Quaternary orbit — micro-twirl filigree
+      radius4 = 0.02;
 
       constructor(
         mouse: MouseClass,
@@ -380,16 +391,22 @@ export default function CosmicNebula({
           ramp = t * t * (3 - 2 * t);
         }
 
-        // Primary orbit — fast twirl
-        this.angle += this.speed * dtSec * 4.5 * ramp;
-        // Secondary orbit — spins opposite direction, faster (spirograph)
-        this.angle2 -= this.speed * dtSec * 7.0 * ramp;
+        // Primary orbit — base swirl
+        this.angle += this.speed * dtSec * 4.2 * ramp;
+        // Secondary — opposite direction, faster (spirograph)
+        this.angle2 -= this.speed * dtSec * 6.8 * ramp;
+        // Tertiary — golden-ratio speed for non-repeating patterns
+        this.angle3 += this.speed * dtSec * 11.0 * ramp;
+        // Quaternary — fastest micro-twirl
+        this.angle4 -= this.speed * dtSec * 17.5 * ramp;
 
-        // Wobble both radii for organic pulsing
+        // Wobble all radii for organic pulsing
         this.wobblePhase += dtSec * 1.2;
         this.wobble2Phase += dtSec * 1.8;
+        this.wobble3Phase += dtSec * 2.5;
         this.radius = this.radiusBase + Math.sin(this.wobblePhase) * this.radiusWobble;
         this.radius2 = 0.07 + Math.sin(this.wobble2Phase) * this.radius2Wobble;
+        this.radius3 = 0.04 + Math.sin(this.wobble3Phase) * this.radius3Wobble;
 
         // Drift the orbit center
         const dx = this.driftTargetX - this.centerX;
@@ -399,13 +416,17 @@ export default function CosmicNebula({
         this.centerX += dx * this.driftSpeed * dtSec;
         this.centerY += dy * this.driftSpeed * dtSec;
 
-        // Dual-orbit spirograph position
+        // Quad-orbit spirograph position — complex, non-repeating twirls
         const x = this.centerX
           + Math.cos(this.angle) * this.radius
-          + Math.cos(this.angle2) * this.radius2;
+          + Math.cos(this.angle2) * this.radius2
+          + Math.cos(this.angle3) * this.radius3
+          + Math.cos(this.angle4) * this.radius4;
         const y = this.centerY
           + Math.sin(this.angle) * this.radius
-          + Math.sin(this.angle2) * this.radius2;
+          + Math.sin(this.angle2) * this.radius2
+          + Math.sin(this.angle3) * this.radius3
+          + Math.sin(this.angle4) * this.radius4;
 
         const cx = Math.max(-0.85, Math.min(0.85, x));
         const cy = Math.max(-0.85, Math.min(0.85, y));
@@ -486,7 +507,7 @@ void main(){
   }
 }`;
 
-    // Cosmic color shader — purple nebula wisps with soft white highlights
+    // Cosmic color shader — purple nebula wisps with ethereal glow
     const color_frag = `
 precision highp float;
 uniform sampler2D velocity;
@@ -496,15 +517,17 @@ varying vec2 uv;
 void main(){
   vec2 vel = texture2D(velocity, uv).xy;
   float speed = length(vel);
-  // Medium mapping — visible wisps without blowing out
-  float lenv = pow(clamp(speed * 1.6, 0.0, 1.0), 0.8);
+  // Sharper mapping for more defined swirl tendrils
+  float lenv = pow(clamp(speed * 2.0, 0.0, 1.0), 0.6);
   vec3 c = texture2D(palette, vec2(lenv, 0.5)).rgb;
-  // Moderate glow on bright tendrils
-  float glow = smoothstep(0.4, 1.0, lenv) * 0.2;
-  c += glow;
+  // Enhanced ethereal glow on swirl tendrils
+  float glow = smoothstep(0.2, 0.75, lenv) * 0.3;
+  // Hot-core highlight for brightest swirl centers
+  float hotCore = smoothstep(0.7, 1.0, lenv) * 0.15;
+  c += glow + hotCore;
   vec3 outRGB = mix(bgColor.rgb, c, lenv);
-  // Max ~75% opacity — present but text still readable
-  float outA = mix(bgColor.a, 0.75, lenv);
+  // Slightly higher peak opacity for more nebula presence
+  float outA = mix(bgColor.a, 0.8, lenv);
   gl_FragColor = vec4(outRGB, outA);
 }`;
 
@@ -589,6 +612,44 @@ void main(){
   vec2 newv = 4.0 * old + v * dt * (new0 + new1 + new2 + new3);
   newv /= 4.0 * (1.0 + v * dt);
   gl_FragColor = vec4(newv, 0.0, 0.0);
+}`;
+
+    // Curl (vorticity) computation — scalar curl of the 2D velocity field
+    const curl_frag = `
+precision highp float;
+uniform sampler2D velocity;
+uniform vec2 px;
+uniform vec2 boundarySpace;
+varying vec2 uv;
+void main(){
+  float vR = texture2D(velocity, uv + vec2(px.x, 0.0)).y;
+  float vL = texture2D(velocity, uv - vec2(px.x, 0.0)).y;
+  float vT = texture2D(velocity, uv + vec2(0.0, px.y)).x;
+  float vB = texture2D(velocity, uv - vec2(0.0, px.y)).x;
+  float curl = (vR - vL - vT + vB) * 0.5;
+  gl_FragColor = vec4(curl, 0.0, 0.0, 1.0);
+}`;
+
+    // Vorticity confinement — amplifies rotational motion for tighter, longer-lasting swirls
+    const vorticity_frag = `
+precision highp float;
+uniform sampler2D curlTex;
+uniform vec2 px;
+uniform vec2 boundarySpace;
+uniform float dt;
+uniform float strength;
+varying vec2 uv;
+void main(){
+  float cL = abs(texture2D(curlTex, uv - vec2(px.x, 0.0)).x);
+  float cR = abs(texture2D(curlTex, uv + vec2(px.x, 0.0)).x);
+  float cB = abs(texture2D(curlTex, uv - vec2(0.0, px.y)).x);
+  float cT = abs(texture2D(curlTex, uv + vec2(0.0, px.y)).x);
+  float cC = texture2D(curlTex, uv).x;
+  vec2 grad = vec2(cR - cL, cT - cB) * 0.5;
+  float len = length(grad) + 1e-5;
+  vec2 n = grad / len;
+  vec2 force = strength * vec2(n.y, -n.x) * cC;
+  gl_FragColor = vec4(force * dt, 0.0, 1.0);
 }`;
 
     // ── Shader pass infrastructure ────────────────────────────────
@@ -840,12 +901,67 @@ void main(){
       }
     }
 
+    class CurlPass extends ShaderPass {
+      constructor(simProps: any) {
+        super({
+          material: {
+            vertexShader: face_vert,
+            fragmentShader: curl_frag,
+            uniforms: {
+              boundarySpace: { value: simProps.boundarySpace },
+              velocity: { value: simProps.src.texture },
+              px: { value: simProps.cellScale },
+            },
+          },
+          output: simProps.dst,
+        });
+        this.init();
+      }
+      update(...args: any[]) {
+        const { vel } = (args[0] || {}) as any;
+        if (this.uniforms && vel) this.uniforms.velocity.value = vel.texture;
+        super.update();
+      }
+    }
+
+    class VorticityConfinement extends ShaderPass {
+      constructor(simProps: any) {
+        super({
+          material: {
+            vertexShader: face_vert,
+            fragmentShader: vorticity_frag,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            uniforms: {
+              boundarySpace: { value: simProps.boundarySpace },
+              curlTex: { value: simProps.src.texture },
+              px: { value: simProps.cellScale },
+              dt: { value: simProps.dt },
+              strength: { value: simProps.strength },
+            },
+          },
+          output: simProps.dst,
+        });
+        this.init();
+      }
+      update(...args: any[]) {
+        const { curl, strength: s, dt: _dt } = (args[0] || {}) as any;
+        if (this.uniforms) {
+          if (curl) this.uniforms.curlTex.value = curl.texture;
+          if (typeof s === 'number') this.uniforms.strength.value = s;
+          if (typeof _dt === 'number') this.uniforms.dt.value = _dt;
+        }
+        super.update();
+      }
+    }
+
     // ── Fluid simulation ──────────────────────────────────────────
     class Simulation {
       options: SimOptions;
       fbos: Record<string, THREE.WebGLRenderTarget | null> = {
         vel_0: null, vel_1: null, vel_viscous0: null, vel_viscous1: null,
-        div: null, pressure_0: null, pressure_1: null,
+        div: null, pressure_0: null, pressure_1: null, curl: null,
       };
       fboSize = new THREE.Vector2();
       cellScale = new THREE.Vector2();
@@ -856,12 +972,14 @@ void main(){
       divergence!: Divergence;
       poisson!: Poisson;
       pressure!: Pressure;
+      curlPass!: CurlPass;
+      vorticityConfinement!: VorticityConfinement;
 
       constructor(options?: Partial<SimOptions>) {
         this.options = {
           iterations_poisson: 32, iterations_viscous: 32, mouse_force: 15,
           resolution: 0.5, cursor_size: 70, viscous: 50, isBounce: false,
-          dt: 0.015, isViscous: true, BFECC: true, ...options,
+          dt: 0.015, isViscous: true, BFECC: true, vorticityStrength: 0.4, ...options,
         };
         this.init();
       }
@@ -903,6 +1021,15 @@ void main(){
           cellScale: this.cellScale, boundarySpace: this.boundarySpace,
           src_p: this.fbos.pressure_0, src_v: this.fbos.vel_viscous0, dst: this.fbos.vel_0, dt: this.options.dt,
         });
+        this.curlPass = new CurlPass({
+          cellScale: this.cellScale, boundarySpace: this.boundarySpace,
+          src: this.fbos.vel_1, dst: this.fbos.curl,
+        });
+        this.vorticityConfinement = new VorticityConfinement({
+          cellScale: this.cellScale, boundarySpace: this.boundarySpace,
+          src: this.fbos.curl, dst: this.fbos.vel_1,
+          dt: this.options.dt, strength: this.options.vorticityStrength,
+        });
       }
       calcSize() {
         const w = Math.max(1, Math.round(this.options.resolution * Common.width));
@@ -921,6 +1048,13 @@ void main(){
         this.externalForce.update({
           cursor_size: this.options.cursor_size, mouse_force: this.options.mouse_force, cellScale: this.cellScale,
         });
+        // Vorticity confinement — amplify swirls for twirlier nebula tendrils
+        if (this.options.vorticityStrength > 0) {
+          this.curlPass.update({ vel: this.fbos.vel_1 });
+          this.vorticityConfinement.update({
+            curl: this.fbos.curl, strength: this.options.vorticityStrength, dt: this.options.dt,
+          });
+        }
         let vel: any = this.fbos.vel_1;
         if (this.options.isViscous) {
           vel = this.viscous.update({
@@ -1057,7 +1191,7 @@ void main(){
       Object.assign(sim.options, {
         mouse_force: mouseForce, cursor_size: cursorSize, isViscous, viscous,
         iterations_viscous: iterationsViscous, iterations_poisson: iterationsPoisson,
-        dt, BFECC, resolution, isBounce,
+        dt, BFECC, resolution, isBounce, vorticityStrength,
       });
       if (resolution !== prevRes) sim.resize();
     };
@@ -1108,7 +1242,7 @@ void main(){
     Object.assign(sim.options, {
       mouse_force: mouseForce, cursor_size: cursorSize, isViscous, viscous,
       iterations_viscous: iterationsViscous, iterations_poisson: iterationsPoisson,
-      dt, BFECC, resolution, isBounce,
+      dt, BFECC, resolution, isBounce, vorticityStrength,
     });
     if (webgl.autoDriver) {
       webgl.autoDriver.enabled = autoDemo;
@@ -1123,7 +1257,7 @@ void main(){
     if (resolution !== prevRes) sim.resize();
   }, [
     mouseForce, cursorSize, isViscous, viscous, iterationsViscous, iterationsPoisson,
-    dt, BFECC, resolution, isBounce, autoDemo, autoSpeed, autoIntensity,
+    dt, BFECC, resolution, isBounce, vorticityStrength, autoDemo, autoSpeed, autoIntensity,
     takeoverDuration, autoResumeDelay, autoRampDuration,
   ]);
 
