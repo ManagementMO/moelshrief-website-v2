@@ -11,7 +11,7 @@ interface Experience {
 
 const experiences: Experience[] = [
   {
-    role: 'Data Scientist',
+    role: 'Data Scientist Intern',
     company: 'Altas Partners',
     period: 'jan 2026 — present',
     logo: '/logos/altas.png',
@@ -126,4 +126,5 @@ const ExperienceSection = () => {
 };
 
 export default ExperienceSection;
+
 
