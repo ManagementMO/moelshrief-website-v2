@@ -13,18 +13,7 @@ const ContactSection = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
       >
-        <p className="text-xs text-stone-400 dark:text-stone-500 uppercase tracking-widest mb-8 font-medium">
-          contact
-        </p>
-
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-2 tracking-tight">
-            let's work together.
-          </h2>
-          <p className="text-stone-500 dark:text-stone-400 font-light text-[15px] leading-relaxed">
-            Have a project in mind or want to connect? My inbox is always open.
-          </p>
-        </div>
+        <p className="section-heading mb-8">contact</p>
 
         {state.succeeded ? (
           <motion.div
