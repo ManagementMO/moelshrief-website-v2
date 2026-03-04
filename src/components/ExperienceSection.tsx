@@ -6,7 +6,6 @@ interface Experience {
   role: string;
   company: string;
   period: string;
-  description: string;
   logo: string;
 }
 
@@ -15,28 +14,24 @@ const experiences: Experience[] = [
     role: 'Data Scientist Intern',
     company: 'Altas Partners',
     period: 'jan 2026 — present',
-    description: 'Turns out private equity needs a lot of data scraped from the internet.',
     logo: '/logos/altas.png',
   },
   {
     role: 'Machine Learning Engineer',
     company: 'WAT.ai',
     period: 'sep 2025 — present',
-    description: 'Building AI at Waterloo\'s AI club. Yes, the recursion is intentional.',
     logo: '/logos/watai.png',
   },
   {
     role: 'Software Engineer Intern',
     company: 'LiftWerx',
     period: 'may 2025 — aug 2025',
-    description: 'Gave wind turbine technicians their own GPT and a fleet of AI agents.',
     logo: '/logos/liftwerx.png',
   },
   {
     role: 'Machine Learning Developer',
     company: 'Themis AI (UTMIST)',
     period: 'may 2025 — aug 2025',
-    description: 'Made data labeling less soul-crushing.',
     logo: '/logos/utmist.svg',
   },
 ];
@@ -88,9 +83,9 @@ const ExperienceSection = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25 }}
-              className="p-5"
+              className="p-4"
             >
-              <div className="flex items-start gap-3.5 mb-4">
+              <div className="flex items-start gap-3.5 mb-3">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5 bg-stone-200/70 dark:bg-stone-700/50">
                   <img
                     src={exp.logo}
@@ -104,17 +99,13 @@ const ExperienceSection = () => {
                 </div>
               </div>
 
-              <p className="text-[15px] text-stone-600 dark:text-stone-300 font-light mb-3">
+              <p className="text-[15px] text-stone-600 dark:text-stone-300 font-light">
                 {exp.role}
-              </p>
-
-              <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed">
-                {exp.description}
               </p>
             </motion.div>
           </AnimatePresence>
 
-          <div className="flex gap-1 px-5 pb-4">
+          <div className="flex gap-1 px-4 pb-3">
             {experiences.map((_, i) => (
               <button
                 key={i}
