@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useForm, ValidationError } from '@formspree/react';
 import { Send } from 'lucide-react';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 const ContactSection = () => {
   const [state, handleSubmit] = useForm('mvgazbyw');
@@ -30,8 +31,9 @@ const ContactSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="card-hover p-6"
+            className="card-hover relative p-6"
           >
+            <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
             <div className="flex items-center gap-3 mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
               <p className="text-sm font-medium text-stone-800 dark:text-stone-200">message sent</p>

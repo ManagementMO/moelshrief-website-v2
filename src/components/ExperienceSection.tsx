@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 interface Experience {
   role: string;
@@ -80,7 +81,9 @@ const ExperienceSection = () => {
           </div>
         </div>
 
-        <div className="card-hover overflow-hidden">
+        <div className="card-hover relative">
+          <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
+          <div className="overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
@@ -127,6 +130,7 @@ const ExperienceSection = () => {
                 aria-label={`Go to experience ${i + 1}`}
               />
             ))}
+          </div>
           </div>
         </div>
       </motion.div>

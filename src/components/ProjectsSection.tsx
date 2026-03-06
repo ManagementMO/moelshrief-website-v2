@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Github, Search } from 'lucide-react';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 interface Project {
   id: string;
@@ -210,8 +211,9 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ delay: index * 0.05 }}
-      className="group card-hover overflow-hidden"
+      className="group card-hover relative"
     >
+      <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
       <div className="overflow-hidden">
         <div className="w-full transition-all duration-500 ease-in-out overflow-hidden h-0 group-hover:h-44">
           {!imageLoaded && (
