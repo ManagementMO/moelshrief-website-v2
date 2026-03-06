@@ -31,16 +31,18 @@ const ContactSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="card-hover relative p-6"
+            className="relative rounded-2xl border border-stone-200/80 dark:border-stone-700/50 p-2 transition-all duration-300"
           >
-            <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <p className="text-sm font-medium text-stone-800 dark:text-stone-200">message sent</p>
+            <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={3} />
+            <div className="relative rounded-xl bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm border border-stone-100 dark:border-stone-800/60 shadow-sm dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)] p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <p className="text-sm font-medium text-stone-800 dark:text-stone-200">message sent</p>
+              </div>
+              <p className="text-sm text-stone-500 dark:text-stone-400 font-light">
+                thanks for reaching out — i'll get back to you soon.
+              </p>
             </div>
-            <p className="text-sm text-stone-500 dark:text-stone-400 font-light">
-              thanks for reaching out — i'll get back to you soon.
-            </p>
           </motion.div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">

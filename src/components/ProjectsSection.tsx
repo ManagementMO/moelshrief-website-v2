@@ -211,78 +211,80 @@ const ProjectCard = ({ project, index, imageLoaded, onImageLoad }: ProjectCardPr
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ delay: index * 0.05 }}
-      className="group card-hover relative"
+      className="group relative rounded-2xl border border-stone-200/80 dark:border-stone-700/50 p-2 transition-all duration-300 hover:border-stone-300/80 dark:hover:border-stone-600/60"
     >
-      <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
-      <div className="overflow-hidden">
-        <div className="w-full transition-all duration-500 ease-in-out overflow-hidden h-0 group-hover:h-44">
-          {!imageLoaded && (
-            <div className="w-full h-44 project-image-shimmer" />
-          )}
-          <img
-            src={project.image}
-            alt={project.title}
-            onLoad={onImageLoad}
-            className={`w-full h-44 object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-          />
-        </div>
-      </div>
-
-      <div className="p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-3 mb-2.5">
-          <h3 className="text-[15px] font-medium text-stone-900 dark:text-stone-100 group-hover:text-teal-800 dark:group-hover:text-teal-400 transition-colors">
-            {project.title}
-          </h3>
-          <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
-                aria-label="GitHub"
-              >
-                <Github size={14} />
-              </a>
+      <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={3} />
+      <div className="relative overflow-hidden rounded-xl bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm border border-stone-100 dark:border-stone-800/60 shadow-sm dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)]">
+        <div className="overflow-hidden">
+          <div className="w-full transition-all duration-500 ease-in-out overflow-hidden h-0 group-hover:h-44">
+            {!imageLoaded && (
+              <div className="w-full h-44 project-image-shimmer" />
             )}
-            {project.live && (
-              <a
-                href={project.live}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
-                aria-label="Live link"
-              >
-                <ExternalLink size={14} />
-              </a>
-            )}
+            <img
+              src={project.image}
+              alt={project.title}
+              onLoad={onImageLoad}
+              className={`w-full h-44 object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
           </div>
         </div>
 
-        <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed mb-3.5">
-          {project.description}
-        </p>
+        <div className="p-4 sm:p-5">
+          <div className="flex items-start justify-between gap-3 mb-2.5">
+            <h3 className="text-[15px] font-medium text-stone-900 dark:text-stone-100 group-hover:text-teal-800 dark:group-hover:text-teal-400 transition-colors">
+              {project.title}
+            </h3>
+            <div className="flex items-center gap-1.5 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
+                  aria-label="GitHub"
+                >
+                  <Github size={14} />
+                </a>
+              )}
+              {project.live && (
+                <a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1.5 text-stone-400 dark:text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 transition-colors hover:bg-stone-100 dark:hover:bg-stone-800 rounded"
+                  aria-label="Live link"
+                >
+                  <ExternalLink size={14} />
+                </a>
+              )}
+            </div>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-1.5">
-          {project.tags.map(tag => (
-            <span
-              key={tag}
-              className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border ${tagColors[tag] || defaultTagColor}`}
-            >
-              {tagIcons[tag] && <span className="flex-shrink-0">{tagIcons[tag]}</span>}
-              {tag}
-            </span>
-          ))}
-          {project.stats && project.stats.length > 0 && (
-            <>
-              <span className="text-stone-200 dark:text-stone-700 mx-0.5">|</span>
-              {project.stats.map(stat => (
-                <span key={stat} className="text-[11px] text-stone-500 dark:text-stone-400 font-light">
-                  {stat}
-                </span>
-              ))}
-            </>
-          )}
+          <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed mb-3.5">
+            {project.description}
+          </p>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            {project.tags.map(tag => (
+              <span
+                key={tag}
+                className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border ${tagColors[tag] || defaultTagColor}`}
+              >
+                {tagIcons[tag] && <span className="flex-shrink-0">{tagIcons[tag]}</span>}
+                {tag}
+              </span>
+            ))}
+            {project.stats && project.stats.length > 0 && (
+              <>
+                <span className="text-stone-200 dark:text-stone-700 mx-0.5">|</span>
+                {project.stats.map(stat => (
+                  <span key={stat} className="text-[11px] text-stone-500 dark:text-stone-400 font-light">
+                    {stat}
+                  </span>
+                ))}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>

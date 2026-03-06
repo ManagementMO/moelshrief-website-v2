@@ -81,56 +81,56 @@ const ExperienceSection = () => {
           </div>
         </div>
 
-        <div className="card-hover relative">
-          <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1} />
-          <div className="overflow-hidden">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25 }}
-              className="p-5"
-            >
-              <div className="flex items-start gap-3.5 mb-4">
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5 bg-stone-200/70 dark:bg-stone-700/50">
-                  <img
-                    src={exp.logo}
-                    alt={`${exp.company} logo`}
-                    className="w-full h-full object-contain rounded-md dark:brightness-150"
-                  />
+        <div className="relative rounded-2xl border border-stone-200/80 dark:border-stone-700/50 p-2 transition-all duration-300 hover:border-stone-300/80 dark:hover:border-stone-600/60">
+          <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={3} />
+          <div className="relative overflow-hidden rounded-xl bg-white/80 dark:bg-stone-900/80 backdrop-blur-sm border border-stone-100 dark:border-stone-800/60 shadow-sm dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={current}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.25 }}
+                className="p-5"
+              >
+                <div className="flex items-start gap-3.5 mb-4">
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden p-1.5 bg-stone-200/70 dark:bg-stone-700/50">
+                    <img
+                      src={exp.logo}
+                      alt={`${exp.company} logo`}
+                      className="w-full h-full object-contain rounded-md dark:brightness-150"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-serif text-[15px] font-medium text-stone-900 dark:text-stone-100">{exp.company}</p>
+                    <p className="text-xs text-stone-400 dark:text-stone-500 font-light">{exp.period}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-serif text-[15px] font-medium text-stone-900 dark:text-stone-100">{exp.company}</p>
-                  <p className="text-xs text-stone-400 dark:text-stone-500 font-light">{exp.period}</p>
-                </div>
-              </div>
 
-              <p className="text-[15px] text-stone-600 dark:text-stone-300 font-light mb-3">
-                {exp.role}
-              </p>
+                <p className="text-[15px] text-stone-600 dark:text-stone-300 font-light mb-3">
+                  {exp.role}
+                </p>
 
-              <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed">
-                {exp.description}
-              </p>
-            </motion.div>
-          </AnimatePresence>
+                <p className="text-sm text-stone-500 dark:text-stone-400 font-light leading-relaxed">
+                  {exp.description}
+                </p>
+              </motion.div>
+            </AnimatePresence>
 
-          <div className="flex gap-1 px-5 pb-4">
-            {experiences.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrent(i)}
-                className={`h-0.5 rounded-full transition-all duration-300 ${
-                  i === current
-                    ? 'w-8 bg-teal-500'
-                    : 'w-4 bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600'
-                }`}
-                aria-label={`Go to experience ${i + 1}`}
-              />
-            ))}
-          </div>
+            <div className="flex gap-1 px-5 pb-4">
+              {experiences.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrent(i)}
+                  className={`h-0.5 rounded-full transition-all duration-300 ${
+                    i === current
+                      ? 'w-8 bg-teal-500'
+                      : 'w-4 bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600'
+                  }`}
+                  aria-label={`Go to experience ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </motion.div>
