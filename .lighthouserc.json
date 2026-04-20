@@ -1,0 +1,31 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run preview",
+      "startServerReadyPattern": "Local",
+      "startServerReadyTimeout": 30000,
+      "url": ["http://localhost:4173/"],
+      "numberOfRuns": 1
+    },
+    "assert": {
+      "preset": "lighthouse:no-pwa",
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.7 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.85 }],
+        "categories:seo": ["warn", { "minScore": 0.9 }],
+        "color-contrast": ["warn", { "minScore": 1 }],
+        "document-title": ["error", { "minScore": 1 }],
+        "html-has-lang": ["error", { "minScore": 1 }],
+        "image-alt": ["error", { "minScore": 1 }],
+        "meta-description": ["warn", { "minScore": 1 }],
+        "tap-targets": ["warn", { "minScore": 0.9 }],
+        "font-display": ["warn", { "minScore": 1 }],
+        "uses-responsive-images": ["warn", { "minScore": 1 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
