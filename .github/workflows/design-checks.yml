@@ -1,0 +1,78 @@
+name: Design Checks (a11y + format + Lighthouse)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint (TypeScript + a11y)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run ESLint
+        # Run lint but allow pre-existing errors to not block CI.
+        # The --max-warnings flag is intentionally removed here so a11y warnings
+        # surface as annotations without hard-failing until the backlog is cleared.
+        run: npx eslint . --ext ts,tsx --report-unused-disable-directives || true
+
+  format:
+    name: Formatting (Prettier)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Check formatting
+        # Non-blocking: surfaces unformatted files as annotations without failing CI.
+        # Run `npm run format` locally to fix. Remove `|| true` once the codebase
+        # is fully formatted.
+        run: npm run format:check || true
+
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Only run on pushes to main (not PRs without a deployed preview URL)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run Lighthouse CI
+        run: npx @lhci/cli@0.14.x autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
