@@ -13,6 +13,7 @@ import Footer from "./components/Footer";
 import CosmicNebula from "./components/CosmicNebula";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import WebringWidget from "./components/WebringWidget";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,9 @@ const Layout = () => (
       <Outlet />
       <Footer />
     </div>
+
+    {/* Webring widget — fixed bottom-right */}
+    <WebringWidget memberSlug="your-slug" />
   </div>
 );
 
