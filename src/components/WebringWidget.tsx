@@ -1,33 +1,62 @@
-import React from "react";
+import { useEffect, type CSSProperties } from "react";
 
 export type WebringWidgetProps = {
-  /**
-   * The member identifier/slug used by the webring you’re participating in.
-   *
-   * NOTE: Replace the placeholder value in App.tsx with your real slug.
-   */
   memberSlug: string;
-  /** Optional additional classes for positioning/styling overrides. */
   className?: string;
 };
 
-/**
- * Minimal placeholder widget to prevent build failures.
- *
- * If you have a real webring script/embed, you can replace this component
- * with your actual implementation.
- */
 export default function WebringWidget({ memberSlug, className }: WebringWidgetProps) {
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      'script[src="https://webring.ca/embed.js"]',
+    );
+
+    if (existingScript) return;
+
+    const script = document.createElement("script");
+    script.src = "https://webring.ca/embed.js";
+    script.defer = true;
+    script.setAttribute("data-webring-script", "ca");
+    document.body.appendChild(script);
+  }, []);
+
+  const webringUrl = "https://webring.ca";
+
   return (
-    <div
+    <aside
       className={
-        "fixed bottom-4 right-4 z-50 select-none rounded-md border border-white/10 bg-black/40 px-3 py-2 text-xs text-white/80 backdrop-blur " +
+        "fixed bottom-4 right-4 z-50 rounded-xl border border-cyan-400/30 bg-slate-950/75 px-4 py-3 text-xs text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.2)] backdrop-blur-md " +
         (className ?? "")
       }
-      aria-label="Webring widget"
+      aria-label="Canadian webring navigation"
     >
-      <div className="font-medium text-white/90">Webring</div>
-      <div className="text-white/70">Member: {memberSlug}</div>
-    </div>
+      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-300/90">
+        Canadian Webring
+      </p>
+      <div
+        data-webring="ca"
+        data-member={memberSlug}
+        style={
+          {
+            "--webring-size": "1rem",
+            "--webring-color": "#cffafe",
+            "--webring-accent": "#22d3ee",
+          } as CSSProperties
+        }
+        className="flex min-h-6 items-center justify-center gap-3"
+      >
+        <a href={`${webringUrl}/prev/${memberSlug}`} aria-label="Previous site in Canadian webring">
+          ←
+        </a>
+        <a href={webringUrl} aria-label="Visit the Canadian webring home">
+          🍁
+        </a>
+        <a href={`${webringUrl}/next/${memberSlug}`} aria-label="Next site in Canadian webring">
+          →
+        </a>
+      </div>
+    </aside>
   );
 }

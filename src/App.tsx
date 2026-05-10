@@ -30,7 +30,7 @@ const Layout = () => (
     </div>
 
     {/* Webring widget — fixed bottom-right */}
-    <WebringWidget memberSlug="your-slug" />
+    <WebringWidget memberSlug="mohammed-elshrief" />
   </div>
 );
 
