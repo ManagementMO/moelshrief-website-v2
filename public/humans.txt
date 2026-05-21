@@ -1,0 +1,11 @@
+/* TEAM */
+Developer: Mohammed Elshrief
+Contact: https://github.com/ManagementMO
+From: Canada
+
+/* SITE */
+Last update: 2024/03/19
+Standards: HTML5, CSS3, JavaScript
+Components: React, TypeScript, Tailwind CSS
+Software: Visual Studio Code
+Language: English 
