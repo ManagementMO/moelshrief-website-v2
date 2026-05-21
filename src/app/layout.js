@@ -1,0 +1,64 @@
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Caveat } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
+import "./globals.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import dynamic from "next/dynamic";
+import ThemeProvider from "./components/ThemeProvider";
+
+const CommandPalette = dynamic(() => import("./components/CommandPalette"), {
+  ssr: false,
+});
+
+const handwriting = Caveat({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-handwriting",
+  display: "swap",
+});
+
+export const metadata = {
+  title: "mohammed elshrief",
+  description:
+    "mohammed elshrief — engineering, data, and the occasional hackathon.",
+  metadataBase: new URL("https://moelshrief.wiki"),
+  openGraph: {
+    title: "mohammed elshrief",
+    description:
+      "mohammed elshrief — engineering, data, and the occasional hackathon.",
+    url: "https://moelshrief.wiki",
+    type: "website",
+    images: ["/my-pfp.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "mohammed elshrief",
+    description:
+      "mohammed elshrief — engineering, data, and the occasional hackathon.",
+    images: ["/my-pfp.jpg"],
+  },
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={`${handwriting.variable} ${GeistMono.variable}`}>
+      <body className={GeistSans.className}>
+        <SpeedInsights />
+        <Analytics />
+        <ThemeProvider>
+          <main className="flex justify-center bg-stone-100 dark:bg-black font-extralight min-h-screen selection:bg-amber-200 dark:selection:bg-amber-800/40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px]">
+            <div className="flex flex-col gap-4 w-full md:max-w-[540px] m-6 md:m-20 text-neutral-500 dark:text-neutral-400 md:mt-[60px]">
+              <Header />
+              {children}
+              <Footer />
+            </div>
+          </main>
+          <CommandPalette />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
