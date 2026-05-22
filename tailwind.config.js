@@ -16,15 +16,29 @@ module.exports = {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.5", transform: "scale(0.85)" },
         },
+        blink: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
+        },
       },
       animation: {
         "pulse-dot": "pulseDot 2.4s ease-in-out infinite",
+        "cursor-blink": "blink 1.06s steps(1) infinite",
       },
       fontSize: {
         micro: "0.625rem",
       },
       fontFamily: {
         handwriting: ["var(--font-handwriting)", "cursive"],
+        mono: [
+          "var(--font-mono)",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          "monospace",
+        ],
       },
     },
   },

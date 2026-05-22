@@ -61,7 +61,7 @@ export default function Header({ className }) {
         </span>
       </h1>
       <div className="flex items-center gap-6">
-        <HorizontalNav links={links} />
+        <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}
           className="p-2 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors"
