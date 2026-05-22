@@ -8,7 +8,7 @@ export default function TerminalHero() {
     </span>
   );
   return (
-    <div className="font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed">
+    <div className="font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words">
       <div>
         {prompt}
         <span className="text-stone-800 dark:text-stone-200">cat about.md</span>

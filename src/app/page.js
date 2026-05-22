@@ -13,7 +13,7 @@ const Signature = dynamic(() => import("@/app/components/Signature"), {
 
 export default function About() {
   return (
-    <div className="flex flex-col max-w-2xl mx-auto font-extralight">
+    <div className="flex flex-col w-full min-w-0 font-extralight">
       <TerminalHero />
 
       <AsciiDivider />
