@@ -1,6 +1,6 @@
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Caveat } from "next/font/google";
+import { Caveat, JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -17,6 +17,13 @@ const handwriting = Caveat({
   subsets: ["latin"],
   weight: ["500"],
   variable: "--font-handwriting",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -44,7 +51,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${handwriting.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}>
       <body className={GeistSans.className}>
         <SpeedInsights />
         <Analytics />

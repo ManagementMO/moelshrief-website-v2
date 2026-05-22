@@ -5,6 +5,7 @@ import NextLink from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { GalleryHorizontalEnd, GraduationCap } from "lucide-react";
+import Dashboard from "./components/Dashboard";
 
 const Signature = dynamic(() => import("@/app/components/Signature"), {
   ssr: false,
@@ -72,6 +73,7 @@ function Logo({
 export default function About() {
   return (
     <div className="flex flex-col max-w-2xl mx-auto font-extralight">
+      <Dashboard />
       <ul className="grid gap-1 text-base">
         <li className="group flex items-start gap-4 pl-4 relative hover:translate-x-1 transition-transform duration-200">
           <Bullet />
@@ -91,6 +93,9 @@ export default function About() {
 
         <li className="group flex flex-col gap-3 pl-4 relative hover:translate-x-1 transition-transform duration-200">
           <Bullet />
+          <span className="mt-2 text-micro uppercase tracking-widest font-mono text-stone-500 dark:text-stone-500">
+            {"// shipping"}
+          </span>
           <span className="text-stone-600 dark:text-stone-400 italic font-medium">
             what i&apos;ve been building:
           </span>
@@ -138,6 +143,9 @@ export default function About() {
 
         <li className="group flex flex-col gap-3 pl-4 relative hover:translate-x-1 transition-transform duration-200">
           <Bullet />
+          <span className="mt-2 text-micro uppercase tracking-widest font-mono text-stone-500 dark:text-stone-500">
+            {"// experience"}
+          </span>
           <span className="text-stone-600 dark:text-stone-400 italic font-medium">
             previously:
           </span>

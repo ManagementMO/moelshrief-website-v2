@@ -25,6 +25,15 @@ module.exports = {
       },
       fontFamily: {
         handwriting: ["var(--font-handwriting)", "cursive"],
+        mono: [
+          "var(--font-mono)",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          "monospace",
+        ],
       },
     },
   },
