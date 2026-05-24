@@ -10,6 +10,8 @@ function Logo({
   paddedWidth = 36,
   paddedBgSize = "175%",
   clipPath,
+  size = 14,
+  topOffset = 3,
 }) {
   if (padded) {
     return (
@@ -17,10 +19,12 @@ function Logo({
         role="img"
         aria-label={alt}
         title={alt}
-        className="inline-block relative top-[3px] rounded-[2px] mr-1"
+        className="inline-block rounded-[2px] mr-1"
         style={{
           width: `${paddedWidth}px`,
           height: "14px",
+          top: `${topOffset}px`,
+          position: "relative",
           backgroundImage: `url(${src})`,
           backgroundSize: paddedBgSize,
           backgroundPosition: "center",
@@ -37,7 +41,8 @@ function Logo({
         alt={alt}
         width={56}
         height={14}
-        className="object-contain object-left relative top-[3px] h-[14px] w-auto inline mr-1"
+        className="object-contain object-left inline mr-1"
+        style={{ position: "relative", top: `${topOffset}px`, height: "14px", width: "auto" }}
       />
     );
   }
@@ -45,9 +50,10 @@ function Logo({
     <Image
       src={src}
       alt={alt}
-      width={14}
-      height={14}
-      className="object-contain relative top-[3px] inline mr-1"
+      width={size}
+      height={size}
+      className="object-contain inline mr-1"
+      style={{ position: "relative", top: `${topOffset}px` }}
     />
   );
 }
@@ -70,7 +76,7 @@ export default function TerminalHero() {
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
       <div>
         - Management Engineering @{" "}
-        <Logo src="/logos/waterloo.png" alt="UWaterloo" />
+        <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} topOffset={-2} />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>

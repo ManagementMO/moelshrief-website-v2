@@ -13,7 +13,6 @@ import {
   Mail,
   CodeXml,
   Trophy,
-  BarChart3,
   Lightbulb,
   Sun,
   Moon,
@@ -39,46 +38,10 @@ function Shortcut({ isModifierPressed, children }) {
   );
 }
 
-const SPARKLINE = "▁ ▂ ▃ ▄ ▅ ▇ ▆ ▇";
-const STATS_LINES = [
-  "~/ projects shipped:  3",
-  "~/ hackathons run:    6+",
-  "~/ years coffee:      ∞",
-  `~/ trend:             ${SPARKLINE}`,
-];
-
-function DataFlash({ open, onClose }) {
-  useEffect(() => {
-    if (!open) return;
-    const t = setTimeout(onClose, 2200);
-    return () => clearTimeout(t);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      role="status"
-      aria-live="polite"
-      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] animate-data-flash pointer-events-none"
-    >
-      <div className="rounded-xl border border-amber-400/60 dark:border-amber-500/40 bg-stone-50/95 dark:bg-stone-900/95 backdrop-blur-sm px-6 py-4 shadow-2xl font-mono text-xs text-stone-700 dark:text-stone-300">
-        <div className="text-amber-700 dark:text-amber-400 mb-2 text-[10px] uppercase tracking-widest">
-          {"// data mode"}
-        </div>
-        {STATS_LINES.map((line) => (
-          <div key={line}>{line}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
   const [isModifierPressed, setIsModifierPressed] = useState(false);
-  const [showDataFlash, setShowDataFlash] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const isMobileDevice = useMobileDevice();
@@ -156,11 +119,6 @@ export default function CommandPalette() {
     command();
   };
 
-  const triggerDataFlash = () => {
-    setOpen(false);
-    setShowDataFlash(true);
-  };
-
   useEffect(() => {
     if (open) return;
 
@@ -182,9 +140,6 @@ export default function CommandPalette() {
       if (key === "t") {
         e.preventDefault();
         toggleTheme();
-      } else if (key === "s") {
-        e.preventDefault();
-        setShowDataFlash(true);
       }
     };
 
@@ -216,18 +171,10 @@ export default function CommandPalette() {
             "_blank"
           ),
         t: () => toggleTheme(),
-        s: () => {
-          setOpen(false);
-          setShowDataFlash(true);
-        },
       };
       if (shortcuts[key]) {
         e.preventDefault();
-        if (key === "s") {
-          shortcuts[key]();
-        } else {
-          runCommand(shortcuts[key]);
-        }
+        runCommand(shortcuts[key]);
       }
     };
 
@@ -238,14 +185,11 @@ export default function CommandPalette() {
   const currentSection = getCurrentSection();
 
   if (isMobileDevice) {
-    return (
-      <DataFlash open={showDataFlash} onClose={() => setShowDataFlash(false)} />
-    );
+    return null;
   }
 
   return (
     <>
-      <DataFlash open={showDataFlash} onClose={() => setShowDataFlash(false)} />
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 bg-black/50 animate-fade-in z-40" />
@@ -419,15 +363,6 @@ export default function CommandPalette() {
                       Toggle {theme === "light" ? "Dark" : "Light"} Mode
                     </span>
                     <Shortcut isModifierPressed={isModifierPressed}>T</Shortcut>
-                  </Command.Item>
-                  <Command.Item
-                    value="stats data mode easter egg"
-                    onSelect={() => triggerDataFlash()}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <BarChart3 className="h-4 w-4" />
-                    <span className="flex-1">Stats</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>S</Shortcut>
                   </Command.Item>
                 </Command.Group>
               </Command.List>

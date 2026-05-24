@@ -11,10 +11,6 @@ export default function CommandHintBar() {
       <span className="flex items-center gap-1">
         <kbd className={k}>shift</kbd>+<kbd className={k}>T</kbd> theme
       </span>
-      <span>·</span>
-      <span className="flex items-center gap-1">
-        <kbd className={k}>shift</kbd>+<kbd className={k}>S</kbd> stats
-      </span>
     </div>
   );
 }
