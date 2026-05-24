@@ -15,13 +15,14 @@ export default function Link({
     text-stone-700 dark:text-stone-300
     transition-colors duration-150
     ${
-      !isActive &&
-      `
+      !isActive
+        ? `
       rounded-[2px]
       px-[2px] -mx-[2px]
       hover:bg-amber-300/35 dark:hover:bg-amber-400/15
       hover:text-amber-900 dark:hover:text-amber-100
     `
+        : ""
     }
     ${className}
   `.trim();
