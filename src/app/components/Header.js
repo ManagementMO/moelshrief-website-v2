@@ -53,23 +53,13 @@ export default function Header({ className }) {
       <h1 className="text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
         <NextLink
           href="/"
-          className="group/wordmark inline-flex items-baseline relative font-mono"
+          className="group/wordmark relative inline-block hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-200"
         >
+          mohammed elshrief
           <span
             aria-hidden="true"
-            className="text-amber-600 dark:text-amber-400 opacity-0 -translate-x-1 group-hover/wordmark:opacity-100 group-hover/wordmark:translate-x-0 transition-all duration-200 mr-0.5"
-          >
-            &lt;
-          </span>
-          <span className="font-sans group-hover/wordmark:text-stone-900 dark:group-hover/wordmark:text-stone-100 transition-colors">
-            mohammed elshrief
-          </span>
-          <span
-            aria-hidden="true"
-            className="text-amber-600 dark:text-amber-400 opacity-0 translate-x-1 group-hover/wordmark:opacity-100 group-hover/wordmark:translate-x-0 transition-all duration-200 ml-0.5"
-          >
-            /&gt;
-          </span>
+            className="absolute left-0 right-0 -bottom-0.5 h-px bg-amber-500/80 dark:bg-amber-400/80 origin-left scale-x-0 group-hover/wordmark:scale-x-100 transition-transform duration-300 ease-out"
+          />
         </NextLink>
         <span
           className="ml-1 text-amber-600 dark:text-amber-400 select-none animate-pulse-dot"
