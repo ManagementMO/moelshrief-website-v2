@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { GraduationCap } from "lucide-react";
 import Link from "./Link";
 
 function Logo({
@@ -71,10 +70,7 @@ export default function TerminalHero() {
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
       <div>
         - Management Engineering @{" "}
-        <GraduationCap
-          className="size-[14px] inline relative top-[2px] text-stone-500 dark:text-stone-400 mr-1"
-          aria-hidden="true"
-        />
+        <Logo src="/logos/waterloo.png" alt="UWaterloo" />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>
