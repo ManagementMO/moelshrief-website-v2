@@ -3,7 +3,6 @@
 import NextLink from "next/link";
 import TerminalHero from "./components/TerminalHero";
 import AsciiDivider from "./components/AsciiDivider";
-import CommandHintBar from "./components/CommandHintBar";
 
 export default function About() {
   return (
@@ -27,8 +26,6 @@ export default function About() {
           ⏎
         </kbd>
       </NextLink>
-
-      <CommandHintBar />
     </div>
   );
 }
