@@ -1,6 +1,6 @@
-import { Linkedin, Github, Mail, CodeXml, Trophy } from "lucide-react";
+import { Linkedin, Github, Mail, CodeXml, Trophy, MapPin } from "lucide-react";
 
-const NOW_STATUS = "running from the geese · waterloo";
+const NOW_STATUS = "waterloo";
 
 export default function Footer({ className }) {
   const links = [
@@ -55,14 +55,15 @@ export default function Footer({ className }) {
           ))}
         </div>
         <div
-          className="flex items-center gap-2 text-xs text-stone-500 dark:text-stone-500"
-          aria-label="current status"
+          className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-500"
+          aria-label="location"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-pulse-dot absolute inline-flex h-full w-full rounded-full bg-amber-400 dark:bg-amber-500 opacity-70" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500 dark:bg-amber-400" />
-          </span>
-          <span className="italic">{NOW_STATUS}</span>
+          <MapPin
+            className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"
+            strokeWidth={1.75}
+            aria-hidden="true"
+          />
+          <span>{NOW_STATUS}</span>
         </div>
       </div>
       <p suppressHydrationWarning>
