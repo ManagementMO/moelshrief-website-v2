@@ -109,13 +109,6 @@ function AboutOutput() {
         — turned stanford&apos;s linear meta-harness loop into a langgraph tree
       </div>
       <div>&nbsp;&nbsp;(time-travel forking, postgres checkpoints)</div>
-      <div>
-        -{" "}
-        <Link href="https://paybridgetech.com/">
-          <span className="text-amber-700 dark:text-amber-400">Paybridge</span>
-        </Link>{" "}
-        — full-stack cross-border payments, $1k+ moved in pilot
-      </div>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># previously</div>
       <div>
@@ -177,7 +170,7 @@ const FS = {
   "~/about.md": { type: "file", render: () => <AboutOutput /> },
   "~/projects": {
     type: "dir",
-    children: ["trace", "meta-harness", "paybridge"],
+    children: ["trace", "meta-harness"],
   },
   "~/projects/trace": {
     type: "file",
@@ -221,27 +214,6 @@ const FS = {
           <Link href="https://github.com/ManagementMO/Meta-Harness">
             <span className="text-amber-700 dark:text-amber-400">
               github.com/ManagementMO/Meta-Harness
-            </span>
-          </Link>
-        </div>
-      </>
-    ),
-  },
-  "~/projects/paybridge": {
-    type: "file",
-    url: "https://paybridgetech.com/",
-    render: () => (
-      <>
-        <div>
-          <span className="text-amber-700 dark:text-amber-400">Paybridge</span>{" "}
-          — full-stack cross-border payments
-        </div>
-        <div>$1k+ moved in pilot.</div>
-        <div className="text-stone-500 dark:text-stone-500 mt-1">
-          link:{" "}
-          <Link href="https://paybridgetech.com/">
-            <span className="text-amber-700 dark:text-amber-400">
-              paybridgetech.com
             </span>
           </Link>
         </div>
