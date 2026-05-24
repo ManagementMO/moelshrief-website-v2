@@ -162,6 +162,38 @@ export default function CommandPalette() {
   };
 
   useEffect(() => {
+    if (open) return;
+
+    const isTypingTarget = (target) => {
+      if (!target) return false;
+      const tag = target.tagName;
+      return (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        target.isContentEditable
+      );
+    };
+
+    const handleGlobalShortcut = (e) => {
+      if (!e.shiftKey || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTypingTarget(e.target)) return;
+      const key = e.key.toLowerCase();
+      if (key === "t") {
+        e.preventDefault();
+        toggleTheme();
+      } else if (key === "s") {
+        e.preventDefault();
+        setShowDataFlash(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleGlobalShortcut);
+    return () =>
+      document.removeEventListener("keydown", handleGlobalShortcut);
+  }, [open, toggleTheme]);
+
+  useEffect(() => {
     if (!open) return;
 
     const handleKeyDown = (e) => {

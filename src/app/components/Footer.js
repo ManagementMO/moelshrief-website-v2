@@ -43,12 +43,12 @@ export default function Footer({ className }) {
               key={link.name}
               href={link.href}
               aria-label={link.name}
-              className="group flex items-center hover:text-neutral-800 dark:hover:text-neutral-200"
+              className="group flex items-center hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-200"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <link.icon className="w-5 h-5 hover:scale-110 md:hover:scale-110 transition-transform duration-500 ease-out" />
-              <span className="hidden md:inline-block md:w-0 md:overflow-hidden md:group-hover:w-auto md:group-hover:ml-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-500 ease-out">
+              <link.icon className="w-5 h-5 transition-all duration-300 ease-out group-hover:scale-110 group-hover:drop-shadow-[0_0_8px_rgba(245,158,11,0.55)] dark:group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.55)]" />
+              <span className="hidden md:inline-block md:w-0 md:overflow-hidden md:group-hover:w-auto md:group-hover:ml-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 ease-out font-mono text-xs">
                 {link.name}
               </span>
             </a>

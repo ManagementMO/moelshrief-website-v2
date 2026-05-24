@@ -1,5 +1,57 @@
 "use client";
+import Image from "next/image";
+import { GraduationCap } from "lucide-react";
 import Link from "./Link";
+
+function Logo({
+  src,
+  alt,
+  padded = false,
+  wide = false,
+  paddedWidth = 36,
+  paddedBgSize = "175%",
+  clipPath,
+}) {
+  if (padded) {
+    return (
+      <span
+        role="img"
+        aria-label={alt}
+        title={alt}
+        className="inline-block relative top-[3px] rounded-[2px] mr-1"
+        style={{
+          width: `${paddedWidth}px`,
+          height: "14px",
+          backgroundImage: `url(${src})`,
+          backgroundSize: paddedBgSize,
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          clipPath,
+        }}
+      />
+    );
+  }
+  if (wide) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={56}
+        height={14}
+        className="object-contain object-left relative top-[3px] h-[14px] w-auto inline mr-1"
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={14}
+      height={14}
+      className="object-contain relative top-[3px] inline mr-1"
+    />
+  );
+}
 
 export default function TerminalHero() {
   const prompt = (
@@ -19,6 +71,10 @@ export default function TerminalHero() {
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
       <div>
         - Management Engineering @{" "}
+        <GraduationCap
+          className="size-[14px] inline relative top-[2px] text-stone-500 dark:text-stone-400 mr-1"
+          aria-hidden="true"
+        />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>
@@ -59,6 +115,7 @@ export default function TerminalHero() {
       <div className="text-stone-500 dark:text-stone-500"># previously</div>
       <div>
         - Software Engineering @{" "}
+        <Logo src="/logos/altas.png" alt="Altas Partners" padded />
         <Link href="https://www.altas.com">
           <span className="text-amber-700 dark:text-amber-400">
             Altas Partners
@@ -67,18 +124,21 @@ export default function TerminalHero() {
       </div>
       <div>
         - Software Engineering @{" "}
+        <Logo src="/logos/liftwerx.png" alt="LiftWerx" wide />
         <Link href="https://www.liftwerx.com">
           <span className="text-amber-700 dark:text-amber-400">LiftWerx</span>
         </Link>
       </div>
       <div>
         - Machine Learning Engineering @{" "}
+        <Logo src="/logos/watai.png" alt="WAT.ai" />
         <Link href="https://watai.ca">
           <span className="text-amber-700 dark:text-amber-400">WAT.ai</span>
         </Link>
       </div>
       <div>
         - Machine Learning Developer @{" "}
+        <Logo src="/logos/utmist.svg" alt="UTMIST" />
         <Link href="https://www.utmist.ca/">
           <span className="text-amber-700 dark:text-amber-400">
             Themis AI · UTMIST
@@ -87,6 +147,14 @@ export default function TerminalHero() {
       </div>
       <div>
         - slightly too into hackathons @{" "}
+        <Logo
+          src="/logos/devpost.jpg"
+          alt="Devpost"
+          padded
+          paddedWidth={16}
+          paddedBgSize="cover"
+          clipPath="polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
+        />
         <Link href="https://devpost.com/ManagementMO">
           <span className="text-amber-700 dark:text-amber-400">Devpost</span>
         </Link>

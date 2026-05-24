@@ -1,15 +1,9 @@
 "use client";
 
 import NextLink from "next/link";
-import dynamic from "next/dynamic";
-import { GalleryHorizontalEnd } from "lucide-react";
 import TerminalHero from "./components/TerminalHero";
 import AsciiDivider from "./components/AsciiDivider";
 import CommandHintBar from "./components/CommandHintBar";
-
-const Signature = dynamic(() => import("@/app/components/Signature"), {
-  ssr: false,
-});
 
 export default function About() {
   return (
@@ -20,17 +14,19 @@ export default function About() {
 
       <NextLink
         href="/projects"
-        className="text-center mt-6 py-4 px-6 rounded-lg border border-stone-400 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-400 transform transition-all duration-300 font-extralight hover:scale-[1.02] active:scale-[0.98] shadow-sm"
+        className="group mt-4 flex items-center justify-between font-mono text-xs sm:text-sm px-3.5 py-2.5 rounded-md border border-dashed border-stone-300 dark:border-stone-700 bg-stone-50/40 dark:bg-stone-900/30 hover:border-amber-500/60 dark:hover:border-amber-400/60 hover:bg-stone-50 dark:hover:bg-stone-900/60 transition-colors"
       >
-        see what i&apos;ve built{" "}
-        <GalleryHorizontalEnd className="size-5 inline align-top ml-1 transition-transform" />
+        <span className="flex items-baseline gap-2 min-w-0">
+          <span className="text-stone-500 dark:text-stone-500">$</span>
+          <span className="text-stone-700 dark:text-stone-300">
+            cd{" "}
+            <span className="text-amber-700 dark:text-amber-400">~/projects</span>
+          </span>
+        </span>
+        <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-micro text-stone-400 dark:text-stone-500 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/40 group-hover:text-amber-700 dark:group-hover:text-amber-300 transition-colors shrink-0 ml-3">
+          ⏎
+        </kbd>
       </NextLink>
-
-      <AsciiDivider label="// signoff" />
-
-      <div className="flex flex-col sm:flex-row items-center justify-end mt-8">
-        <Signature />
-      </div>
 
       <CommandHintBar />
     </div>

@@ -15,7 +15,7 @@ const CommandPalette = dynamic(() => import("./components/CommandPalette"), {
 
 const handwriting = Caveat({
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["600"],
   variable: "--font-handwriting",
   display: "swap",
 });
@@ -49,9 +49,27 @@ export const metadata = {
   },
 };
 
+const themeInitScript = `
+(function(){
+  try {
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var dark = stored ? stored === 'dark' : prefersDark;
+    if (dark) document.documentElement.classList.add('dark');
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className={GeistSans.className}>
         <SpeedInsights />
         <Analytics />

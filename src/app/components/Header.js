@@ -2,6 +2,7 @@
 
 import HorizontalNav from "./HorizontalNav";
 import { usePathname } from "next/navigation";
+import NextLink from "next/link";
 import Link from "./Link";
 import { useEffect, useMemo, useState } from "react";
 import useModifierKey from "../hooks/useModifierKey";
@@ -50,11 +51,28 @@ export default function Header({ className }) {
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
-        <Link href="/" isNextLink={true}>
-          mohammed elshrief
-        </Link>
+        <NextLink
+          href="/"
+          className="group/wordmark inline-flex items-baseline relative font-mono"
+        >
+          <span
+            aria-hidden="true"
+            className="text-amber-600 dark:text-amber-400 opacity-0 -translate-x-1 group-hover/wordmark:opacity-100 group-hover/wordmark:translate-x-0 transition-all duration-200 mr-0.5"
+          >
+            &lt;
+          </span>
+          <span className="font-sans group-hover/wordmark:text-stone-900 dark:group-hover/wordmark:text-stone-100 transition-colors">
+            mohammed elshrief
+          </span>
+          <span
+            aria-hidden="true"
+            className="text-amber-600 dark:text-amber-400 opacity-0 translate-x-1 group-hover/wordmark:opacity-100 group-hover/wordmark:translate-x-0 transition-all duration-200 ml-0.5"
+          >
+            /&gt;
+          </span>
+        </NextLink>
         <span
-          className="ml-1 text-amber-600 dark:text-amber-400 select-none"
+          className="ml-1 text-amber-600 dark:text-amber-400 select-none animate-pulse-dot"
           aria-hidden="true"
         >
           •
@@ -64,13 +82,13 @@ export default function Header({ className }) {
         <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors"
+          className="group/theme p-2 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-amber-100/60 dark:hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
           aria-label="Toggle theme"
         >
           {theme === "dark" ? (
-            <Sun className="h-4 w-4" />
+            <Sun className="h-4 w-4 transition-transform duration-500 ease-out group-hover/theme:rotate-[180deg]" />
           ) : (
-            <Moon className="h-4 w-4" />
+            <Moon className="h-4 w-4 transition-transform duration-500 ease-out group-hover/theme:-rotate-[20deg]" />
           )}
         </button>
         {!isMobileDevice && (
@@ -80,19 +98,19 @@ export default function Header({ className }) {
             )}
             <button
               onClick={openCommandPalette}
-              className="hidden sm:flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-700 hover:border-stone-300 dark:hover:border-stone-600 transition-colors duration-200"
+              className="group/cmdk hidden sm:flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 hover:border-amber-400/70 dark:hover:border-amber-500/50 hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-200"
             >
               <span
                 className={`flex items-center ${
                   isModifierPressed ? "opacity-0" : "opacity-100"
                 }`}
               >
-                <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono">
+                <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono transition-transform duration-100 group-hover/cmdk:translate-y-[1px] group-hover/cmdk:bg-amber-100 dark:group-hover/cmdk:bg-amber-900/40">
                   {isMac ? "⌘" : "ctrl"}
                 </kbd>
                 <span>+</span>
               </span>
-              <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono">
+              <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono transition-transform duration-100 group-hover/cmdk:translate-y-[1px] group-hover/cmdk:bg-amber-100 dark:group-hover/cmdk:bg-amber-900/40">
                 K
               </kbd>
             </button>

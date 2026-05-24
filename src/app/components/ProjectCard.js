@@ -34,7 +34,7 @@ export default function ProjectCard({
 }) {
   return (
     <div
-      className={`group bg-neutral-100 dark:bg-neutral-900 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ${
+      className={`group relative bg-neutral-100 dark:bg-neutral-900 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 before:absolute before:left-0 before:top-4 before:bottom-4 before:w-[3px] before:rounded-r bg-clip-padding before:bg-amber-500 dark:before:bg-amber-400 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 ${
         className ?? ""
       }`}
     >
