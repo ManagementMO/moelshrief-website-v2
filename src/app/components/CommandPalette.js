@@ -16,6 +16,26 @@ function Shortcut({ isModifierPressed, children }) {
   );
 }
 
+const ITEM_CLASS =
+  "group flex items-center gap-3 px-3 py-1.5 cursor-pointer text-stone-700 dark:text-stone-300 " +
+  "data-[selected=true]:bg-amber-200/40 dark:data-[selected=true]:bg-amber-500/15 " +
+  "data-[selected=true]:text-amber-900 dark:data-[selected=true]:text-amber-200";
+
+function Item({ value, onSelect, prefix, name, dest, shortcut, isModifierPressed }) {
+  return (
+    <Command.Item value={value} onSelect={onSelect} className={ITEM_CLASS}>
+      <span className="text-stone-500 dark:text-stone-500 w-3 shrink-0 group-data-[selected=true]:text-amber-700 dark:group-data-[selected=true]:text-amber-400">
+        {prefix}
+      </span>
+      <span className="shrink-0">{name}</span>
+      <span className="text-stone-500 dark:text-stone-500 truncate min-w-0 flex-1">
+        {dest}
+      </span>
+      <Shortcut isModifierPressed={isModifierPressed}>{shortcut}</Shortcut>
+    </Command.Item>
+  );
+}
+
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
@@ -149,24 +169,6 @@ export default function CommandPalette() {
 
   const cwd = pathname === "/" ? "~" : `~${pathname}`;
 
-  const itemClass =
-    "group flex items-center gap-3 px-3 py-1.5 cursor-pointer text-stone-700 dark:text-stone-300 " +
-    "data-[selected=true]:bg-amber-200/40 dark:data-[selected=true]:bg-amber-500/15 " +
-    "data-[selected=true]:text-amber-900 dark:data-[selected=true]:text-amber-200";
-
-  const Item = ({ value, onSelect, prefix, name, dest, shortcut }) => (
-    <Command.Item value={value} onSelect={onSelect} className={itemClass}>
-      <span className="text-stone-500 dark:text-stone-500 w-3 shrink-0 group-data-[selected=true]:text-amber-700 dark:group-data-[selected=true]:text-amber-400">
-        {prefix}
-      </span>
-      <span className="shrink-0">{name}</span>
-      <span className="text-stone-500 dark:text-stone-500 truncate min-w-0 flex-1">
-        {dest}
-      </span>
-      <Shortcut isModifierPressed={isModifierPressed}>{shortcut}</Shortcut>
-    </Command.Item>
-  );
-
   return (
     <>
       <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -228,30 +230,33 @@ export default function CommandPalette() {
 
                 <Command.Group heading="// navigation">
                   <Item
-                    value="home"
+                    value="home about"
                     prefix="→"
                     name="home"
                     dest="./"
                     shortcut="H"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() => runCommand(() => router.push("/"))}
                   />
                   <Item
-                    value="projects"
+                    value="projects work"
                     prefix="→"
                     name="projects"
                     dest="./projects"
                     shortcut="P"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() => runCommand(() => router.push("/projects"))}
                   />
                 </Command.Group>
 
                 <Command.Group heading="// links" className="mt-1">
                   <Item
-                    value="email"
+                    value="email mailto mkelshri uwaterloo contact"
                     prefix="↗"
                     name="email"
                     dest="mkelshri@uwaterloo.ca"
                     shortcut="E"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() =>
                       runCommand(() =>
                         window.open("mailto:mkelshri@uwaterloo.ca", "_blank")
@@ -259,11 +264,12 @@ export default function CommandPalette() {
                     }
                   />
                   <Item
-                    value="linkedin"
+                    value="linkedin in mohammed elshrief profile"
                     prefix="↗"
                     name="linkedin"
                     dest="linkedin.com/in/mohammed-elshrief"
                     shortcut="L"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -274,11 +280,12 @@ export default function CommandPalette() {
                     }
                   />
                   <Item
-                    value="github"
+                    value="github ManagementMO repo profile"
                     prefix="↗"
                     name="github"
                     dest="github.com/ManagementMO"
                     shortcut="G"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() =>
                       runCommand(() =>
                         window.open("https://github.com/ManagementMO", "_blank")
@@ -286,11 +293,12 @@ export default function CommandPalette() {
                     }
                   />
                   <Item
-                    value="devpost hackathons"
+                    value="devpost hackathons ManagementMO competitions"
                     prefix="↗"
                     name="devpost"
                     dest="devpost.com/ManagementMO"
                     shortcut="D"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -301,11 +309,12 @@ export default function CommandPalette() {
                     }
                   />
                   <Item
-                    value="source code repo"
+                    value="source code repo github ManagementMO website-v2 view-source"
                     prefix="↗"
                     name="source"
                     dest="github.com/ManagementMO/moelshrief-website-v2"
                     shortcut="C"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -319,11 +328,12 @@ export default function CommandPalette() {
 
                 <Command.Group heading="// theme" className="mt-1">
                   <Item
-                    value="toggle theme dark mode light mode"
+                    value="toggle theme dark mode light mode appearance"
                     prefix="*"
                     name={`theme=${theme}`}
                     dest={`toggle → ${theme === "light" ? "dark" : "light"}`}
                     shortcut="T"
+                    isModifierPressed={isModifierPressed}
                     onSelect={() => runCommand(() => toggleTheme())}
                   />
                 </Command.Group>
