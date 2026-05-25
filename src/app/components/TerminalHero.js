@@ -774,7 +774,7 @@ export default function TerminalHero() {
           <span className="text-amber-700 dark:text-amber-400 not-italic">
             help
           </span>{" "}
-          · tab autocomplete · ↑/↓ history · ⌃A/E line nav · esc clears)
+          for commands · ↑/↓ for history)
         </div>
       )}
       <div ref={bottomRef} />
