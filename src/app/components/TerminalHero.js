@@ -768,15 +768,13 @@ export default function TerminalHero() {
           )}
         </div>
       </div>
-      {history.length <= 1 && cmdHistory.length === 0 && (
-        <div className="text-stone-400 dark:text-stone-600 text-xs italic mt-1">
-          (type{" "}
-          <span className="text-amber-700 dark:text-amber-400 not-italic">
-            help
-          </span>{" "}
-          for commands · ↑/↓ for history)
-        </div>
-      )}
+      <div className="text-stone-400 dark:text-stone-600 text-xs italic mt-1">
+        (type{" "}
+        <span className="text-amber-700 dark:text-amber-400 not-italic">
+          help
+        </span>{" "}
+        for commands · ↑/↓ for history)
+      </div>
       <div ref={bottomRef} />
     </div>
   );
