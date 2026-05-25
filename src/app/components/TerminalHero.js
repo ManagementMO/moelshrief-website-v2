@@ -342,7 +342,7 @@ function runCommand(input, cwd, setCwd, setHistory) {
     return (
       <div>
         mohammed elshrief — management engineering @ uwaterloo. building TRACE
-        + meta-harness + paybridge. slightly too into hackathons.
+        + meta-harness. slightly too into hackathons.
       </div>
     );
   }
@@ -373,7 +373,7 @@ function runCommand(input, cwd, setCwd, setHistory) {
             <span className="text-amber-700 dark:text-amber-400">
               shipping
             </span>
-            : trace · meta-harness · paybridge
+            : trace · meta-harness
           </div>
           <div>
             <span className="text-amber-700 dark:text-amber-400">coffee</span>:
