@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "./Link";
+import { useTheme } from "./ThemeProvider";
 
 function Logo({
   src,
@@ -299,18 +300,150 @@ const DIM = (text) => (
 
 const HELP_ROWS = [
   ["help", "list available commands"],
+  ["about", "alias: cat about.md"],
+  ["projects", "alias: cd projects && ls"],
   ["ls [path]", "list files in a directory"],
-  ["cd <path>", "change directory (try `cd projects`)"],
+  ["cd <path>", "change directory"],
   ["pwd", "print current directory"],
-  ["cat <file>", "read a file (try `cat about.md`)"],
+  ["cat <file>", "read a file"],
   ["open <file>", "open the file's link in a new tab"],
+  ["theme [dark|light]", "toggle or set color theme"],
   ["whoami", "short bio"],
-  ["echo <text>", "echo text"],
   ["neofetch", "system info"],
   ["clear", "clear the terminal (or ⌃L)"],
 ];
 
-function runCommand(input, cwd, setCwd, setHistory) {
+const ALL_COMMANDS = [
+  "help",
+  "about",
+  "projects",
+  "ls",
+  "cd",
+  "pwd",
+  "cat",
+  "open",
+  "theme",
+  "whoami",
+  "echo",
+  "neofetch",
+  "clear",
+  "exit",
+  "logout",
+  "sudo",
+  "vim",
+  "nvim",
+  "emacs",
+  "nano",
+];
+
+function longestCommonPrefix(strings) {
+  if (strings.length === 0) return "";
+  let prefix = strings[0];
+  for (let i = 1; i < strings.length; i++) {
+    while (!strings[i].startsWith(prefix)) {
+      prefix = prefix.slice(0, -1);
+      if (!prefix) return "";
+    }
+  }
+  return prefix;
+}
+
+// returns the new input after a Tab completion, or null if nothing to complete
+function autocomplete(input, cwd) {
+  if (!input) return null;
+
+  const hasSpace = /\s/.test(input);
+  if (!hasSpace) {
+    // completing the command name
+    const prefix = input;
+    const matches = ALL_COMMANDS.filter((c) => c.startsWith(prefix));
+    if (matches.length === 0) return null;
+    if (matches.length === 1) return matches[0] + " ";
+    const common = longestCommonPrefix(matches);
+    return common.length > prefix.length ? common : null;
+  }
+
+  // completing a path argument — work on the last whitespace-separated token
+  const tokens = input.split(/(\s+)/);
+  const lastToken = tokens[tokens.length - 1];
+  if (!lastToken) return null;
+
+  // split last token into directory prefix + leaf to complete
+  let parentRaw, leaf, prefix;
+  const lastSlash = lastToken.lastIndexOf("/");
+  if (lastSlash >= 0) {
+    parentRaw = lastToken.slice(0, lastSlash);
+    if (parentRaw === "") parentRaw = "/";
+    leaf = lastToken.slice(lastSlash + 1);
+    prefix = lastToken.slice(0, lastSlash + 1);
+  } else {
+    parentRaw = ".";
+    leaf = lastToken;
+    prefix = "";
+  }
+
+  const parentPath =
+    parentRaw === "."
+      ? cwd
+      : parentRaw === "/"
+        ? null
+        : resolvePath(cwd, parentRaw);
+  if (!parentPath || !FS[parentPath] || FS[parentPath].type !== "dir")
+    return null;
+
+  const candidates = FS[parentPath].children.filter((n) => n.startsWith(leaf));
+  if (candidates.length === 0) return null;
+
+  const buildFull = (suffix) => {
+    tokens[tokens.length - 1] = prefix + suffix;
+    return tokens.join("");
+  };
+
+  if (candidates.length === 1) {
+    const child = candidates[0];
+    const childPath =
+      parentPath === "~" ? `~/${child}` : `${parentPath}/${child}`;
+    const isDir = FS[childPath]?.type === "dir";
+    return buildFull(child + (isDir ? "/" : " "));
+  }
+
+  const common = longestCommonPrefix(candidates);
+  if (common.length > leaf.length) return buildFull(common);
+  return null;
+}
+
+
+function runLs(target) {
+  if (!target || !FS[target])
+    return ERR(`ls: no such file or directory`);
+  const node = FS[target];
+  if (node.type !== "dir") return <div>{target.split("/").pop()}</div>;
+  return (
+    <div className="flex flex-wrap gap-x-4">
+      {node.children.map((name) => {
+        const childPath = target === "~" ? `~/${name}` : `${target}/${name}`;
+        const child = FS[childPath];
+        const isDir = child?.type === "dir";
+        return (
+          <span
+            key={name}
+            className={
+              isDir
+                ? "text-sky-700 dark:text-sky-400"
+                : "text-stone-700 dark:text-stone-300"
+            }
+          >
+            {name}
+            {isDir ? "/" : ""}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
+  const { theme, toggleTheme } = extras;
   const trimmed = input.trim();
   if (!trimmed) return null;
   const [cmd, ...args] = trimmed.split(/\s+/);
@@ -319,6 +452,29 @@ function runCommand(input, cwd, setCwd, setHistory) {
   if (c === "clear") {
     setHistory([]);
     return "HANDLED";
+  }
+
+  if (c === "about") {
+    return <div>{FS["~/about.md"].render()}</div>;
+  }
+
+  if (c === "projects") {
+    setCwd("~/projects");
+    return runLs("~/projects");
+  }
+
+  if (c === "theme") {
+    const arg = args[0]?.toLowerCase();
+    if (arg && arg !== "dark" && arg !== "light" && arg !== "toggle") {
+      return ERR(`theme: invalid mode '${arg}' (use dark, light, or toggle)`);
+    }
+    if (!toggleTheme) return ERR("theme: not available");
+    if (arg === "dark" || arg === "light") {
+      if (theme !== arg) toggleTheme();
+      return DIM(`theme → ${arg}`);
+    }
+    toggleTheme();
+    return DIM(`theme → ${theme === "dark" ? "light" : "dark"}`);
   }
 
   if (c === "help") {
@@ -388,30 +544,7 @@ function runCommand(input, cwd, setCwd, setHistory) {
     const target = args[0] ? resolvePath(cwd, args[0]) : cwd;
     if (!target || !FS[target])
       return ERR(`ls: ${args[0] ?? cwd}: no such file or directory`);
-    const node = FS[target];
-    if (node.type !== "dir") return <div>{target.split("/").pop()}</div>;
-    return (
-      <div className="flex flex-wrap gap-x-4">
-        {node.children.map((name) => {
-          const childPath = target === "~" ? `~/${name}` : `${target}/${name}`;
-          const child = FS[childPath];
-          const isDir = child?.type === "dir";
-          return (
-            <span
-              key={name}
-              className={
-                isDir
-                  ? "text-sky-700 dark:text-sky-400"
-                  : "text-stone-700 dark:text-stone-300"
-              }
-            >
-              {name}
-              {isDir ? "/" : ""}
-            </span>
-          );
-        })}
-      </div>
-    );
+    return runLs(target);
   }
 
   if (c === "cd") {
@@ -455,14 +588,24 @@ function runCommand(input, cwd, setCwd, setHistory) {
   }
 
   if (c === "exit" || c === "logout") {
-    return DIM("(this is a website. close the tab.)");
+    if (typeof window !== "undefined") {
+      setTimeout(() => {
+        document
+          .querySelector("footer")
+          ?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 80);
+    }
+    return DIM("// EOF · scrolling to signoff…");
   }
 
   return ERR(`bash: ${c}: command not found · type \`help\``);
 }
 
 export default function TerminalHero() {
+  const { theme, toggleTheme } = useTheme();
   const [cwd, setCwd] = useState("~");
+  // Seeded with the fully-rendered `cat about.md` command + output so the bio
+  // is visible the moment the page loads — no animation gate.
   const [history, setHistory] = useState(() => [
     { cmd: "cat about.md", cwd: "~", output: <AboutOutput /> },
   ]);
@@ -474,12 +617,38 @@ export default function TerminalHero() {
   const blockRef = useRef(null);
   const bottomRef = useRef(null);
 
+  // On mount: restore persisted command history
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("terminal_cmd_history");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) setCmdHistory(parsed.slice(-50));
+      }
+    } catch {}
+  }, []);
+
+  // Persist command history to localStorage (capped at 50). Skip writing
+  // when cmdHistory is the empty initial state — otherwise the first effect
+  // run after mount would wipe the persisted value before the load effect's
+  // setCmdHistory has had a chance to propagate.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (cmdHistory.length === 0) return;
+    try {
+      localStorage.setItem(
+        "terminal_cmd_history",
+        JSON.stringify(cmdHistory.slice(-50))
+      );
+    } catch {}
+  }, [cmdHistory]);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ block: "nearest" });
   }, [history, cwd]);
 
   const focusInput = () => {
-    // don't steal focus from real links/buttons inside the terminal
     inputRef.current?.focus();
   };
 
@@ -487,20 +656,33 @@ export default function TerminalHero() {
     if (e.key === "Enter") {
       e.preventDefault();
       const trimmed = input.trim();
-      const result = runCommand(input, cwd, setCwd, setHistory);
+      const result = runCommand(input, cwd, setCwd, setHistory, {
+        theme,
+        toggleTheme,
+      });
       if (result !== "HANDLED") {
         setHistory((h) => [...h, { cmd: trimmed, cwd, output: result }]);
       }
       if (trimmed) setCmdHistory((c) => [...c, trimmed]);
       setInput("");
       setHistIdx(-1);
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      const completed = autocomplete(input, cwd);
+      if (completed !== null) {
+        setInput(completed);
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      if (input.length > 0) {
+        setInput("");
+        setHistIdx(-1);
+      }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (cmdHistory.length === 0) return;
       const newIdx =
-        histIdx < 0
-          ? cmdHistory.length - 1
-          : Math.max(0, histIdx - 1);
+        histIdx < 0 ? cmdHistory.length - 1 : Math.max(0, histIdx - 1);
       setHistIdx(newIdx);
       setInput(cmdHistory[newIdx]);
     } else if (e.key === "ArrowDown") {
@@ -514,9 +696,18 @@ export default function TerminalHero() {
         setHistIdx(newIdx);
         setInput(cmdHistory[newIdx]);
       }
-    } else if (e.key === "l" && (e.ctrlKey || e.metaKey)) {
+    } else if (e.key === "l" && e.ctrlKey && !e.metaKey) {
       e.preventDefault();
       setHistory([]);
+    } else if (e.key === "a" && e.ctrlKey && !e.metaKey) {
+      // Ctrl+A → move cursor to start (real readline)
+      e.preventDefault();
+      inputRef.current?.setSelectionRange(0, 0);
+    } else if (e.key === "e" && e.ctrlKey && !e.metaKey) {
+      // Ctrl+E → move cursor to end
+      e.preventDefault();
+      const end = inputRef.current?.value.length ?? 0;
+      inputRef.current?.setSelectionRange(end, end);
     }
   };
 
@@ -525,8 +716,10 @@ export default function TerminalHero() {
       ref={blockRef}
       onClick={(e) => {
         // don't steal focus while user is selecting text
-        if (typeof window !== "undefined" &&
-            window.getSelection?.()?.toString().length > 0)
+        if (
+          typeof window !== "undefined" &&
+          window.getSelection?.()?.toString().length > 0
+        )
           return;
         // and don't override real links inside the terminal
         if (e.target.tagName !== "A" && e.target.closest("a") === null)
@@ -575,13 +768,13 @@ export default function TerminalHero() {
           )}
         </div>
       </div>
-      {history.length <= 1 && (
+      {history.length <= 1 && cmdHistory.length === 0 && (
         <div className="text-stone-400 dark:text-stone-600 text-xs italic mt-1">
           (type{" "}
           <span className="text-amber-700 dark:text-amber-400 not-italic">
             help
           </span>{" "}
-          for commands · ↑/↓ for history)
+          · tab autocomplete · ↑/↓ history · ⌃A/E line nav · esc clears)
         </div>
       )}
       <div ref={bottomRef} />
