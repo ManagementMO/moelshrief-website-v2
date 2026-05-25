@@ -14,6 +14,7 @@ function Logo({
   clipPath,
   size = 14,
   topOffset = 3,
+  unoptimized = false,
 }) {
   if (padded) {
     return (
@@ -59,6 +60,7 @@ function Logo({
       alt={alt}
       width={size}
       height={size}
+      unoptimized={unoptimized}
       className="object-contain inline mr-1"
       style={{ position: "relative", top: `${topOffset}px` }}
     />
@@ -84,6 +86,7 @@ function AboutOutput() {
           alt="UWaterloo"
           size={24}
           topOffset={-2}
+          unoptimized
         />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
