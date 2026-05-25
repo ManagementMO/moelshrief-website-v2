@@ -9,7 +9,6 @@ import useModifierKey from "../hooks/useModifierKey";
 import useMobileDevice from "../hooks/useMobileDevice";
 import CurvedArrow from "./CurvedArrow";
 import { useTheme } from "./ThemeProvider";
-import { Moon, Sun } from "lucide-react";
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}+*?#$%&@=01";
 
@@ -147,14 +146,15 @@ export default function Header({ className }) {
         <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}
-          className="group/theme p-2 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-amber-100/60 dark:hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
-          aria-label="Toggle theme"
+          className="group/theme font-mono text-xs px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-amber-100/60 dark:hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-300 transition-colors leading-none"
+          aria-label={`Theme: ${theme} — click to toggle`}
+          title={`theme=${theme} · click to toggle`}
         >
-          {theme === "dark" ? (
-            <Sun className="h-4 w-4 transition-transform duration-500 ease-out group-hover/theme:rotate-[180deg]" />
-          ) : (
-            <Moon className="h-4 w-4 transition-transform duration-500 ease-out group-hover/theme:-rotate-[20deg]" />
-          )}
+          <span className="text-stone-400 dark:text-stone-600">[</span>
+          <span className="text-stone-700 dark:text-stone-200 group-hover/theme:text-amber-700 dark:group-hover/theme:text-amber-300 transition-colors">
+            {theme === "dark" ? "1" : "0"}
+          </span>
+          <span className="text-stone-400 dark:text-stone-600">]</span>
         </button>
         {!isMobileDevice && (
           <div className="relative">
@@ -163,21 +163,21 @@ export default function Header({ className }) {
             )}
             <button
               onClick={openCommandPalette}
-              className="group/cmdk hidden sm:flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 hover:border-amber-400/70 dark:hover:border-amber-500/50 hover:text-amber-700 dark:hover:text-amber-300 transition-colors duration-200"
+              className="group/cmdk hidden sm:flex items-center font-mono text-xs leading-none px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:border-amber-400/70 dark:hover:border-amber-500/50 hover:bg-amber-100/40 dark:hover:bg-amber-500/10 transition-colors duration-200"
+              aria-label="Open command palette"
+              title={`Command palette (${isMac ? "⌘" : "ctrl"}K)`}
             >
-              <span
-                className={`flex items-center ${
-                  isModifierPressed ? "opacity-0" : "opacity-100"
-                }`}
-              >
-                <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono transition-transform duration-100 group-hover/cmdk:translate-y-[1px] group-hover/cmdk:bg-amber-100 dark:group-hover/cmdk:bg-amber-900/40">
-                  {isMac ? "⌘" : "ctrl"}
-                </kbd>
-                <span>+</span>
+              <span className="text-stone-400 dark:text-stone-600">[</span>
+              <span className="text-stone-700 dark:text-stone-300 group-hover/cmdk:text-amber-700 dark:group-hover/cmdk:text-amber-300 transition-colors">
+                &gt;
               </span>
-              <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-700 font-mono transition-transform duration-100 group-hover/cmdk:translate-y-[1px] group-hover/cmdk:bg-amber-100 dark:group-hover/cmdk:bg-amber-900/40">
-                K
-              </kbd>
+              <span
+                aria-hidden="true"
+                className="inline-block w-[5px] h-[10px] ml-[2px] bg-stone-700 dark:bg-stone-300 group-hover/cmdk:bg-amber-500 dark:group-hover/cmdk:bg-amber-400 animate-cursor-blink transition-colors"
+              />
+              <span className="text-stone-400 dark:text-stone-600 ml-[1px]">
+                ]
+              </span>
             </button>
           </div>
         )}

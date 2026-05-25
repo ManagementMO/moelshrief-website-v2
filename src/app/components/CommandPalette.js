@@ -4,37 +4,15 @@ import { useEffect, useState } from "react";
 import { Command } from "cmdk";
 import { useRouter, usePathname } from "next/navigation";
 import * as Dialog from "@radix-ui/react-dialog";
-import {
-  Search,
-  Home,
-  FolderGit2,
-  Github,
-  Linkedin,
-  Mail,
-  CodeXml,
-  Trophy,
-  Lightbulb,
-  Sun,
-  Moon,
-} from "lucide-react";
 import useMobileDevice from "../hooks/useMobileDevice";
 import { useTheme } from "./ThemeProvider";
 
 function Shortcut({ isModifierPressed, children }) {
+  const k = String(children).toLowerCase();
   return (
-    <div className="flex text-xs items-center gap-1 ml-auto text-stone-500 dark:text-stone-500">
-      {!isModifierPressed && (
-        <>
-          <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 font-mono text-stone-600 dark:text-stone-400">
-            shift
-          </kbd>
-          <span>+</span>
-        </>
-      )}
-      <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 font-mono text-stone-600 dark:text-stone-400">
-        {children}
-      </kbd>
-    </div>
+    <span className="ml-auto shrink-0 text-stone-400 dark:text-stone-600">
+      {isModifierPressed ? k : `shift+${k}`}
+    </span>
   );
 }
 
@@ -96,23 +74,6 @@ export default function CommandPalette() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [open]);
-
-  const getCurrentSection = () => {
-    if (pathname === "/") {
-      return {
-        name: "Home",
-        icon: <Home className="h-5 w-5" />,
-        description: "About me and what i'm building",
-      };
-    }
-    if (pathname === "/projects") {
-      return {
-        name: "Projects",
-        icon: <FolderGit2 className="h-5 w-5" />,
-        description: "Things i've shipped",
-      };
-    }
-  };
 
   const runCommand = (command) => {
     setOpen(false);
@@ -182,21 +143,39 @@ export default function CommandPalette() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, router, toggleTheme]);
 
-  const currentSection = getCurrentSection();
-
   if (isMobileDevice) {
     return null;
   }
+
+  const cwd = pathname === "/" ? "~" : `~${pathname}`;
+
+  const itemClass =
+    "group flex items-center gap-3 px-3 py-1.5 cursor-pointer text-stone-700 dark:text-stone-300 " +
+    "data-[selected=true]:bg-amber-200/40 dark:data-[selected=true]:bg-amber-500/15 " +
+    "data-[selected=true]:text-amber-900 dark:data-[selected=true]:text-amber-200";
+
+  const Item = ({ value, onSelect, prefix, name, dest, shortcut }) => (
+    <Command.Item value={value} onSelect={onSelect} className={itemClass}>
+      <span className="text-stone-500 dark:text-stone-500 w-3 shrink-0 group-data-[selected=true]:text-amber-700 dark:group-data-[selected=true]:text-amber-400">
+        {prefix}
+      </span>
+      <span className="shrink-0">{name}</span>
+      <span className="text-stone-500 dark:text-stone-500 truncate min-w-0 flex-1">
+        {dest}
+      </span>
+      <Shortcut isModifierPressed={isModifierPressed}>{shortcut}</Shortcut>
+    </Command.Item>
+  );
 
   return (
     <>
       <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 bg-black/50 animate-fade-in z-40" />
-          <Dialog.Content className="fixed top-[20%] left-1/2 -translate-x-1/2 w-full max-w-[500px] p-3 animate-slide-down z-50">
+          <Dialog.Overlay className="fixed inset-0 bg-black/60 animate-fade-in z-40" />
+          <Dialog.Content className="fixed top-[18%] left-1/2 -translate-x-1/2 w-full max-w-[560px] p-3 animate-slide-down z-50">
             <Dialog.Title className="sr-only">Command palette</Dialog.Title>
             <Command
-              className="w-full rounded-xl border border-stone-300 dark:border-stone-900 bg-white dark:bg-neutral-900 shadow-2xl overflow-hidden"
+              className="w-full rounded-md border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 shadow-2xl overflow-hidden font-mono text-xs"
               loop={true}
               shouldFilter={true}
               onClick={(e) => {
@@ -204,27 +183,26 @@ export default function CommandPalette() {
                 if (input) input.focus();
               }}
             >
-              {currentSection && (
-                <div className="px-5 py-6 border-b border-stone-200 dark:border-stone-700 flex items-center gap-3">
-                  <div className="p-1.5 bg-stone-100 dark:bg-stone-800 rounded-lg text-stone-600 dark:text-stone-400">
-                    {currentSection.icon}
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="font-medium text-stone-900 dark:text-stone-100">
-                      {currentSection.name}
-                    </h2>
-                    <p className="text-sm text-stone-500 dark:text-stone-400">
-                      {currentSection.description}
-                    </p>
-                  </div>
-                </div>
-              )}
+              {/* title bar — shows cwd-style context */}
+              <div className="px-3 py-2 border-b border-stone-300 dark:border-stone-800 flex items-center justify-between text-stone-500 dark:text-stone-500">
+                <span>
+                  mohammed@portfolio:
+                  <span className="text-amber-700 dark:text-amber-400">
+                    {cwd}
+                  </span>
+                  $ command-palette
+                </span>
+                <span className="text-stone-400 dark:text-stone-600">[esc]</span>
+              </div>
 
-              <div className="flex items-center border-b border-stone-300 dark:border-stone-700 px-4 py-4">
-                <Search className="h-4 w-4 text-stone-500 dark:text-stone-400" />
+              {/* > prompt input */}
+              <div className="flex items-center px-3 py-2.5 border-b border-stone-300 dark:border-stone-800">
+                <span className="text-amber-700 dark:text-amber-400 mr-2 shrink-0">
+                  &gt;
+                </span>
                 <Command.Input
-                  placeholder="Search for actions..."
-                  className="flex-1 w-full bg-transparent px-3 text-sm text-stone-800 dark:text-stone-200 placeholder:text-stone-500 dark:placeholder:text-stone-500 focus:outline-none"
+                  placeholder="type to filter…"
+                  className="flex-1 w-full bg-transparent text-stone-800 dark:text-stone-200 placeholder:text-stone-400 dark:placeholder:text-stone-600 placeholder:italic focus:outline-none caret-amber-500 dark:caret-amber-400"
                   onBlur={(e) => {
                     const commandDialog =
                       e.currentTarget.closest('[role="dialog"]');
@@ -236,54 +214,56 @@ export default function CommandPalette() {
                 />
               </div>
 
-              <Command.List className="max-h-[300px] overflow-y-auto px-3 py-4">
-                <Command.Empty className="px-5 py-4 text-sm text-stone-500 dark:text-stone-400">
-                  No results found.
+              {/* list */}
+              <Command.List
+                className={
+                  "max-h-[340px] overflow-y-auto py-2 " +
+                  "[&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-1.5 " +
+                  "[&_[cmdk-group-heading]]:text-stone-500 dark:[&_[cmdk-group-heading]]:text-stone-500"
+                }
+              >
+                <Command.Empty className="px-3 py-3 text-stone-500 dark:text-stone-500 italic">
+                  no matches found.
                 </Command.Empty>
 
-                <Command.Group
-                  heading="Navigation"
-                  className="px-2 text-stone-500 dark:text-stone-400"
-                >
-                  <Command.Item
+                <Command.Group heading="// navigation">
+                  <Item
                     value="home"
+                    prefix="→"
+                    name="home"
+                    dest="./"
+                    shortcut="H"
                     onSelect={() => runCommand(() => router.push("/"))}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <Home className="h-4 w-4" />
-                    <span className="flex-1">Go to Home</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>H</Shortcut>
-                  </Command.Item>
-                  <Command.Item
+                  />
+                  <Item
                     value="projects"
+                    prefix="→"
+                    name="projects"
+                    dest="./projects"
+                    shortcut="P"
                     onSelect={() => runCommand(() => router.push("/projects"))}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <FolderGit2 className="h-4 w-4" />
-                    <span className="flex-1">Go to Projects</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>P</Shortcut>
-                  </Command.Item>
+                  />
                 </Command.Group>
 
-                <Command.Group
-                  heading="Links"
-                  className="px-2 text-stone-500 dark:text-stone-400"
-                >
-                  <Command.Item
+                <Command.Group heading="// links" className="mt-1">
+                  <Item
                     value="email"
+                    prefix="↗"
+                    name="email"
+                    dest="mkelshri@uwaterloo.ca"
+                    shortcut="E"
                     onSelect={() =>
                       runCommand(() =>
                         window.open("mailto:mkelshri@uwaterloo.ca", "_blank")
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <Mail className="h-4 w-4" />
-                    <span className="flex-1">Email</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>E</Shortcut>
-                  </Command.Item>
-                  <Command.Item
+                  />
+                  <Item
                     value="linkedin"
+                    prefix="↗"
+                    name="linkedin"
+                    dest="linkedin.com/in/mohammed-elshrief"
+                    shortcut="L"
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -292,27 +272,25 @@ export default function CommandPalette() {
                         )
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    <span className="flex-1">LinkedIn Profile</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>L</Shortcut>
-                  </Command.Item>
-                  <Command.Item
+                  />
+                  <Item
                     value="github"
+                    prefix="↗"
+                    name="github"
+                    dest="github.com/ManagementMO"
+                    shortcut="G"
                     onSelect={() =>
                       runCommand(() =>
                         window.open("https://github.com/ManagementMO", "_blank")
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <Github className="h-4 w-4" />
-                    <span className="flex-1">GitHub Profile</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>G</Shortcut>
-                  </Command.Item>
-                  <Command.Item
+                  />
+                  <Item
                     value="devpost hackathons"
+                    prefix="↗"
+                    name="devpost"
+                    dest="devpost.com/ManagementMO"
+                    shortcut="D"
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -321,14 +299,13 @@ export default function CommandPalette() {
                         )
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <Trophy className="h-4 w-4" />
-                    <span className="flex-1">Devpost (hackathons)</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>D</Shortcut>
-                  </Command.Item>
-                  <Command.Item
+                  />
+                  <Item
                     value="source code repo"
+                    prefix="↗"
+                    name="source"
+                    dest="github.com/ManagementMO/moelshrief-website-v2"
+                    shortcut="C"
                     onSelect={() =>
                       runCommand(() =>
                         window.open(
@@ -337,53 +314,37 @@ export default function CommandPalette() {
                         )
                       )
                     }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    <CodeXml className="h-4 w-4" />
-                    <span className="flex-1">Website Source</span>
-                    <Shortcut isModifierPressed={isModifierPressed}>C</Shortcut>
-                  </Command.Item>
+                  />
                 </Command.Group>
 
-                <Command.Group
-                  heading="Other"
-                  className="px-2 text-stone-500 dark:text-stone-400"
-                >
-                  <Command.Item
+                <Command.Group heading="// theme" className="mt-1">
+                  <Item
                     value="toggle theme dark mode light mode"
+                    prefix="*"
+                    name={`theme=${theme}`}
+                    dest={`toggle → ${theme === "light" ? "dark" : "light"}`}
+                    shortcut="T"
                     onSelect={() => runCommand(() => toggleTheme())}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-stone-600 dark:text-stone-400 rounded hover:bg-stone-100 dark:hover:bg-stone-800 cursor-pointer data-[selected=true]:bg-stone-100 dark:data-[selected=true]:bg-stone-800"
-                  >
-                    {theme === "dark" ? (
-                      <Sun className="h-4 w-4" />
-                    ) : (
-                      <Moon className="h-4 w-4" />
-                    )}
-                    <span className="flex-1">
-                      Toggle {theme === "light" ? "Dark" : "Light"} Mode
-                    </span>
-                    <Shortcut isModifierPressed={isModifierPressed}>T</Shortcut>
-                  </Command.Item>
+                  />
                 </Command.Group>
               </Command.List>
-              <div className="border-t border-stone-200 dark:border-stone-700 px-3 py-4">
-                <div className="flex items-center justify-between text-stone-500 dark:text-stone-400 text-xs">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="h-3 w-3" />
-                    <span>Type</span>
-                    <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 font-mono text-stone-600 dark:text-stone-400">
-                      ↵
-                    </kbd>
-                    <span>to select</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span>Press</span>
-                    <kbd className="px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 font-mono text-stone-600 dark:text-stone-400">
-                      esc
-                    </kbd>
-                    <span>to close</span>
-                  </div>
-                </div>
+
+              {/* bottom hint bar */}
+              <div className="px-3 py-2 border-t border-stone-300 dark:border-stone-800 flex items-center gap-3 text-stone-500 dark:text-stone-500">
+                <span>
+                  <span className="text-stone-700 dark:text-stone-300">↵</span>{" "}
+                  select
+                </span>
+                <span className="text-stone-400 dark:text-stone-700">·</span>
+                <span>
+                  <span className="text-stone-700 dark:text-stone-300">↑↓</span>{" "}
+                  navigate
+                </span>
+                <span className="text-stone-400 dark:text-stone-700">·</span>
+                <span>
+                  <span className="text-stone-700 dark:text-stone-300">esc</span>{" "}
+                  close
+                </span>
               </div>
             </Command>
           </Dialog.Content>
