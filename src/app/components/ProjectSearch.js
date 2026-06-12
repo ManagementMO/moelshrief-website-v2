@@ -1,80 +1,99 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
-import ProjectList from "./ProjectList";
+import { projects, archive } from "../projects/projectsData";
+import ProjectPane from "./ProjectPane";
+import Reveal from "./Reveal";
+import AsciiDivider from "./AsciiDivider";
 
-const projects = [
-  {
-    title: "TRACE",
-    href: "https://watai.ca",
-    description:
-      "agentic qa + observability for ai agents — runs them through realistic tool / rag workflows, verifies outcomes, isolates where the workflow became unrecoverable, and turns failures into regression tests. built at wat.ai w/ composio + magic hour. catching agents when they hallucinate.",
-    image: "/images/projects/trace.svg",
-    imageAlt: "TRACE",
-    technologies: [
-      "AI Agents",
-      "LLM Evals",
-      "RAG",
-      "Observability",
-      "Python",
-    ],
-    demo: "https://watai.ca",
-  },
-  {
-    title: "Meta-Harness",
-    href: "https://github.com/ManagementMO/Meta-Harness",
-    description:
-      "stanford's meta-harness paper had a linear loop — i mapped it onto langgraph and made it a tree. two state machines, postgres-backed checkpointing, time-travel forking, cross-run memory. self-improving agent harnesses, by construction.",
-    image: "/images/projects/meta-harness.svg",
-    imageAlt: "Meta-Harness",
-    technologies: [
-      "LangGraph",
-      "Postgres",
-      "FastAPI",
-      "Next.js",
-      "Python",
-    ],
-    github: "https://github.com/ManagementMO/Meta-Harness",
-  },
-  {
-    title: "Paybridge",
-    href: "https://paybridgetech.com/",
-    description:
-      "full-stack money transfer app for cross-border payments. moved $1k+ in real-user volume in early pilot.",
-    image: "/images/projects/pay-bridge.jpg",
-    imageAlt: "Paybridge",
-    technologies: ["Python", "React", "PostgreSQL", "Docker"],
-    github: "https://github.com/ManagementMO",
-    demo: "https://paybridgetech.com/",
-  },
-];
+const matches = (p, q) =>
+  p.title.toLowerCase().includes(q) ||
+  p.description.toLowerCase().includes(q) ||
+  p.technologies.some((t) => t.toLowerCase().includes(q));
 
 export default function ProjectSearch() {
   const [searchTerm, setSearchTerm] = useState("");
-
-  const filtered = projects.filter(
-    (project) =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.technologies.some((tech) =>
-        tech.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-  );
+  const q = searchTerm.trim().toLowerCase();
+  const main = projects.filter((p) => matches(p, q));
+  const archived = archive.filter((p) => matches(p, q));
 
   return (
     <>
-      <div className="relative">
-        <Search className="absolute top-2.5 left-3 size-6 text-stone-400" />
+      <div className="flex items-center font-mono text-sm rounded-md border border-stone-300 dark:border-stone-700 bg-stone-50/40 dark:bg-stone-900/30 px-3.5 py-2.5 focus-within:border-amber-500/60 dark:focus-within:border-amber-400/60 transition-colors">
+        <span className="text-stone-500 dark:text-stone-500 select-none whitespace-pre">
+          $ grep -ri{" "}
+        </span>
+        <span className="text-stone-400 dark:text-stone-600 select-none">
+          &quot;
+        </span>
         <input
           type="text"
-          placeholder="search for a project, technology, etc."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full py-2 px-4 border border-stone-400 rounded-md bg-transparent focus:outline-none focus:border-stone-700 dark:focus:border-stone-300 pl-10 text-stone-700 dark:text-stone-300 placeholder:text-stone-400 dark:placeholder:text-stone-500"
+          aria-label="search projects"
+          spellCheck={false}
+          autoCorrect="off"
+          autoCapitalize="off"
+          className="flex-1 min-w-0 bg-transparent outline-none border-none text-stone-800 dark:text-stone-200 caret-amber-500 dark:caret-amber-400"
         />
+        <span className="text-stone-400 dark:text-stone-600 select-none">
+          &quot;
+        </span>
+        <span className="hidden sm:inline text-stone-500 dark:text-stone-500 select-none whitespace-pre">
+          {" "}
+          ~/projects
+        </span>
       </div>
-      <ProjectList projects={filtered} />
+
+      {main.length === 0 && archived.length === 0 ? (
+        <div className="font-mono text-sm text-rose-600 dark:text-rose-400">
+          grep: no matches in ~/projects
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 gap-4">
+            {main.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.06}>
+                <ProjectPane project={p} />
+              </Reveal>
+            ))}
+          </div>
+          {archived.length > 0 && (
+            <>
+              <AsciiDivider label="archive" />
+              <div className="font-mono text-xs flex flex-col gap-1.5">
+                {archived.map((p) => (
+                  <div key={p.slug} className="flex items-baseline gap-3 min-w-0">
+                    <span className="text-stone-400 dark:text-stone-600 shrink-0 hidden sm:inline">
+                      -rw-r--r--
+                    </span>
+                    {p.href ? (
+                      <a
+                        href={p.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-stone-700 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-300 transition-colors shrink-0"
+                      >
+                        {p.title}
+                      </a>
+                    ) : (
+                      <span className="text-stone-700 dark:text-stone-300 shrink-0">
+                        {p.title}
+                      </span>
+                    )}
+                    <span className="text-stone-400 dark:text-stone-600 shrink-0">
+                      {p.year}
+                    </span>
+                    <span className="text-stone-500 dark:text-stone-500 truncate">
+                      {p.description}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }
