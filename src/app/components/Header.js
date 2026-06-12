@@ -18,6 +18,10 @@ function ScrambleText({ text }) {
   const animRef = useRef(null);
 
   const start = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setHovered(true);
+      return;
+    }
     setHovered(true);
     if (animRef.current) cancelAnimationFrame(animRef.current);
 
@@ -125,6 +129,12 @@ export default function Header({ className }) {
         isActive: pathname === "/projects",
         isNextLink: true,
       },
+      {
+        name: "writing",
+        href: "/writing",
+        isActive: pathname.startsWith("/writing"),
+        isNextLink: true,
+      },
     ],
     [pathname]
   );
@@ -136,7 +146,7 @@ export default function Header({ className }) {
           <ScrambleText text="mohammed elshrief" />
         </NextLink>
         <span
-          className="ml-1 text-amber-600 dark:text-amber-400 select-none animate-pulse-dot"
+          className="ml-1 text-amber-600 dark:text-amber-400 select-none motion-safe:animate-pulse-dot"
           aria-hidden="true"
         >
           •

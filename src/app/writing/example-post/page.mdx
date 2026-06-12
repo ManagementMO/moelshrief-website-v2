@@ -1,0 +1,28 @@
+import MdxLayout from "../../layouts/MdxLayout";
+
+export const metadata = {
+  title: "example post · mohammed elshrief",
+  description: "post template — replace with real writing.",
+  robots: { index: false },
+};
+
+## how posts work
+
+Write normal prose. Inline `code` gets the mono treatment, and fenced blocks
+get prism highlighting via the existing rehype pipeline:
+
+```python
+def hello(name: str) -> str:
+    return f"honk, {name}"
+```
+
+- lists work
+- **bold** and *italics* work
+- [links](https://moelshrief.wiki) get the amber treatment
+
+To publish: copy this directory, write, then flip `published: true` in
+`src/app/writing/posts.js`.
+
+export default function Page({ children }) {
+  return <MdxLayout slug="example-post">{children}</MdxLayout>;
+}

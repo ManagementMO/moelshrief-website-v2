@@ -50,6 +50,24 @@ export const metadata = {
   },
 };
 
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Mohammed Elshrief",
+  url: "https://moelshrief.wiki",
+  image: "https://moelshrief.wiki/my-pfp.jpg",
+  jobTitle: "Management Engineering Student",
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Waterloo",
+  },
+  sameAs: [
+    "https://github.com/ManagementMO",
+    "https://www.linkedin.com/in/mohammed-elshrief/",
+    "https://devpost.com/ManagementMO",
+  ],
+};
+
 const themeInitScript = `
 (function(){
   try {
@@ -70,6 +88,10 @@ export default function RootLayout({ children }) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body className={GeistSans.className}>
         <SpeedInsights />

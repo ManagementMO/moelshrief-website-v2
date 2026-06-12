@@ -138,6 +138,7 @@ export default function CommandPalette() {
       const shortcuts = {
         h: () => router.push("/"),
         p: () => router.push("/projects"),
+        w: () => router.push("/writing"),
         l: () =>
           window.open(
             "https://www.linkedin.com/in/mohammed-elshrief/",
@@ -246,6 +247,15 @@ export default function CommandPalette() {
                     shortcut="P"
                     isModifierPressed={isModifierPressed}
                     onSelect={() => runCommand(() => router.push("/projects"))}
+                  />
+                  <Item
+                    value="writing essays notes blog posts"
+                    prefix="→"
+                    name="writing"
+                    dest="./writing"
+                    shortcut="W"
+                    isModifierPressed={isModifierPressed}
+                    onSelect={() => runCommand(() => router.push("/writing"))}
                   />
                 </Command.Group>
 

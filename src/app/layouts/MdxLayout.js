@@ -1,21 +1,55 @@
-export default function MdxLayout({ children }) {
+import NextLink from "next/link";
+import Pane from "../components/Pane";
+import { posts, publishedPosts } from "../writing/posts";
+
+export default function MdxLayout({ slug, children }) {
+  const post = posts.find((p) => p.slug === slug);
+  const pubIdx = publishedPosts.findIndex((p) => p.slug === slug);
+  const prev = pubIdx > 0 ? publishedPosts[pubIdx - 1] : null;
+  const next =
+    pubIdx >= 0 && pubIdx < publishedPosts.length - 1
+      ? publishedPosts[pubIdx + 1]
+      : null;
+
   return (
-    <div
-      className="prose dark:prose-invert prose-stone
-                    prose-headings:mt-8 prose-headings:font-semibold prose-headings:text-stone-900 dark:prose-headings:text-stone-100
-                    prose-h1:text-3xl
-                    prose-a:text-stone-800 dark:prose-a:text-stone-200 hover:prose-a:text-stone-600 dark:hover:prose-a:text-stone-400
-                    prose-p:text-stone-600 dark:prose-p:text-stone-400
-                    prose-li:text-stone-600 dark:prose-li:text-stone-400
-                    prose-strong:text-stone-900 dark:prose-strong:text-stone-100
-                    prose-code:text-stone-800 dark:prose-code:text-stone-200
-                    prose-pre:p-0 prose-pre:bg-transparent dark:prose-pre:bg-transparent
-                    prose-pre:text-stone-800 dark:prose-pre:text-stone-200
-                    prose-blockquote:text-stone-600 dark:prose-blockquote:text-stone-400
-                    prose-blockquote:border-stone-300 dark:prose-blockquote:border-stone-700
-                    max-w-none"
-    >
-      {children}
-    </div>
+    <article className="w-full min-w-0">
+      <Pane path={`~/writing/${slug}.md`} meta="less">
+        {post && (
+          <div className="font-mono text-micro text-stone-400 dark:text-stone-600 mb-4">
+            {post.date} · {post.readMins} min read
+          </div>
+        )}
+        <div className="prose prose-sm prose-stone dark:prose-invert max-w-none prose-headings:font-medium prose-a:text-amber-700 dark:prose-a:text-amber-400">
+          {children}
+        </div>
+        <div className="font-mono text-xs text-stone-400 dark:text-stone-600 mt-6 select-none">
+          (END)
+        </div>
+      </Pane>
+      {(prev || next) && (
+        <div className="flex justify-between font-mono text-xs mt-4 text-stone-500 dark:text-stone-500">
+          {prev ? (
+            <NextLink
+              href={`/writing/${prev.slug}`}
+              className="hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
+            >
+              $ cd ../{prev.slug}
+            </NextLink>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <NextLink
+              href={`/writing/${next.slug}`}
+              className="hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
+            >
+              $ cd ../{next.slug}
+            </NextLink>
+          ) : (
+            <span />
+          )}
+        </div>
+      )}
+    </article>
   );
 }
