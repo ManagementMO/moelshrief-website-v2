@@ -103,7 +103,9 @@ export default function TerminalHero() {
       setHistory((h) => [...h, { cmd: trimmed, cwd, output: result }]);
     }
     if (trimmed) setCmdHistory((cArr) => [...cArr, trimmed]);
-    setInput("");
+    // Only clear the input when the executed command came from the input
+    // itself — a chip tap shouldn't discard half-typed text.
+    if (raw === input) setInput("");
     setHistIdx(-1);
   };
 

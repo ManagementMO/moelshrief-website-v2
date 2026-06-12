@@ -527,11 +527,12 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
       (c === "honk" && args.length === 0 ? "HONK." : args.join(" ")) ||
       "honk.";
     const text = msg.length > 38 ? msg.slice(0, 35) + "…" : msg;
-    const bar = "─".repeat(text.length + 2);
+    const top = " " + "_".repeat(text.length + 2);
+    const bottom = " " + "-".repeat(text.length + 2);
     return (
-      <pre className="leading-tight">{` ┌${bar}┐
- │ ${text} │
- └${bar}┘
+      <pre className="leading-tight">{`${top}
+< ${text} >
+${bottom}
     \\
      \\   _
       >(.)__

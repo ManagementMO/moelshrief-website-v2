@@ -40,11 +40,19 @@ export default function MatrixRain({ onDone }) {
 
     const stop = () => onDone();
     const timer = setTimeout(stop, 4000);
-    window.addEventListener("keydown", stop, { once: true });
+    // Defer listener attachment one macrotask: React 18 flushes this mount
+    // effect synchronously during the same Enter keydown that launched the
+    // command, so an immediate listener would catch that very keypress and
+    // kill the rain instantly.
+    const attach = setTimeout(
+      () => window.addEventListener("keydown", stop, { once: true }),
+      0
+    );
 
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
+      clearTimeout(attach);
       window.removeEventListener("keydown", stop);
     };
   }, [onDone]);
