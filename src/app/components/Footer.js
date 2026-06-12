@@ -1,29 +1,16 @@
-import { Linkedin, Github, Mail, CodeXml, Trophy, MapPin } from "lucide-react";
-
-const NOW_STATUS = "waterloo";
+import { Linkedin, Github, Mail, CodeXml, Trophy } from "lucide-react";
+import Signature from "./Signature";
 
 export default function Footer({ className }) {
   const links = [
-    {
-      name: "github",
-      href: "https://github.com/ManagementMO",
-      icon: Github,
-    },
+    { name: "github", href: "https://github.com/ManagementMO", icon: Github },
     {
       name: "linkedin",
       href: "https://www.linkedin.com/in/mohammed-elshrief/",
       icon: Linkedin,
     },
-    {
-      name: "email",
-      href: "mailto:mkelshri@uwaterloo.ca",
-      icon: Mail,
-    },
-    {
-      name: "devpost",
-      href: "https://devpost.com/ManagementMO",
-      icon: Trophy,
-    },
+    { name: "email", href: "mailto:mkelshri@uwaterloo.ca", icon: Mail },
+    { name: "devpost", href: "https://devpost.com/ManagementMO", icon: Trophy },
     {
       name: "repo",
       href: "https://github.com/ManagementMO/moelshrief-website-v2",
@@ -37,7 +24,7 @@ export default function Footer({ className }) {
     >
       <hr className="border-b border-neutral-200 dark:border-neutral-800" />
       <div className="flex flex-row justify-between gap-4 items-center">
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 items-center">
           {links.map((link) => (
             <a
               key={link.name}
@@ -54,21 +41,8 @@ export default function Footer({ className }) {
             </a>
           ))}
         </div>
-        <div
-          className="flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-500"
-          aria-label="location"
-        >
-          <MapPin
-            className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"
-            strokeWidth={1.75}
-            aria-hidden="true"
-          />
-          <span>{NOW_STATUS}</span>
-        </div>
+        <Signature />
       </div>
-      <p suppressHydrationWarning>
-        {new Date().getFullYear()} &copy; mohammed elshrief
-      </p>
     </footer>
   );
 }

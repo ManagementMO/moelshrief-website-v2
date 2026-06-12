@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import dynamic from "next/dynamic";
 import ThemeProvider from "./components/ThemeProvider";
+import Statusline from "./components/Statusline";
 
 const CommandPalette = dynamic(() => import("./components/CommandPalette"), {
   ssr: false,
@@ -74,7 +75,7 @@ export default function RootLayout({ children }) {
         <SpeedInsights />
         <Analytics />
         <ThemeProvider>
-          <main className="flex justify-center bg-stone-100 dark:bg-black font-extralight min-h-screen selection:bg-amber-200 dark:selection:bg-amber-800/40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px]">
+          <main className="flex justify-center bg-stone-100 dark:bg-black font-extralight min-h-screen selection:bg-amber-200 dark:selection:bg-amber-800/40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px] md:pb-10">
             <div className="flex flex-col gap-4 w-full md:max-w-[540px] m-6 md:m-20 text-neutral-500 dark:text-neutral-400 md:mt-[60px]">
               <Header />
               {children}
@@ -82,6 +83,7 @@ export default function RootLayout({ children }) {
             </div>
           </main>
           <CommandPalette />
+          <Statusline />
         </ThemeProvider>
       </body>
     </html>
