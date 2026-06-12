@@ -259,7 +259,7 @@ function buildTree(path, prefix, lines) {
   return lines;
 }
 
-/** extras: { theme, toggleTheme, cmdHistory, startMatrix } — capability bag; keys optional. */
+/** extras: { theme, toggleTheme, cmdHistory, activity, startMatrix } — capability bag; keys optional. */
 function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   const { theme, toggleTheme } = extras;
   const trimmed = input.trim();
@@ -520,6 +520,47 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
     return FS["~/writing"].children.length === 0
       ? DIM("// nothing published yet")
       : runLs("~/writing");
+  }
+
+  if (c === "activity") {
+    const a = extras.activity;
+    if (!a) return ERR("activity: github unreachable — try again later");
+    const blocks = "▁▂▃▅█";
+    const recent = a.weeks.slice(-12);
+    const weekly = recent.map((w) =>
+      w.reduce((s, d) => s + (d?.count ?? 0), 0)
+    );
+    const max = Math.max(...weekly, 1);
+    const spark = weekly
+      .map((n) =>
+        n === 0 ? blocks[0] : blocks[Math.min(4, Math.ceil((n / max) * 4))]
+      )
+      .join("");
+    return (
+      <div>
+        <div>
+          <span className="text-amber-700 dark:text-amber-400">{spark}</span>{" "}
+          <span className="text-stone-500 dark:text-stone-500">
+            last 12 weeks
+          </span>
+        </div>
+        <div>
+          {a.total} contributions in the last year
+          {a.streak > 0 ? ` · ${a.streak}d streak` : ""}
+        </div>
+        {a.commits.map((cm) => (
+          <div key={cm.sha} className="truncate">
+            <span className="text-amber-700 dark:text-amber-400">
+              {cm.sha}
+            </span>{" "}
+            <span className="text-sky-700 dark:text-sky-400">{cm.repo}</span>{" "}
+            <span className="text-stone-500 dark:text-stone-500">
+              — {cm.message}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (c === "cowsay" || c === "honk") {

@@ -33,7 +33,7 @@ function Prompt({ cwd }) {
   );
 }
 
-export default function TerminalHero() {
+export default function TerminalHero({ activity = null }) {
   const { theme, toggleTheme } = useTheme();
   const [cwd, setCwd] = useState("~");
   // Seeded with the fully-rendered `cat about.md` command + output so the bio
@@ -97,6 +97,7 @@ export default function TerminalHero() {
       theme,
       toggleTheme,
       cmdHistory,
+      activity,
       startMatrix: () => setMatrixOn(true),
     });
     if (result !== HANDLED) {
