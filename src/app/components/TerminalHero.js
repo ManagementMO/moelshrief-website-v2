@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { AboutOutput } from "./terminal/fs";
-import { runCommand, autocomplete } from "./terminal/commands";
+import { runCommand, autocomplete, HANDLED } from "./terminal/commands";
 
 function Prompt({ cwd }) {
   return (
@@ -70,8 +70,9 @@ export default function TerminalHero() {
       const result = runCommand(input, cwd, setCwd, setHistory, {
         theme,
         toggleTheme,
+        cmdHistory,
       });
-      if (result !== "HANDLED") {
+      if (result !== HANDLED) {
         setHistory((h) => [...h, { cmd: trimmed, cwd, output: result }]);
       }
       if (trimmed) setCmdHistory((c) => [...c, trimmed]);

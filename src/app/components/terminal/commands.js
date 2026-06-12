@@ -7,19 +7,42 @@ const DIM = (text) => (
   <div className="text-stone-500 dark:text-stone-500">{text}</div>
 );
 
-const HELP_ROWS = [
-  ["help", "list available commands"],
-  ["about", "alias: cat about.md"],
-  ["projects", "alias: cd projects && ls"],
-  ["ls [path]", "list files in a directory"],
-  ["cd <path>", "change directory"],
-  ["pwd", "print current directory"],
-  ["cat <file>", "read a file"],
-  ["open <file>", "open the file's link in a new tab"],
-  ["theme [dark|light]", "toggle or set color theme"],
-  ["whoami", "short bio"],
-  ["neofetch", "system info"],
-  ["clear", "clear the terminal (or ⌃L)"],
+export const HANDLED = "HANDLED";
+
+const HELP_GROUPS = [
+  {
+    label: "# files",
+    rows: [
+      ["ls [-a] [path]", "list files (-a shows hidden)"],
+      ["cd <path>", "change directory"],
+      ["cat <file>", "read a file"],
+      ["open <file>", "open the file's link"],
+      ["tree", "draw the directory tree"],
+      ["pwd", "print current directory"],
+    ],
+  },
+  {
+    label: "# info",
+    rows: [
+      ["about", "alias: cat about.md"],
+      ["projects", "alias: cd projects && ls"],
+      ["writing", "alias: cd writing && ls"],
+      ["git log", "career as commit history"],
+      ["activity", "live github stats"],
+      ["whoami", "short bio"],
+      ["history", "recent commands"],
+      ["man <cmd>", "what does this do?"],
+      ["theme [dark|light]", "toggle or set color theme"],
+      ["clear", "clear the terminal (or ⌃L)"],
+    ],
+  },
+  {
+    label: "# fun",
+    rows: [
+      ["neofetch", "system info"],
+      ["cowsay [msg]", "ask the goose"],
+    ],
+  },
 ];
 
 const ALL_COMMANDS = [
@@ -43,6 +66,16 @@ const ALL_COMMANDS = [
   "nvim",
   "emacs",
   "nano",
+  "tree",
+  "history",
+  "git",
+  "man",
+  "date",
+  "uptime",
+  "activity",
+  "cowsay",
+  "honk",
+  "writing",
 ];
 
 function longestCommonPrefix(strings) {
@@ -100,7 +133,10 @@ function autocomplete(input, cwd) {
   if (!parentPath || !FS[parentPath] || FS[parentPath].type !== "dir")
     return null;
 
-  const candidates = FS[parentPath].children.filter((n) => n.startsWith(leaf));
+  const pool = leaf.startsWith(".")
+    ? [...(FS[parentPath].hidden ?? []), ...FS[parentPath].children]
+    : FS[parentPath].children;
+  const candidates = pool.filter((n) => n.startsWith(leaf));
   if (candidates.length === 0) return null;
 
   const buildFull = (suffix) => {
@@ -122,24 +158,28 @@ function autocomplete(input, cwd) {
 }
 
 
-function runLs(target) {
+function runLs(target, { all = false } = {}) {
   if (!target || !FS[target])
-    return ERR(`ls: no such file or directory`);
+    return ERR(`ls: ${target ?? ""}: no such file or directory`);
   const node = FS[target];
   if (node.type !== "dir") return <div>{target.split("/").pop()}</div>;
+  const names = [...(all ? node.hidden ?? [] : []), ...node.children];
   return (
     <div className="flex flex-wrap gap-x-4">
-      {node.children.map((name) => {
+      {names.map((name) => {
         const childPath = target === "~" ? `~/${name}` : `${target}/${name}`;
         const child = FS[childPath];
         const isDir = child?.type === "dir";
+        const isHidden = name.startsWith(".");
         return (
           <span
             key={name}
             className={
               isDir
                 ? "text-sky-700 dark:text-sky-400"
-                : "text-stone-700 dark:text-stone-300"
+                : isHidden
+                  ? "text-stone-400 dark:text-stone-600"
+                  : "text-stone-700 dark:text-stone-300"
             }
           >
             {name}
@@ -151,6 +191,73 @@ function runLs(target) {
   );
 }
 
+const BOOT = Date.now();
+
+const CAREER = [
+  ["f4b1e25", "(HEAD -> waterloo) building TRACE + Meta-Harness @ wat.ai"],
+  ["a7c3d91", "software engineering @ altas partners"],
+  ["c1d8a44", "software engineering @ liftwerx"],
+  ["9b2e7f3", "machine learning engineering @ wat.ai"],
+  ["5a6c9d1", "ml dev @ themis ai · utmist"],
+  ["e8f2b35", "(initial commit) management engineering @ uwaterloo"],
+];
+
+const MAN_PAGES = {
+  help: "help — list available commands, grouped by vibe.",
+  about: "about — alias for `cat about.md`. the short version of me.",
+  projects: "projects — alias for `cd projects && ls`.",
+  writing: "writing — alias for `cd writing && ls`. essays + notes.",
+  ls: "ls [-a] [path] — list directory contents. -a shows dotfiles.",
+  cd: "cd <path> — change directory. supports ~, .., relative paths.",
+  pwd: "pwd — print working directory.",
+  cat: "cat <file> — print a file. works on .md, .txt, and worse ideas.",
+  open: "open <file> — follow the file's link (new tab for external).",
+  tree: "tree [path] — draw the directory tree. dotfiles excluded.",
+  history: "history — your last commands. persisted in localStorage.",
+  git: "git log | git status — career as commit history.",
+  activity: "activity — live github contributions + recent commits.",
+  theme: "theme [dark|light|toggle] — set the color theme.",
+  whoami: "whoami — one-line bio.",
+  neofetch: "neofetch — system info, but the system is me.",
+  date: "date — current date and time.",
+  uptime: "uptime — time since you opened this page.",
+  cowsay: "cowsay [msg] — a goose says your message. alias: honk.",
+  echo: "echo <text> — print text.",
+  clear: "clear — wipe the terminal. also ctrl+L.",
+  man: "man <command> — you are here.",
+};
+
+function buildTree(path, prefix, lines) {
+  const node = FS[path];
+  const children = (node.children ?? []).filter((c) => !c.startsWith("."));
+  children.forEach((name, i) => {
+    const last = i === children.length - 1;
+    const childPath = path === "~" ? `~/${name}` : `${path}/${name}`;
+    const isDir = FS[childPath]?.type === "dir";
+    lines.push(
+      <div key={childPath}>
+        <span className="text-stone-400 dark:text-stone-600">
+          {prefix}
+          {last ? "└── " : "├── "}
+        </span>
+        <span
+          className={
+            isDir
+              ? "text-sky-700 dark:text-sky-400"
+              : "text-stone-700 dark:text-stone-300"
+          }
+        >
+          {name}
+          {isDir ? "/" : ""}
+        </span>
+      </div>
+    );
+    if (isDir) buildTree(childPath, prefix + (last ? "    " : "│   "), lines);
+  });
+  return lines;
+}
+
+/** extras: { theme, toggleTheme, cmdHistory } — capability bag; keys optional. */
 function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   const { theme, toggleTheme } = extras;
   const trimmed = input.trim();
@@ -160,7 +267,7 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
 
   if (c === "clear") {
     setHistory([]);
-    return "HANDLED";
+    return HANDLED;
   }
 
   if (c === "about") {
@@ -189,12 +296,21 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   if (c === "help") {
     return (
       <div>
-        {HELP_ROWS.map(([name, desc]) => (
-          <div key={name}>
-            <span className="text-amber-700 dark:text-amber-400 inline-block min-w-[110px]">
-              {name}
-            </span>
-            <span className="text-stone-500 dark:text-stone-500">{desc}</span>
+        {HELP_GROUPS.map((group) => (
+          <div key={group.label} className="mb-1.5 last:mb-0">
+            <div className="text-stone-400 dark:text-stone-600">
+              {group.label}
+            </div>
+            {group.rows.map(([name, desc]) => (
+              <div key={name}>
+                <span className="text-amber-700 dark:text-amber-400 inline-block min-w-[150px]">
+                  {name}
+                </span>
+                <span className="text-stone-500 dark:text-stone-500">
+                  {desc}
+                </span>
+              </div>
+            ))}
           </div>
         ))}
       </div>
@@ -250,10 +366,13 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   }
 
   if (c === "ls") {
-    const target = args[0] ? resolvePath(cwd, args[0]) : cwd;
+    const flags = args.filter((a) => a.startsWith("-")).join("");
+    const all = flags.includes("a");
+    const pathArg = args.find((a) => !a.startsWith("-"));
+    const target = pathArg ? resolvePath(cwd, pathArg) : cwd;
     if (!target || !FS[target])
-      return ERR(`ls: ${args[0] ?? cwd}: no such file or directory`);
-    return runLs(target);
+      return ERR(`ls: ${pathArg ?? cwd}: no such file or directory`);
+    return runLs(target, { all });
   }
 
   if (c === "cd") {
@@ -284,7 +403,10 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
       return ERR(`open: ${args[0]}: no such file or directory`);
     const node = FS[target];
     if (!node.url) return ERR(`open: ${args[0]}: no link associated`);
-    if (typeof window !== "undefined") window.open(node.url, "_blank");
+    if (typeof window !== "undefined") {
+      if (node.internal) window.location.assign(node.url);
+      else window.open(node.url, "_blank");
+    }
     return DIM(`opened ${node.url}`);
   }
 
@@ -305,6 +427,94 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
       }, 80);
     }
     return DIM("// EOF · scrolling to signoff…");
+  }
+
+  if (c === "tree") {
+    const root = args[0] ? resolvePath(cwd, args[0]) : cwd;
+    if (!root || !FS[root]) return ERR(`tree: ${args[0]}: no such directory`);
+    if (FS[root].type !== "dir")
+      return ERR(`tree: ${args[0]}: not a directory`);
+    return (
+      <div>
+        <div className="text-sky-700 dark:text-sky-400">{root}</div>
+        {buildTree(root, "", [])}
+      </div>
+    );
+  }
+
+  if (c === "history") {
+    const items = (extras.cmdHistory ?? []).slice(-20);
+    if (items.length === 0) return DIM("history: empty");
+    return (
+      <div>
+        {items.map((cmdStr, i) => (
+          <div key={i}>
+            <span className="text-stone-400 dark:text-stone-600 inline-block min-w-[2.5rem] text-right pr-3">
+              {i + 1}
+            </span>
+            {cmdStr}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (c === "git") {
+    const sub = args[0]?.toLowerCase();
+    if (sub === "log") {
+      return (
+        <div>
+          {CAREER.map(([hash, msg]) => (
+            <div key={hash}>
+              <span className="text-amber-700 dark:text-amber-400">{hash}</span>{" "}
+              {msg}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (sub === "status") {
+      return (
+        <div>
+          <div>on branch waterloo</div>
+          <div>
+            your branch is ahead of &apos;graduation&apos; by 42 commits.
+          </div>
+          <div className="text-stone-500 dark:text-stone-500">
+            nothing to commit, working tree clean (lol)
+          </div>
+        </div>
+      );
+    }
+    return DIM("usage: git log · git status");
+  }
+
+  if (c === "man") {
+    if (!args[0]) return ERR("what manual page do you want?");
+    const page = MAN_PAGES[args[0].toLowerCase()];
+    return page ? <div>{page}</div> : ERR(`No manual entry for ${args[0]}`);
+  }
+
+  if (c === "date") {
+    return <div>{new Date().toString()}</div>;
+  }
+
+  if (c === "uptime") {
+    const s = Math.floor((Date.now() - BOOT) / 1000);
+    const mins = Math.floor(s / 60);
+    const secs = s % 60;
+    return (
+      <div>
+        up {mins}m {secs}s · load average: coffee, hackathons, shipping
+      </div>
+    );
+  }
+
+  if (c === "writing") {
+    setCwd("~/writing");
+    return FS["~/writing"].children.length === 0
+      ? DIM("// nothing published yet")
+      : runLs("~/writing");
   }
 
   return ERR(`bash: ${c}: command not found · type \`help\``);

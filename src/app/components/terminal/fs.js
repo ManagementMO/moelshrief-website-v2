@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "../Link";
+import { archive } from "../../projects/projectsData";
+import { publishedPosts } from "../../writing/posts";
 
 function Logo({
   src,
@@ -158,12 +160,13 @@ function AboutOutput() {
 const FS = {
   "~": {
     type: "dir",
-    children: ["about.md", "projects", "work.txt", "contact.md"],
+    children: ["about.md", "projects", "writing", "work.txt", "contact.md"],
+    hidden: [".bashrc", ".secrets"],
   },
   "~/about.md": { type: "file", render: () => <AboutOutput /> },
   "~/projects": {
     type: "dir",
-    children: ["trace", "meta-harness"],
+    children: ["trace", "meta-harness", "paybridge", "archive"],
   },
   "~/projects/trace": {
     type: "file",
@@ -213,6 +216,65 @@ const FS = {
       </>
     ),
   },
+  "~/projects/paybridge": {
+    type: "file",
+    url: "https://paybridgetech.com/",
+    render: () => (
+      <>
+        <div>
+          <span className="text-amber-700 dark:text-amber-400">Paybridge</span>{" "}
+          — cross-border money transfers
+        </div>
+        <div>moved $1k+ in real-user volume in early pilot.</div>
+        <div className="text-stone-500 dark:text-stone-500 mt-1">
+          link:{" "}
+          <Link href="https://paybridgetech.com/">
+            <span className="text-amber-700 dark:text-amber-400">
+              paybridgetech.com
+            </span>
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  "~/projects/archive": {
+    type: "dir",
+    children: archive.map((p) => p.slug),
+  },
+  "~/writing": {
+    type: "dir",
+    children: publishedPosts.map((p) => `${p.slug}.md`),
+  },
+  "~/.secrets": {
+    type: "file",
+    hidden: true,
+    render: () => (
+      <>
+        <div className="text-stone-500 dark:text-stone-500">
+          # ~/.secrets — decrypting…
+        </div>
+        <div>next_big_thing: ████████████████</div>
+        <div>dream_job: ██████████ (you know the one)</div>
+        <div>hackathon_strategy: sleep is ████████</div>
+        <div className="text-stone-500 dark:text-stone-500">
+          (3 entries redacted · nice try)
+        </div>
+      </>
+    ),
+  },
+  "~/.bashrc": {
+    type: "file",
+    hidden: true,
+    render: () => (
+      <>
+        <div className="text-stone-500 dark:text-stone-500"># aliases</div>
+        <div>alias work=&quot;coffee &amp;&amp; code&quot;</div>
+        <div>alias ship=&quot;git push --force-with-lease &amp;&amp; pray&quot;</div>
+        <div>alias goose=&quot;cowsay&quot;</div>
+        <div>export EDITOR=vim &nbsp;# fight me</div>
+      </>
+    ),
+  },
   "~/work.txt": {
     type: "file",
     render: () => (
@@ -256,6 +318,45 @@ const FS = {
     ),
   },
 };
+
+// generated archive file nodes
+for (const p of archive) {
+  FS[`~/projects/archive/${p.slug}`] = {
+    type: "file",
+    url: p.href,
+    render: () => (
+      <>
+        <div>
+          <span className="text-amber-700 dark:text-amber-400">{p.title}</span>{" "}
+          — {p.description}
+        </div>
+        <div className="text-stone-500 dark:text-stone-500">
+          {p.year} · {p.technologies.join(" · ")}
+        </div>
+      </>
+    ),
+  };
+}
+
+// generated writing file nodes
+for (const p of publishedPosts) {
+  FS[`~/writing/${p.slug}.md`] = {
+    type: "file",
+    url: `/writing/${p.slug}`,
+    internal: true,
+    render: () => (
+      <>
+        <div>
+          <span className="text-amber-700 dark:text-amber-400">{p.title}</span>{" "}
+          — {p.summary}
+        </div>
+        <div className="text-stone-500 dark:text-stone-500">
+          {p.date} · {p.readMins} min · open {p.slug}.md → read it
+        </div>
+      </>
+    ),
+  };
+}
 
 // resolve a relative or absolute path against cwd → canonical "~"-rooted path
 function resolvePath(cwd, raw) {
