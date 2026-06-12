@@ -1,3 +1,4 @@
+import SlTrain from "./SlTrain";
 import { FS, resolvePath } from "./fs";
 
 const ERR = (text) => (
@@ -258,7 +259,7 @@ function buildTree(path, prefix, lines) {
   return lines;
 }
 
-/** extras: { theme, toggleTheme, cmdHistory } — capability bag; keys optional. */
+/** extras: { theme, toggleTheme, cmdHistory, startMatrix } — capability bag; keys optional. */
 function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   const { theme, toggleTheme } = extras;
   const trimmed = input.trim();
@@ -519,6 +520,32 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
     return FS["~/writing"].children.length === 0
       ? DIM("// nothing published yet")
       : runLs("~/writing");
+  }
+
+  if (c === "cowsay" || c === "honk") {
+    const msg =
+      (c === "honk" && args.length === 0 ? "HONK." : args.join(" ")) ||
+      "honk.";
+    const text = msg.length > 38 ? msg.slice(0, 35) + "…" : msg;
+    const bar = "─".repeat(text.length + 2);
+    return (
+      <pre className="leading-tight">{` ┌${bar}┐
+ │ ${text} │
+ └${bar}┘
+    \\
+     \\   _
+      >(.)__
+       (___/   — the goose has spoken`}</pre>
+    );
+  }
+
+  if (c === "sl") {
+    return <SlTrain />;
+  }
+
+  if (c === "matrix") {
+    extras.startMatrix?.();
+    return DIM("wake up, neo… (any key to exit)");
   }
 
   return ERR(`bash: ${c}: command not found · type \`help\``);

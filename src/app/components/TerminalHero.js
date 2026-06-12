@@ -1,8 +1,10 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { AboutOutput } from "./terminal/fs";
 import { runCommand, autocomplete, HANDLED } from "./terminal/commands";
+import MatrixRain from "./terminal/MatrixRain";
+import useMobileDevice from "../hooks/useMobileDevice";
 
 class OutputBoundary extends React.Component {
   constructor(props) {
@@ -43,6 +45,8 @@ export default function TerminalHero() {
   const [cmdHistory, setCmdHistory] = useState([]);
   const [histIdx, setHistIdx] = useState(-1);
   const [focused, setFocused] = useState(false);
+  const [matrixOn, setMatrixOn] = useState(false);
+  const isMobileDevice = useMobileDevice();
   const inputRef = useRef(null);
   const blockRef = useRef(null);
   const bottomRef = useRef(null);
@@ -85,21 +89,28 @@ export default function TerminalHero() {
     inputRef.current?.focus();
   };
 
+  const stopMatrix = useCallback(() => setMatrixOn(false), []);
+
+  const execute = (raw) => {
+    const trimmed = raw.trim();
+    const result = runCommand(raw, cwd, setCwd, setHistory, {
+      theme,
+      toggleTheme,
+      cmdHistory,
+      startMatrix: () => setMatrixOn(true),
+    });
+    if (result !== HANDLED) {
+      setHistory((h) => [...h, { cmd: trimmed, cwd, output: result }]);
+    }
+    if (trimmed) setCmdHistory((cArr) => [...cArr, trimmed]);
+    setInput("");
+    setHistIdx(-1);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      const trimmed = input.trim();
-      const result = runCommand(input, cwd, setCwd, setHistory, {
-        theme,
-        toggleTheme,
-        cmdHistory,
-      });
-      if (result !== HANDLED) {
-        setHistory((h) => [...h, { cmd: trimmed, cwd, output: result }]);
-      }
-      if (trimmed) setCmdHistory((c) => [...c, trimmed]);
-      setInput("");
-      setHistIdx(-1);
+      execute(input);
     } else if (e.key === "Tab") {
       e.preventDefault();
       const completed = autocomplete(input, cwd);
@@ -159,8 +170,9 @@ export default function TerminalHero() {
         if (e.target.tagName !== "A" && e.target.closest("a") === null)
           focusInput();
       }}
-      className="font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
+      className="relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
     >
+      {matrixOn && <MatrixRain onDone={stopMatrix} />}
       <div role="log" aria-live="polite" aria-label="terminal output">
         {history.map((entry, i) => (
           <div key={i}>
@@ -211,6 +223,22 @@ export default function TerminalHero() {
         </span>{" "}
         for commands · ↑/↓ for history)
       </div>
+      {isMobileDevice && (
+        <div className="flex flex-wrap gap-2 mt-3">
+          {["help", "about", "projects", "tree"].map((cmd) => (
+            <button
+              key={cmd}
+              onClick={(e) => {
+                e.stopPropagation();
+                execute(cmd);
+              }}
+              className="font-mono text-xs px-2.5 py-1 rounded-md border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 active:bg-amber-100 dark:active:bg-amber-500/15"
+            >
+              $ {cmd}
+            </button>
+          ))}
+        </div>
+      )}
       <div ref={bottomRef} />
     </div>
   );

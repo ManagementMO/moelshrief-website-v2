@@ -20,10 +20,15 @@ module.exports = {
           "0%, 49%": { opacity: "1" },
           "50%, 100%": { opacity: "0" },
         },
+        slTrain: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-110%)" },
+        },
       },
       animation: {
         "pulse-dot": "pulseDot 2.4s ease-in-out infinite",
         "cursor-blink": "blink 1.06s steps(1) infinite",
+        "sl-train": "slTrain 3.5s linear forwards",
       },
       fontSize: {
         micro: "0.625rem",
