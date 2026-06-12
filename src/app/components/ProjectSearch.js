@@ -9,7 +9,7 @@ import AsciiDivider from "./AsciiDivider";
 const matches = (p, q) =>
   p.title.toLowerCase().includes(q) ||
   p.description.toLowerCase().includes(q) ||
-  p.technologies.some((t) => t.toLowerCase().includes(q));
+  (p.technologies ?? []).some((t) => t.toLowerCase().includes(q));
 
 export default function ProjectSearch() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -19,11 +19,17 @@ export default function ProjectSearch() {
 
   return (
     <>
-      <div className="flex items-center font-mono text-sm rounded-md border border-stone-300 dark:border-stone-700 bg-stone-50/40 dark:bg-stone-900/30 px-3.5 py-2.5 focus-within:border-amber-500/60 dark:focus-within:border-amber-400/60 transition-colors">
-        <span className="text-stone-500 dark:text-stone-500 select-none whitespace-pre">
+      <label className="flex items-center font-mono text-sm rounded-md border border-stone-300 dark:border-stone-700 bg-stone-50/40 dark:bg-stone-900/30 px-3.5 py-2.5 focus-within:border-amber-500/60 dark:focus-within:border-amber-400/60 transition-colors cursor-text">
+        <span
+          aria-hidden="true"
+          className="text-stone-500 dark:text-stone-500 select-none whitespace-pre"
+        >
           $ grep -ri{" "}
         </span>
-        <span className="text-stone-400 dark:text-stone-600 select-none">
+        <span
+          aria-hidden="true"
+          className="text-stone-400 dark:text-stone-600 select-none"
+        >
           &quot;
         </span>
         <input
@@ -36,14 +42,20 @@ export default function ProjectSearch() {
           autoCapitalize="off"
           className="flex-1 min-w-0 bg-transparent outline-none border-none text-stone-800 dark:text-stone-200 caret-amber-500 dark:caret-amber-400"
         />
-        <span className="text-stone-400 dark:text-stone-600 select-none">
+        <span
+          aria-hidden="true"
+          className="text-stone-400 dark:text-stone-600 select-none"
+        >
           &quot;
         </span>
-        <span className="hidden sm:inline text-stone-500 dark:text-stone-500 select-none whitespace-pre">
+        <span
+          aria-hidden="true"
+          className="hidden sm:inline text-stone-500 dark:text-stone-500 select-none whitespace-pre"
+        >
           {" "}
           ~/projects
         </span>
-      </div>
+      </label>
 
       {main.length === 0 && archived.length === 0 ? (
         <div className="font-mono text-sm text-rose-600 dark:text-rose-400">
@@ -51,20 +63,31 @@ export default function ProjectSearch() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4">
-            {main.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 0.06}>
-                <ProjectPane project={p} />
-              </Reveal>
-            ))}
-          </div>
+          {main.length > 0 && (
+            <div className="grid grid-cols-1 gap-4">
+              {main.map((p, i) =>
+                q ? (
+                  <div key={p.slug}>
+                    <ProjectPane project={p} />
+                  </div>
+                ) : (
+                  <Reveal key={p.slug} delay={i * 0.06}>
+                    <ProjectPane project={p} />
+                  </Reveal>
+                )
+              )}
+            </div>
+          )}
           {archived.length > 0 && (
             <>
               <AsciiDivider label="archive" />
               <div className="font-mono text-xs flex flex-col gap-1.5">
                 {archived.map((p) => (
                   <div key={p.slug} className="flex items-baseline gap-3 min-w-0">
-                    <span className="text-stone-400 dark:text-stone-600 shrink-0 hidden sm:inline">
+                    <span
+                      aria-hidden="true"
+                      className="text-stone-400 dark:text-stone-600 shrink-0 hidden sm:inline"
+                    >
                       -rw-r--r--
                     </span>
                     {p.href ? (
@@ -81,7 +104,7 @@ export default function ProjectSearch() {
                         {p.title}
                       </span>
                     )}
-                    <span className="text-stone-400 dark:text-stone-600 shrink-0">
+                    <span className="text-stone-500 dark:text-stone-500 shrink-0">
                       {p.year}
                     </span>
                     <span className="text-stone-500 dark:text-stone-500 truncate">

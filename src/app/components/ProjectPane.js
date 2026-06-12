@@ -30,7 +30,7 @@ export default function ProjectPane({ project }) {
         {description}
       </p>
       <div className="mt-3 flex flex-wrap gap-1.5">
-        {technologies.map((tech) => (
+        {(technologies ?? []).map((tech) => (
           <span
             key={tech}
             className="text-micro uppercase tracking-wider px-2 py-0.5 rounded-full border border-stone-300 dark:border-stone-700 text-stone-500 dark:text-stone-400"
@@ -42,12 +42,14 @@ export default function ProjectPane({ project }) {
       <div className="mt-3.5 flex items-center gap-5 font-mono text-xs">
         {demo && (
           <span className="text-stone-500 dark:text-stone-500">
-            $ <Link href={demo}>open demo ↗</Link>
+            <span aria-hidden="true">$ </span>
+            <Link href={demo}>open demo ↗</Link>
           </span>
         )}
         {github && (
           <span className="text-stone-500 dark:text-stone-500">
-            $ <Link href={github}>git clone</Link>
+            <span aria-hidden="true">$ </span>
+            <Link href={github}>git clone</Link>
           </span>
         )}
       </div>
