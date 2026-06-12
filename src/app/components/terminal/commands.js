@@ -164,6 +164,7 @@ function runLs(target, { all = false } = {}) {
   const node = FS[target];
   if (node.type !== "dir") return <div>{target.split("/").pop()}</div>;
   const names = [...(all ? node.hidden ?? [] : []), ...node.children];
+  if (names.length === 0) return DIM("(empty)");
   return (
     <div className="flex flex-wrap gap-x-4">
       {names.map((name) => {
@@ -303,7 +304,7 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
             </div>
             {group.rows.map(([name, desc]) => (
               <div key={name}>
-                <span className="text-amber-700 dark:text-amber-400 inline-block min-w-[150px]">
+                <span className="text-amber-700 dark:text-amber-400 inline-block min-w-[150px] pr-3">
                   {name}
                 </span>
                 <span className="text-stone-500 dark:text-stone-500">
@@ -443,14 +444,16 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   }
 
   if (c === "history") {
-    const items = (extras.cmdHistory ?? []).slice(-20);
+    const all = extras.cmdHistory ?? [];
+    const items = all.slice(-20);
+    const offset = all.length - items.length;
     if (items.length === 0) return DIM("history: empty");
     return (
       <div>
         {items.map((cmdStr, i) => (
-          <div key={i}>
+          <div key={offset + i}>
             <span className="text-stone-400 dark:text-stone-600 inline-block min-w-[2.5rem] text-right pr-3">
-              {i + 1}
+              {offset + i + 1}
             </span>
             {cmdStr}
           </div>
@@ -491,7 +494,8 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
 
   if (c === "man") {
     if (!args[0]) return ERR("what manual page do you want?");
-    const page = MAN_PAGES[args[0].toLowerCase()];
+    const key = args[0].toLowerCase();
+    const page = Object.hasOwn(MAN_PAGES, key) ? MAN_PAGES[key] : null;
     return page ? <div>{page}</div> : ERR(`No manual entry for ${args[0]}`);
   }
 

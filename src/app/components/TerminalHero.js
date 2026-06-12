@@ -1,8 +1,27 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "./ThemeProvider";
 import { AboutOutput } from "./terminal/fs";
 import { runCommand, autocomplete, HANDLED } from "./terminal/commands";
+
+class OutputBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    if (this.state.failed)
+      return (
+        <div className="text-rose-600 dark:text-rose-400">
+          (render error — output suppressed)
+        </div>
+      );
+    return this.props.children;
+  }
+}
 
 function Prompt({ cwd }) {
   return (
@@ -35,7 +54,10 @@ export default function TerminalHero() {
       const stored = localStorage.getItem("terminal_cmd_history");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) setCmdHistory(parsed.slice(-50));
+        if (Array.isArray(parsed))
+          setCmdHistory(
+            parsed.slice(-50).filter((x) => typeof x === "string")
+          );
       }
     } catch {}
   }, []);
@@ -149,7 +171,9 @@ export default function TerminalHero() {
               </span>
             </div>
             {entry.output ? (
-              <div className="mt-1 mb-2">{entry.output}</div>
+              <OutputBoundary>
+                <div className="mt-1 mb-2">{entry.output}</div>
+              </OutputBoundary>
             ) : null}
           </div>
         ))}
