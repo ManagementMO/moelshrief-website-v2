@@ -58,7 +58,6 @@ export const archive = [
     slug: "mo-planner",
     title: "mo-planner",
     year: "2023",
-    href: "https://github.com/ManagementMO/mo-planner",
     description: "student budget forecasting in excel/vba · used by 100+ students",
     technologies: ["Excel", "VBA", "Python"],
   },
