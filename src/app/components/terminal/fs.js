@@ -12,7 +12,6 @@ function Logo({
   paddedBgSize = "175%",
   clipPath,
   size = 14,
-  topOffset = 3,
   unoptimized = false,
   invertDark = false,
 }) {
@@ -22,12 +21,10 @@ function Logo({
         role="img"
         aria-label={alt}
         title={alt}
-        className="inline-block rounded-[2px] mr-1"
+        className="inline-block rounded-[2px] mr-1 align-middle"
         style={{
           width: `${paddedWidth}px`,
           height: "14px",
-          top: `${topOffset}px`,
-          position: "relative",
           backgroundImage: `url(${src})`,
           backgroundSize: paddedBgSize,
           backgroundPosition: "center",
@@ -45,12 +42,10 @@ function Logo({
         width={56}
         height={14}
         unoptimized={unoptimized}
-        className={`object-contain object-left inline mr-1${
+        className={`object-contain object-left inline mr-1 align-middle${
           invertDark ? " dark:invert" : ""
         }`}
         style={{
-          position: "relative",
-          top: `${topOffset}px`,
           height: "14px",
           width: "auto",
         }}
@@ -64,22 +59,8 @@ function Logo({
       width={size}
       height={size}
       unoptimized={unoptimized}
-      className="object-contain inline mr-1"
-      style={{ position: "relative", top: `${topOffset}px` }}
+      className="object-contain inline mr-1 align-middle"
     />
-  );
-}
-
-// One aligned "role @ company" line. The role sits in a fixed-width
-// (monospace ch) column on sm+ so every `@`, logo, and company line up
-// vertically; on mobile it falls back to natural inline flow.
-function Role({ title, children }) {
-  return (
-    <div>
-      <span className="sm:inline-block sm:w-[28ch]">- {title}</span>
-      {" @ "}
-      {children}
-    </div>
   );
 }
 
@@ -87,18 +68,13 @@ function AboutOutput() {
   return (
     <>
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
-      <Role title="Management Engineering">
-        <Logo
-          src="/logos/waterloo.png"
-          alt="UWaterloo"
-          size={24}
-          topOffset={-2}
-          unoptimized
-        />
+      <div>
+        - Management Engineering @{" "}
+        <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} unoptimized />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>
-      </Role>
+      </div>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># building</div>
       <div>
@@ -122,7 +98,8 @@ function AboutOutput() {
       <div>&nbsp;&nbsp;(time-travel forking, postgres checkpoints)</div>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># previously</div>
-      <Role title="Software Engineer">
+      <div>
+        - Software Engineer @{" "}
         <Logo
           src="/logos/upfront.png"
           alt="Upfront Ventures"
@@ -135,34 +112,39 @@ function AboutOutput() {
             Upfront Ventures
           </span>
         </Link>
-      </Role>
-      <Role title="Software Engineer">
+      </div>
+      <div>
+        - Software Engineer @{" "}
         <Logo src="/logos/altas.png" alt="Altas Partners" padded />
         <Link href="https://www.altas.com">
           <span className="text-amber-700 dark:text-amber-400">
             Altas Partners
           </span>
         </Link>
-      </Role>
-      <Role title="Software Engineer">
+      </div>
+      <div>
+        - Software Engineer @{" "}
         <Logo src="/logos/liftwerx.png" alt="LiftWerx" wide />
         <Link href="https://www.liftwerx.com">
           <span className="text-amber-700 dark:text-amber-400">LiftWerx</span>
         </Link>
-      </Role>
-      <Role title="Machine Learning Engineer">
+      </div>
+      <div>
+        - Machine Learning Engineer @{" "}
         <Logo src="/logos/watai.png" alt="WAT.ai" />
         <Link href="https://watai.ca">
           <span className="text-amber-700 dark:text-amber-400">WAT.ai</span>
         </Link>
-      </Role>
-      <Role title="Machine Learning Engineer">
+      </div>
+      <div>
+        - Machine Learning Engineer @{" "}
         <Logo src="/logos/utmist.svg" alt="UTMIST" />
         <Link href="https://www.utmist.ca/">
           <span className="text-amber-700 dark:text-amber-400">UTMIST</span>
         </Link>
-      </Role>
-      <Role title="Hackathon Addict">
+      </div>
+      <div>
+        - Hackathon Addict @{" "}
         <Logo
           src="/logos/devpost.jpg"
           alt="Devpost"
@@ -174,7 +156,7 @@ function AboutOutput() {
         <Link href="https://devpost.com/ManagementMO">
           <span className="text-amber-700 dark:text-amber-400">Devpost</span>
         </Link>
-      </Role>
+      </div>
     </>
   );
 }
@@ -189,7 +171,7 @@ const FS = {
   "~/about.md": { type: "file", render: () => <AboutOutput /> },
   "~/projects": {
     type: "dir",
-    children: ["trace", "meta-harness", "paybridge", "archive"],
+    children: ["trace", "meta-harness", "archive"],
   },
   "~/projects/trace": {
     type: "file",
@@ -233,27 +215,6 @@ const FS = {
           <Link href="https://github.com/ManagementMO/Meta-Harness">
             <span className="text-amber-700 dark:text-amber-400">
               github.com/ManagementMO/Meta-Harness
-            </span>
-          </Link>
-        </div>
-      </>
-    ),
-  },
-  "~/projects/paybridge": {
-    type: "file",
-    url: "https://paybridgetech.com/",
-    render: () => (
-      <>
-        <div>
-          <span className="text-amber-700 dark:text-amber-400">Paybridge</span>{" "}
-          — cross-border money transfers
-        </div>
-        <div>moved $1k+ in real-user volume in early pilot.</div>
-        <div className="text-stone-500 dark:text-stone-500 mt-1">
-          link:{" "}
-          <Link href="https://paybridgetech.com/">
-            <span className="text-amber-700 dark:text-amber-400">
-              paybridgetech.com
             </span>
           </Link>
         </div>

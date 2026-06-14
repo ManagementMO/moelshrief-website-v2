@@ -24,20 +24,17 @@ export const projects = [
     technologies: ["LangGraph", "Postgres", "FastAPI", "Next.js", "Python"],
     github: "https://github.com/ManagementMO/Meta-Harness",
   },
-  {
-    slug: "paybridge",
-    title: "Paybridge",
-    year: "2024",
-    href: "https://paybridgetech.com/",
-    description:
-      "full-stack money transfer app for cross-border payments. moved $1k+ in real-user volume in early pilot.",
-    technologies: ["Python", "React", "PostgreSQL", "Docker"],
-    github: "https://github.com/ManagementMO",
-    demo: "https://paybridgetech.com/",
-  },
 ];
 
 export const archive = [
+  {
+    slug: "paybridge",
+    title: "paybridge",
+    year: "2024",
+    href: "https://paybridgetech.com/",
+    description: "Founder, learned americans don't have etransfer",
+    technologies: ["Python", "React", "PostgreSQL", "Docker"],
+  },
   {
     slug: "scam-mah",
     title: "scam-mah",
