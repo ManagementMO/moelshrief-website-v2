@@ -70,27 +70,24 @@ function Logo({
   );
 }
 
+// One aligned "role @ company" line. The role sits in a fixed-width
+// (monospace ch) column on sm+ so every `@`, logo, and company line up
+// vertically; on mobile it falls back to natural inline flow.
+function Role({ title, children }) {
+  return (
+    <div>
+      <span className="sm:inline-block sm:w-[28ch]">- {title}</span>
+      {" @ "}
+      {children}
+    </div>
+  );
+}
+
 function AboutOutput() {
   return (
     <>
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
-      <div>
-        - Software Engineering @{" "}
-        <Logo
-          src="/logos/upfront.png"
-          alt="Upfront Ventures"
-          wide
-          invertDark
-          unoptimized
-        />
-        <Link href="https://upfront.com">
-          <span className="text-amber-700 dark:text-amber-400">
-            Upfront Ventures
-          </span>
-        </Link>
-      </div>
-      <div>
-        - Management Engineering @{" "}
+      <Role title="Management Engineering">
         <Logo
           src="/logos/waterloo.png"
           alt="UWaterloo"
@@ -101,7 +98,7 @@ function AboutOutput() {
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>
-      </div>
+      </Role>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># building</div>
       <div>
@@ -125,40 +122,47 @@ function AboutOutput() {
       <div>&nbsp;&nbsp;(time-travel forking, postgres checkpoints)</div>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># previously</div>
-      <div>
-        - Software Engineering @{" "}
+      <Role title="Software Engineer">
+        <Logo
+          src="/logos/upfront.png"
+          alt="Upfront Ventures"
+          wide
+          invertDark
+          unoptimized
+        />
+        <Link href="https://upfront.com">
+          <span className="text-amber-700 dark:text-amber-400">
+            Upfront Ventures
+          </span>
+        </Link>
+      </Role>
+      <Role title="Software Engineer">
         <Logo src="/logos/altas.png" alt="Altas Partners" padded />
         <Link href="https://www.altas.com">
           <span className="text-amber-700 dark:text-amber-400">
             Altas Partners
           </span>
         </Link>
-      </div>
-      <div>
-        - Software Engineering @{" "}
+      </Role>
+      <Role title="Software Engineer">
         <Logo src="/logos/liftwerx.png" alt="LiftWerx" wide />
         <Link href="https://www.liftwerx.com">
           <span className="text-amber-700 dark:text-amber-400">LiftWerx</span>
         </Link>
-      </div>
-      <div>
-        - Machine Learning Engineering @{" "}
+      </Role>
+      <Role title="Machine Learning Engineer">
         <Logo src="/logos/watai.png" alt="WAT.ai" />
         <Link href="https://watai.ca">
           <span className="text-amber-700 dark:text-amber-400">WAT.ai</span>
         </Link>
-      </div>
-      <div>
-        - Machine Learning Developer @{" "}
+      </Role>
+      <Role title="Machine Learning Engineer">
         <Logo src="/logos/utmist.svg" alt="UTMIST" />
         <Link href="https://www.utmist.ca/">
-          <span className="text-amber-700 dark:text-amber-400">
-            Themis AI · UTMIST
-          </span>
+          <span className="text-amber-700 dark:text-amber-400">UTMIST</span>
         </Link>
-      </div>
-      <div>
-        - slightly too into hackathons @{" "}
+      </Role>
+      <Role title="Hackathon Addict">
         <Logo
           src="/logos/devpost.jpg"
           alt="Devpost"
@@ -170,7 +174,7 @@ function AboutOutput() {
         <Link href="https://devpost.com/ManagementMO">
           <span className="text-amber-700 dark:text-amber-400">Devpost</span>
         </Link>
-      </div>
+      </Role>
     </>
   );
 }
@@ -298,10 +302,11 @@ const FS = {
     type: "file",
     render: () => (
       <>
-        <div>- Software Engineering · Altas Partners</div>
-        <div>- Software Engineering · LiftWerx</div>
-        <div>- Machine Learning Engineering · WAT.ai</div>
-        <div>- Machine Learning Developer · Themis AI / UTMIST</div>
+        <div>- Software Engineer · Upfront Ventures</div>
+        <div>- Software Engineer · Altas Partners</div>
+        <div>- Software Engineer · LiftWerx</div>
+        <div>- Machine Learning Engineer · WAT.ai</div>
+        <div>- Machine Learning Engineer · UTMIST</div>
       </>
     ),
   },
