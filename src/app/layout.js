@@ -4,15 +4,19 @@ import { Caveat, JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+// Loaded as a JS CSS import (not a CSS @import) so it works with Turbopack's
+// strict CSS parser, which requires @import to precede all other rules.
+import "./styles/prism.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import dynamic from "next/dynamic";
 import ThemeProvider from "./components/ThemeProvider";
 import Statusline from "./components/Statusline";
 
-const CommandPalette = dynamic(() => import("./components/CommandPalette"), {
-  ssr: false,
-});
+// Lazy-loaded for code-splitting. It's a client component that renders null
+// during SSR (mobile-detection defaults true server-side), so it needs no
+// `ssr: false` — which is disallowed in a Server Component in Next.js 15+.
+const CommandPalette = dynamic(() => import("./components/CommandPalette"));
 
 const handwriting = Caveat({
   subsets: ["latin"],
