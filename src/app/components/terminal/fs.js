@@ -14,6 +14,7 @@ function Logo({
   size = 14,
   topOffset = 3,
   unoptimized = false,
+  invertDark = false,
 }) {
   if (padded) {
     return (
@@ -43,7 +44,10 @@ function Logo({
         alt={alt}
         width={56}
         height={14}
-        className="object-contain object-left inline mr-1"
+        unoptimized={unoptimized}
+        className={`object-contain object-left inline mr-1${
+          invertDark ? " dark:invert" : ""
+        }`}
         style={{
           position: "relative",
           top: `${topOffset}px`,
@@ -70,6 +74,21 @@ function AboutOutput() {
   return (
     <>
       <div className="text-stone-500 dark:text-stone-500"># currently</div>
+      <div>
+        - Software Engineering @{" "}
+        <Logo
+          src="/logos/upfront.png"
+          alt="Upfront Ventures"
+          wide
+          invertDark
+          unoptimized
+        />
+        <Link href="https://upfront.com">
+          <span className="text-amber-700 dark:text-amber-400">
+            Upfront Ventures
+          </span>
+        </Link>
+      </div>
       <div>
         - Management Engineering @{" "}
         <Logo

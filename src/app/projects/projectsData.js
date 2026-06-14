@@ -55,9 +55,10 @@ export const archive = [
     technologies: ["Excel", "VBA", "Gemini API"],
   },
   {
-    slug: "mo-planner",
-    title: "mo-planner",
+    slug: "financial-planning-tool",
+    title: "financial-planning-tool",
     year: "2023",
+    href: "https://github.com/ManagementMO/VBA-Financial-Planning-Tool",
     description: "student budget forecasting in excel/vba · used by 100+ students",
     technologies: ["Excel", "VBA", "Python"],
   },
