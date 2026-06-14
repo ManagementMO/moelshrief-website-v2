@@ -30,7 +30,7 @@ export const archive = [
   {
     slug: "paybridge",
     title: "paybridge",
-    year: "2024",
+    year: "2022",
     href: "https://paybridgetech.com/",
     description: "Founder, learned americans don't have etransfer",
     technologies: ["Python", "React", "PostgreSQL", "Docker"],
