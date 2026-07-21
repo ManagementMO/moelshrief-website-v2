@@ -75,10 +75,9 @@ const personJsonLd = {
 const themeInitScript = `
 (function(){
   try {
+    // Dark is the default; only an explicitly stored 'light' opts out.
     var stored = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var dark = stored ? stored === 'dark' : prefersDark;
-    if (dark) document.documentElement.classList.add('dark');
+    document.documentElement.classList.toggle('dark', stored !== 'light');
   } catch (e) {}
 })();
 `;
@@ -87,7 +86,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}
+      className={`dark ${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
