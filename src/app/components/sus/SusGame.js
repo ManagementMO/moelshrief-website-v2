@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import {
   ROOMS,
   WALK,
@@ -13,53 +19,73 @@ import {
 } from "./ship";
 
 // ---------------------------------------------------------------------------
-// palette — mirrors the site's stone/amber theme so the game blends in.
+// themes — the site's stone/amber palette, extended into 3d.
 // ---------------------------------------------------------------------------
-const PALETTES = {
+const THEMES = {
   dark: {
-    floor: "#161311",
-    floorDot: "#231f1b",
-    wall: "#2a2523",
-    wallEdge: "#3b3633",
-    line: "#57534e",
-    lineSoft: "#44403c",
-    label: "#6f6a64",
-    labelActive: "#a8a29e",
-    star: "#78716c",
-    accent: "#fbbf24",
-    accentSoft: "rgba(251, 191, 36, 0.45)",
-    body: "#fbbf24",
-    bodyShade: "#d97706",
-    visor: "#e7e5e4",
-    visorShine: "#ffffff",
-    outline: "#0c0a09",
-    shadow: "rgba(0, 0, 0, 0.5)",
-    glow: "rgba(0, 0, 0, 0.55)",
+    bg: 0x060504,
+    fogDensity: 0.00038,
+    floor: 0x171310,
+    floorOpacity: 0.9,
+    floorRough: 0.2,
+    floorMetal: 0.4,
+    wall: 0x27221f,
+    wallRough: 0.6,
+    trim: 0xfbbf24,
+    trimIntensity: 0.5,
+    stone: 0x38322e,
+    hemiSky: 0x3c3630,
+    hemiGround: 0x100d0a,
+    hemiInt: 0.6,
+    dir: 0xe9e4dc,
+    dirInt: 1.5,
+    point: 0xffc75e,
+    pointInt: 26000,
+    envInt: 0.45,
+    bloom: 0.28,
+    bloomThreshold: 0.72,
+    starsVisible: true,
+    body: 0xfbbf24,
+    pack: 0xd97706,
+    visor: 0xaec3cf,
+    mirrorOpacity: 0.24,
+    label: "#a8a29e",
     hud: "#a8a29e",
     hudDim: "#57534e",
+    accent: "#fbbf24",
     toast: "#d6d3d1",
   },
   light: {
-    floor: "#fafaf9",
-    floorDot: "#e7e5e4",
-    wall: "#d6d3d1",
-    wallEdge: "#bab5b1",
-    line: "#a8a29e",
-    lineSoft: "#c7c2bd",
-    label: "#a8a29e",
-    labelActive: "#57534e",
-    star: "#a8a29e",
-    accent: "#d97706",
-    accentSoft: "rgba(217, 119, 6, 0.4)",
-    body: "#f59e0b",
-    bodyShade: "#d97706",
-    visor: "#fafaf9",
-    visorShine: "#ffffff",
-    outline: "#44403c",
-    shadow: "rgba(28, 25, 23, 0.18)",
-    glow: "rgba(28, 25, 23, 0.22)",
+    bg: 0xf5f5f4,
+    fogDensity: 0.00013,
+    floor: 0xf4f1ee,
+    floorOpacity: 0.96,
+    floorRough: 0.24,
+    floorMetal: 0.15,
+    wall: 0xccc6c0,
+    wallRough: 0.7,
+    trim: 0xf59e0b,
+    trimIntensity: 0.5,
+    stone: 0xa49c94,
+    hemiSky: 0xffffff,
+    hemiGround: 0xc9c4bf,
+    hemiInt: 0.55,
+    dir: 0xffffff,
+    dirInt: 2.1,
+    point: 0xffce74,
+    pointInt: 12000,
+    envInt: 0.5,
+    bloom: 0.07,
+    bloomThreshold: 0.85,
+    starsVisible: false,
+    body: 0xf59e0b,
+    pack: 0xd97706,
+    visor: 0xb9d0dc,
+    mirrorOpacity: 0.14,
+    label: "#6f6a64",
     hud: "#78716c",
     hudDim: "#a8a29e",
+    accent: "#d97706",
     toast: "#57534e",
   },
 };
@@ -84,8 +110,10 @@ const KEYS = {
 };
 const INTERACT_CODES = new Set(["KeyE", "Space", "Enter"]);
 
-const R = 20; // collision radius (world units)
-const SPEED = 300; // walk speed (world units / s)
+const R = 20; // collision radius
+const SPEED = 300; // walk speed, world units/s
+const WALL_H = 86;
+const WALL_T = 16;
 
 function mulberry32(a) {
   return function () {
@@ -108,314 +136,92 @@ function fits(x, y) {
   return true;
 }
 
-function rr(ctx, x, y, w, h, r) {
-  if (ctx.roundRect) {
-    ctx.roundRect(x, y, w, h, r);
-    return;
+// subtract [a,b] from a list of intervals
+function subtractIv(ivs, a, b) {
+  const out = [];
+  for (const [s, e] of ivs) {
+    if (b <= s || a >= e) {
+      out.push([s, e]);
+    } else {
+      if (a > s) out.push([s, a]);
+      if (b < e) out.push([b, e]);
+    }
   }
-  const rad = Math.min(typeof r === "number" ? r : 8, w / 2, h / 2);
-  ctx.moveTo(x + rad, y);
-  ctx.arcTo(x + w, y, x + w, y + h, rad);
-  ctx.arcTo(x + w, y + h, x, y + h, rad);
-  ctx.arcTo(x, y + h, x, y, rad);
-  ctx.arcTo(x, y, x + w, y, rad);
-  ctx.closePath();
+  return out;
 }
 
-// ---------------------------------------------------------------------------
-// per-room set dressing — simple line art, drawn in world space.
-// ---------------------------------------------------------------------------
-function drawDecor(ctx, room, t, P) {
-  const cx = room.x + room.w / 2;
-  const cy = room.y + room.h / 2;
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = P.line;
-
-  switch (room.id) {
-    case "cafeteria": {
-      for (const [dx, dy] of [
-        [-150, 60],
-        [150, 60],
-        [0, 150],
-      ]) {
-        ctx.beginPath();
-        ctx.arc(cx + dx, cy + dy, 40, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(cx + dx, cy + dy, 14, 0, Math.PI * 2);
-        ctx.strokeStyle = P.lineSoft;
-        ctx.stroke();
-        ctx.strokeStyle = P.line;
+// derive wall segments: every rect edge, minus the spans where another
+// walkable rect continues across it (those are doorways/openings).
+function wallSegments() {
+  const segs = [];
+  for (const r of WALK) {
+    for (const [z, topSide] of [
+      [r.y, true],
+      [r.y + r.h, false],
+    ]) {
+      let ivs = [[r.x, r.x + r.w]];
+      for (const o of WALK) {
+        if (o === r) continue;
+        const covers = topSide
+          ? o.y < z && o.y + o.h >= z
+          : o.y <= z && o.y + o.h > z;
+        if (!covers) continue;
+        const a = Math.max(o.x, r.x);
+        const b = Math.min(o.x + o.w, r.x + r.w);
+        if (b > a) ivs = subtractIv(ivs, a, b);
       }
-      break;
-    }
-    case "weapons": {
-      ctx.beginPath();
-      ctx.arc(cx, cy + 14, 44, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(cx - 60, cy + 14);
-      ctx.lineTo(cx + 60, cy + 14);
-      ctx.moveTo(cx, cy - 46);
-      ctx.lineTo(cx, cy + 74);
-      ctx.strokeStyle = P.lineSoft;
-      ctx.stroke();
-      break;
-    }
-    case "navigation": {
-      ctx.beginPath();
-      ctx.arc(cx, cy + 66, 60, Math.PI * 1.15, Math.PI * 1.85);
-      ctx.stroke();
-      ctx.beginPath();
-      rr(ctx, cx - 22, cy + 10, 44, 26, 6);
-      ctx.stroke();
-      ctx.setLineDash([4, 8]);
-      ctx.beginPath();
-      ctx.moveTo(cx, cy - 4);
-      ctx.lineTo(cx, cy - 74);
-      ctx.strokeStyle = P.lineSoft;
-      ctx.stroke();
-      ctx.setLineDash([]);
-      break;
-    }
-    case "o2": {
-      for (const dx of [-26, 6]) {
-        ctx.beginPath();
-        rr(ctx, cx + dx, cy - 8, 22, 54, 10);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(cx + dx + 5, cy + 6);
-        ctx.lineTo(cx + dx + 17, cy + 6);
-        ctx.strokeStyle = P.lineSoft;
-        ctx.stroke();
-        ctx.strokeStyle = P.line;
+      for (const [a, b] of ivs) {
+        if (b - a > 4) segs.push({ h: true, a, b, line: z });
       }
-      break;
     }
-    case "shields": {
-      for (const [dx, dy, dash] of [
-        [-30, 4, false],
-        [30, 4, false],
-        [0, -40, true],
-      ]) {
-        if (dash) ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        for (let i = 0; i < 6; i++) {
-          const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
-          const px = cx + dx + Math.cos(a) * 24;
-          const py = cy + 20 + dy + Math.sin(a) * 24;
-          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.stroke();
-        ctx.setLineDash([]);
+    for (const [x, leftSide] of [
+      [r.x, true],
+      [r.x + r.w, false],
+    ]) {
+      let ivs = [[r.y, r.y + r.h]];
+      for (const o of WALK) {
+        if (o === r) continue;
+        const covers = leftSide
+          ? o.x < x && o.x + o.w >= x
+          : o.x <= x && o.x + o.w > x;
+        if (!covers) continue;
+        const a = Math.max(o.y, r.y);
+        const b = Math.min(o.y + o.h, r.y + r.h);
+        if (b > a) ivs = subtractIv(ivs, a, b);
       }
-      break;
-    }
-    case "comms": {
-      ctx.beginPath();
-      ctx.arc(cx - 6, cy + 8, 40, Math.PI * 1.2, Math.PI * 1.75);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(cx - 20, cy + 34);
-      ctx.lineTo(cx - 6, cy + 8);
-      ctx.stroke();
-      ctx.beginPath();
-      rr(ctx, cx - 24, cy + 34, 36, 16, 4);
-      ctx.stroke();
-      const blink = Math.sin(t * 2.4) > 0.3;
-      if (blink) {
-        ctx.fillStyle = P.accentSoft;
-        ctx.beginPath();
-        ctx.arc(cx + 34, cy - 24, 3.5, 0, Math.PI * 2);
-        ctx.fill();
+      for (const [a, b] of ivs) {
+        if (b - a > 4) segs.push({ h: false, a, b, line: x });
       }
-      break;
     }
-    case "storage": {
-      ctx.beginPath();
-      rr(ctx, cx - 60, cy + 30, 46, 46, 6);
-      ctx.stroke();
-      ctx.beginPath();
-      rr(ctx, cx - 6, cy + 44, 40, 32, 6);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(cx + 46, cy - 10, 22, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(cx - 60, cy + 53);
-      ctx.lineTo(cx - 14, cy + 53);
-      ctx.strokeStyle = P.lineSoft;
-      ctx.stroke();
-      break;
-    }
-    case "admin": {
-      ctx.beginPath();
-      rr(ctx, cx - 62, cy + 6, 124, 74, 8);
-      ctx.stroke();
-      ctx.strokeStyle = P.lineSoft;
-      for (const [mx, my, mw, mh] of [
-        [-46, 22, 22, 16],
-        [-14, 22, 30, 20],
-        [24, 24, 26, 14],
-        [-38, 48, 30, 18],
-        [4, 50, 38, 16],
-      ]) {
-        ctx.beginPath();
-        rr(ctx, cx + mx, cy + my, mw, mh, 3);
-        ctx.stroke();
-      }
-      break;
-    }
-    case "electrical": {
-      ctx.beginPath();
-      rr(ctx, cx - 66, cy - 4, 82, 58, 6);
-      ctx.stroke();
-      ctx.strokeStyle = P.lineSoft;
-      for (const dx of [-48, -26, -4]) {
-        ctx.beginPath();
-        ctx.moveTo(cx + dx, cy + 8);
-        ctx.lineTo(cx + dx, cy + 42);
-        ctx.stroke();
-      }
-      ctx.beginPath();
-      ctx.moveTo(cx + 16, cy + 24);
-      ctx.lineTo(cx + 30, cy + 12);
-      ctx.lineTo(cx + 42, cy + 32);
-      ctx.lineTo(cx + 56, cy + 18);
-      ctx.stroke();
-      break;
-    }
-    case "medbay": {
-      for (const dx of [-52, 4]) {
-        ctx.beginPath();
-        rr(ctx, cx + dx, cy - 6, 42, 74, 12);
-        ctx.stroke();
-      }
-      const pulse = 20 + Math.sin(t * 2) * 4;
-      ctx.beginPath();
-      ctx.arc(cx + 80, cy + 30, pulse, 0, Math.PI * 2);
-      ctx.strokeStyle = P.lineSoft;
-      ctx.stroke();
-      break;
-    }
-    case "security": {
-      for (const dx of [-52, -8, 36]) {
-        ctx.beginPath();
-        rr(ctx, cx + dx, cy - 10, 38, 28, 4);
-        ctx.stroke();
-      }
-      ctx.fillStyle = P.lineSoft;
-      const rnd = mulberry32(Math.floor(t * 6));
-      for (let i = 0; i < 9; i++) {
-        ctx.fillRect(cx - 48 + rnd() * 120, cy - 6 + rnd() * 18, 2, 2);
-      }
-      break;
-    }
-    case "reactor": {
-      ctx.beginPath();
-      ctx.arc(cx, cy + 20, 58, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(cx, cy + 20, 30, 0, Math.PI * 2);
-      ctx.strokeStyle = P.lineSoft;
-      ctx.stroke();
-      ctx.strokeStyle = P.line;
-      const spin = t * 0.5;
-      for (let i = 0; i < 8; i++) {
-        const a = spin + (i / 8) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * 40, cy + 20 + Math.sin(a) * 40);
-        ctx.lineTo(cx + Math.cos(a) * 50, cy + 20 + Math.sin(a) * 50);
-        ctx.stroke();
-      }
-      break;
-    }
-    case "upperEngine":
-    case "lowerEngine": {
-      ctx.beginPath();
-      rr(ctx, cx - 30, cy - 52, 76, 108, 14);
-      ctx.stroke();
-      ctx.strokeStyle = P.lineSoft;
-      const flick = Math.sin(t * 7 + (room.id === "lowerEngine" ? 2 : 0));
-      for (let i = 0; i < 3; i++) {
-        const len = 18 + i * 8 + flick * 4;
-        ctx.beginPath();
-        ctx.moveTo(cx - 44, cy - 24 + i * 26);
-        ctx.lineTo(cx - 44 - len, cy - 24 + i * 26);
-        ctx.stroke();
-      }
-      break;
-    }
-    default:
-      break;
   }
+  return segs;
 }
 
-// ---------------------------------------------------------------------------
-// the crewmate. drawn at (0,0) = feet center; caller translates.
-// ---------------------------------------------------------------------------
-function drawCrewmate(ctx, P, { face, walk, bob, scale }) {
-  ctx.save();
-  ctx.scale(scale, scale);
-
-  // shadow
-  ctx.fillStyle = P.shadow;
-  ctx.beginPath();
-  ctx.ellipse(0, 2, 24, 8, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.save();
-  ctx.scale(face, 1);
-  ctx.translate(0, bob);
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = P.outline;
-
-  // legs
-  const lift = Math.sin(walk) * 6;
-  for (const [side, dx] of [
-    [1, -12],
-    [-1, 10],
-  ]) {
-    const up = Math.max(0, side * lift);
-    ctx.fillStyle = P.body;
-    ctx.beginPath();
-    rr(ctx, dx + side * lift * 0.4, -20 - up, 14, 22 + up * 0.4, [
-      2, 2, 6, 6,
-    ]);
-    ctx.fill();
-    ctx.stroke();
-  }
-
-  // backpack
-  ctx.fillStyle = P.bodyShade;
-  ctx.beginPath();
-  rr(ctx, -34, -46, 14, 32, [7, 4, 4, 7]);
-  ctx.fill();
-  ctx.stroke();
-
-  // body
-  ctx.fillStyle = P.body;
-  ctx.beginPath();
-  rr(ctx, -23, -58, 46, 46, [22, 24, 12, 12]);
-  ctx.fill();
-  ctx.stroke();
-
-  // visor
-  ctx.fillStyle = P.visor;
-  ctx.beginPath();
-  rr(ctx, 0, -50, 26, 16, [8, 9, 9, 8]);
-  ctx.fill();
-  ctx.stroke();
-  ctx.fillStyle = P.visorShine;
-  ctx.globalAlpha = 0.85;
-  ctx.beginPath();
-  rr(ctx, 5, -47, 10, 5, 3);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-
-  ctx.restore();
-  ctx.restore();
+// a crewmate build — called twice (real + floor reflection).
+function makeCrewmate(bodyMat, packMat, visorMat) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(20, 22, 8, 20), bodyMat);
+  body.position.y = 36;
+  const packG = new THREE.CapsuleGeometry(9, 16, 6, 12);
+  const pack = new THREE.Mesh(packG, packMat);
+  pack.scale.set(1.5, 1, 0.9);
+  pack.position.set(0, 36, -24);
+  const visor = new THREE.Mesh(new THREE.SphereGeometry(13, 24, 16), visorMat);
+  visor.scale.set(1, 0.72, 0.62);
+  visor.position.set(0, 46, 15);
+  const hipL = new THREE.Group();
+  const hipR = new THREE.Group();
+  hipL.position.set(-10, 22, 0);
+  hipR.position.set(10, 22, 0);
+  const legG = new THREE.CapsuleGeometry(7.5, 9, 6, 12);
+  const legL = new THREE.Mesh(legG, bodyMat);
+  const legR = new THREE.Mesh(legG, bodyMat);
+  legL.position.y = -12;
+  legR.position.y = -12;
+  hipL.add(legL);
+  hipR.add(legR);
+  g.add(body, pack, visor, hipL, hipR);
+  return { group: g, hipL, hipR, meshes: [body, pack, visor, legL, legR] };
 }
 
 // ---------------------------------------------------------------------------
@@ -423,96 +229,533 @@ function drawCrewmate(ctx, P, { face, walk, bob, scale }) {
 // ---------------------------------------------------------------------------
 export default function SusGame() {
   const wrapRef = useRef(null);
-  const canvasRef = useRef(null);
+  const glRef = useRef(null);
+  const hudRef = useRef(null);
   const [focused, setFocused] = useState(false);
   const [touchMode, setTouchMode] = useState(false);
 
   useEffect(() => {
     const wrap = wrapRef.current;
-    const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+    const glCanvas = glRef.current;
+    const hudCanvas = hudRef.current;
+    if (!wrap || !glCanvas || !hudCanvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const hud = hudCanvas.getContext("2d");
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
-    if (coarse) setTouchMode(true);
+    if (window.matchMedia("(pointer: coarse)").matches) setTouchMode(true);
 
-    // -- theme ------------------------------------------------------------
-    let P = PALETTES[
-      document.documentElement.classList.contains("dark") ? "dark" : "light"
-    ];
+    let theme = document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
+    let T = THEMES[theme];
+
+    // -- renderer / scene ------------------------------------------------
+    const renderer = new THREE.WebGLRenderer({
+      canvas: glCanvas,
+      antialias: true,
+      alpha: false,
+      powerPreference: "high-performance",
+    });
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 1, 10, 7000);
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environment = envTex;
+
+    const hemi = new THREE.HemisphereLight(T.hemiSky, T.hemiGround, T.hemiInt);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(T.dir, T.dirInt);
+    dir.position.set(-420, 760, -300);
+    dir.castShadow = true;
+    dir.shadow.mapSize.set(2048, 2048);
+    dir.shadow.bias = -0.0004;
+    dir.shadow.normalBias = 3;
+    scene.add(dir);
+    scene.add(dir.target);
+    const lamp = new THREE.PointLight(T.point, T.pointInt, 1500, 2);
+    lamp.position.set(SPAWN.x, 230, SPAWN.y);
+    scene.add(lamp);
+
+    // -- materials -------------------------------------------------------
+    const floorMat = new THREE.MeshPhysicalMaterial({
+      color: T.floor,
+      roughness: T.floorRough,
+      metalness: T.floorMetal,
+      clearcoat: 1,
+      clearcoatRoughness: 0.28,
+      transparent: true,
+      opacity: T.floorOpacity,
+    });
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: T.wall,
+      roughness: T.wallRough,
+      metalness: 0.12,
+    });
+    const trimMat = new THREE.MeshStandardMaterial({
+      color: 0x000000,
+      emissive: T.trim,
+      emissiveIntensity: T.trimIntensity,
+      roughness: 0.4,
+    });
+    const stoneMat = new THREE.MeshStandardMaterial({
+      color: T.stone,
+      roughness: 0.55,
+      metalness: 0.1,
+    });
+    const accentMat = new THREE.MeshStandardMaterial({
+      color: 0x1c1917,
+      emissive: T.trim,
+      emissiveIntensity: 0.85,
+      roughness: 0.35,
+    });
+    const bodyMat = new THREE.MeshPhysicalMaterial({
+      color: T.body,
+      roughness: 0.36,
+      metalness: 0.05,
+      clearcoat: 1,
+      clearcoatRoughness: 0.16,
+    });
+    const packMat = new THREE.MeshPhysicalMaterial({
+      color: T.pack,
+      roughness: 0.45,
+      metalness: 0.05,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.25,
+    });
+    const visorMat = new THREE.MeshPhysicalMaterial({
+      color: T.visor,
+      roughness: 0.05,
+      metalness: 0.1,
+      clearcoat: 1,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.6,
+    });
+    const mirrorBody = bodyMat.clone();
+    const mirrorPack = packMat.clone();
+    const mirrorVisor = visorMat.clone();
+    for (const m of [mirrorBody, mirrorPack, mirrorVisor]) {
+      m.transparent = true;
+      m.opacity = T.mirrorOpacity;
+      m.depthWrite = false;
+    }
+
+    // -- floor -----------------------------------------------------------
+    const floorGroup = new THREE.Group();
+    for (const r of WALK) {
+      const m = new THREE.Mesh(new THREE.BoxGeometry(r.w + 8, 10, r.h + 8), floorMat);
+      m.position.set(r.x + r.w / 2, -5, r.y + r.h / 2);
+      m.receiveShadow = true;
+      floorGroup.add(m);
+    }
+    scene.add(floorGroup);
+
+    // -- walls + amber trim ----------------------------------------------
+    const walls = new THREE.Group();
+    for (const s of wallSegments()) {
+      const len = s.b - s.a + WALL_T;
+      const wallGeo = s.h
+        ? new THREE.BoxGeometry(len, WALL_H, WALL_T)
+        : new THREE.BoxGeometry(WALL_T, WALL_H, len);
+      const wall = new THREE.Mesh(wallGeo, wallMat);
+      const cx = s.h ? (s.a + s.b) / 2 : s.line;
+      const cz = s.h ? s.line : (s.a + s.b) / 2;
+      wall.position.set(cx, WALL_H / 2, cz);
+      wall.castShadow = true;
+      wall.receiveShadow = true;
+      walls.add(wall);
+      const trimLen = Math.max(6, len - 14);
+      const trimGeo = s.h
+        ? new THREE.BoxGeometry(trimLen, 2.6, 4)
+        : new THREE.BoxGeometry(4, 2.6, trimLen);
+      const trim = new THREE.Mesh(trimGeo, trimMat);
+      trim.position.set(cx, WALL_H + 1.4, cz);
+      walls.add(trim);
+    }
+    scene.add(walls);
+
+    // -- room decor ------------------------------------------------------
+    const reactorPulse = [];
+    const pulseMats = [];
+    // pulsing items get their own material so phases don't fight
+    const pulseMat = () => {
+      const m = accentMat.clone();
+      pulseMats.push(m);
+      return m;
+    };
+    const decor = new THREE.Group();
+    const addM = (mesh, x, y, z, cast = true) => {
+      mesh.position.set(x, y, z);
+      mesh.castShadow = cast;
+      mesh.receiveShadow = true;
+      decor.add(mesh);
+      return mesh;
+    };
+    for (const room of ROOMS) {
+      const cx = room.x + room.w / 2;
+      const cz = room.y + room.h / 2;
+      switch (room.id) {
+        case "cafeteria": {
+          for (const [dx, dz] of [
+            [-150, 60],
+            [150, 60],
+            [0, 150],
+          ]) {
+            addM(new THREE.Mesh(new THREE.CylinderGeometry(12, 14, 22, 12), stoneMat), cx + dx, 11, cz + dz);
+            addM(new THREE.Mesh(new THREE.CylinderGeometry(42, 42, 5, 28), stoneMat), cx + dx, 25, cz + dz);
+          }
+          break;
+        }
+        case "reactor": {
+          const core = addM(new THREE.Mesh(new THREE.SphereGeometry(22, 24, 16), pulseMat()), cx, 30, cz + 20);
+          reactorPulse.push(core);
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(48, 6, 12, 40), stoneMat);
+          ring.rotation.x = Math.PI / 2;
+          addM(ring, cx, 12, cz + 20);
+          break;
+        }
+        case "upperEngine":
+        case "lowerEngine": {
+          addM(new THREE.Mesh(new THREE.BoxGeometry(70, 54, 104), stoneMat), cx + 8, 27, cz);
+          const jet = addM(new THREE.Mesh(new THREE.BoxGeometry(8, 30, 78), pulseMat()), cx - 32, 24, cz, false);
+          reactorPulse.push(jet);
+          break;
+        }
+        case "medbay": {
+          for (const dz of [-46, 22]) {
+            addM(new THREE.Mesh(new THREE.BoxGeometry(74, 16, 40), stoneMat), cx - 20, 8, cz + dz);
+          }
+          const scan = new THREE.Mesh(new THREE.TorusGeometry(24, 2.4, 10, 32), pulseMat());
+          scan.rotation.x = Math.PI / 2;
+          addM(scan, cx + 78, 3, cz + 28, false);
+          reactorPulse.push(scan);
+          break;
+        }
+        case "storage": {
+          addM(new THREE.Mesh(new THREE.BoxGeometry(46, 40, 46), stoneMat), cx - 40, 20, cz + 52);
+          addM(new THREE.Mesh(new THREE.BoxGeometry(34, 26, 34), stoneMat), cx + 8, 13, cz + 60);
+          addM(new THREE.Mesh(new THREE.CylinderGeometry(20, 20, 34, 16), stoneMat), cx + 48, 17, cz - 10);
+          break;
+        }
+        case "admin": {
+          addM(new THREE.Mesh(new THREE.BoxGeometry(124, 26, 76), stoneMat), cx, 13, cz + 42);
+          addM(new THREE.Mesh(new THREE.BoxGeometry(100, 3, 56), accentMat), cx, 28, cz + 42, false);
+          break;
+        }
+        case "weapons": {
+          const tor = new THREE.Mesh(new THREE.TorusGeometry(42, 4, 10, 36), stoneMat);
+          tor.rotation.x = Math.PI / 2;
+          addM(tor, cx, 8, cz + 14);
+          addM(new THREE.Mesh(new THREE.CylinderGeometry(6, 8, 40, 10), stoneMat), cx, 20, cz + 14);
+          break;
+        }
+        case "navigation": {
+          addM(new THREE.Mesh(new THREE.BoxGeometry(90, 30, 34), stoneMat), cx, 15, cz + 74);
+          addM(new THREE.Mesh(new THREE.BoxGeometry(70, 16, 4), accentMat), cx, 40, cz + 84, false);
+          break;
+        }
+        case "o2": {
+          for (const dx of [-20, 16]) {
+            addM(new THREE.Mesh(new THREE.CylinderGeometry(12, 12, 56, 14), stoneMat), cx + dx, 28, cz + 10);
+          }
+          break;
+        }
+        case "shields": {
+          for (const [dx, dz] of [
+            [-30, 24],
+            [30, 24],
+            [0, -32],
+          ]) {
+            addM(new THREE.Mesh(new THREE.CylinderGeometry(24, 24, 8, 6), stoneMat), cx + dx, 4, cz + dz, false);
+          }
+          break;
+        }
+        case "comms": {
+          addM(new THREE.Mesh(new THREE.CylinderGeometry(4, 6, 44, 8), stoneMat), cx - 6, 22, cz + 16);
+          const dish = new THREE.Mesh(new THREE.SphereGeometry(26, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2.6), stoneMat);
+          dish.rotation.x = Math.PI * 0.82;
+          addM(dish, cx - 6, 48, cz + 8);
+          break;
+        }
+        case "electrical": {
+          addM(new THREE.Mesh(new THREE.BoxGeometry(86, 60, 14), stoneMat), cx - 24, 30, cz + 24);
+          const led = addM(new THREE.Mesh(new THREE.BoxGeometry(60, 3, 3), pulseMat()), cx - 24, 52, cz + 17, false);
+          reactorPulse.push(led);
+          break;
+        }
+        case "security": {
+          for (const dx of [-46, 0, 46]) {
+            addM(new THREE.Mesh(new THREE.BoxGeometry(38, 26, 6), stoneMat), cx + dx, 26, cz - 20);
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    }
+    scene.add(decor);
+
+    // -- vents + emergency button ----------------------------------------
+    const ventRings = [];
+    for (const v of VENTS) {
+      const g = new THREE.Group();
+      const base = new THREE.Mesh(new THREE.BoxGeometry(48, 9, 36), stoneMat);
+      base.position.y = 4.5;
+      base.castShadow = true;
+      base.receiveShadow = true;
+      g.add(base);
+      for (let i = -1; i <= 1; i++) {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(32, 2.4, 5), wallMat);
+        slat.position.set(0, 10, i * 9);
+        g.add(slat);
+      }
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(32, 2, 10, 36),
+        new THREE.MeshStandardMaterial({
+          color: 0x000000,
+          emissive: T.trim,
+          emissiveIntensity: 1.4,
+          transparent: true,
+          opacity: 0,
+        })
+      );
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 3;
+      g.add(ring);
+      g.position.set(v.x, 0, v.y);
+      scene.add(g);
+      ventRings.push({ v, ring });
+    }
+
+    const btnGroup = new THREE.Group();
+    const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(30, 36, 12, 24), stoneMat);
+    pedestal.position.y = 6;
+    pedestal.castShadow = true;
+    pedestal.receiveShadow = true;
+    const dome = new THREE.Mesh(
+      new THREE.SphereGeometry(16, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+      accentMat
+    );
+    dome.position.y = 12;
+    const btnRing = new THREE.Mesh(
+      new THREE.TorusGeometry(42, 2.2, 10, 40),
+      new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        emissive: T.trim,
+        emissiveIntensity: 1.4,
+        transparent: true,
+        opacity: 0,
+      })
+    );
+    btnRing.rotation.x = Math.PI / 2;
+    btnRing.position.y = 3;
+    const flashRing = new THREE.Mesh(
+      new THREE.TorusGeometry(40, 3, 10, 48),
+      new THREE.MeshBasicMaterial({
+        color: T.trim,
+        transparent: true,
+        opacity: 0,
+      })
+    );
+    flashRing.rotation.x = Math.PI / 2;
+    flashRing.position.y = 5;
+    btnGroup.add(pedestal, dome, btnRing, flashRing);
+    btnGroup.position.set(BUTTON.x, 0, BUTTON.y);
+    scene.add(btnGroup);
+
+    // -- stars below the glass floor -------------------------------------
+    const starGeo = new THREE.BufferGeometry();
+    const rnd = mulberry32(4242);
+    const starPos = new Float32Array(700 * 3);
+    for (let i = 0; i < 700; i++) {
+      starPos[i * 3] = WORLD.x - 1200 + rnd() * (WORLD.w + 2400);
+      starPos[i * 3 + 1] = -140 - rnd() * 1400;
+      starPos[i * 3 + 2] = WORLD.y - 1200 + rnd() * (WORLD.h + 2400);
+    }
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+    const starMat = new THREE.PointsMaterial({
+      color: 0xcfc7bd,
+      size: 3.2,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+
+    // -- crewmate + its reflection ---------------------------------------
+    const crew = makeCrewmate(bodyMat, packMat, visorMat);
+    for (const m of crew.meshes) m.castShadow = true;
+    scene.add(crew.group);
+    const mirror = makeCrewmate(mirrorBody, mirrorPack, mirrorVisor);
+    mirror.group.scale.y = -1;
+    scene.add(mirror.group);
+
+    // -- painted floor labels (canvas textures) --------------------------
+    let labelMeshes = [];
+    const monoFamily = () => getComputedStyle(wrap).fontFamily || "monospace";
+    const buildLabels = () => {
+      for (const m of labelMeshes) {
+        m.material.map?.dispose();
+        m.material.dispose();
+        m.geometry.dispose();
+        scene.remove(m);
+      }
+      labelMeshes = [];
+      const fam = monoFamily();
+      for (const room of ROOMS) {
+        const text = `// ${room.name}`;
+        const c = document.createElement("canvas");
+        const cctx = c.getContext("2d");
+        cctx.font = `500 48px ${fam}`;
+        const tw = Math.ceil(cctx.measureText(text).width);
+        c.width = tw + 16;
+        c.height = 64;
+        cctx.font = `500 48px ${fam}`;
+        cctx.textBaseline = "middle";
+        cctx.fillStyle = THEMES[theme].label;
+        cctx.fillText(text, 8, 34);
+        const tex = new THREE.CanvasTexture(c);
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const h = 24;
+        const w = (c.width / c.height) * h;
+        const mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(w, h),
+          new THREE.MeshBasicMaterial({
+            map: tex,
+            transparent: true,
+            opacity: 0.92,
+            depthWrite: false,
+          })
+        );
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.position.set(room.x + 20 + w / 2, 0.9, room.y + 34);
+        scene.add(mesh);
+        labelMeshes.push(mesh);
+      }
+    };
+    setTimeout(buildLabels, 0);
+
+    // -- theme application ------------------------------------------------
+    const applyTheme = () => {
+      T = THEMES[theme];
+      scene.background = new THREE.Color(T.bg);
+      scene.fog = new THREE.FogExp2(T.bg, T.fogDensity);
+      hemi.color.set(T.hemiSky);
+      hemi.groundColor.set(T.hemiGround);
+      hemi.intensity = T.hemiInt;
+      dir.color.set(T.dir);
+      dir.intensity = T.dirInt;
+      lamp.color.set(T.point);
+      lamp.intensity = T.pointInt;
+      floorMat.color.set(T.floor);
+      floorMat.opacity = T.floorOpacity;
+      floorMat.roughness = T.floorRough;
+      floorMat.metalness = T.floorMetal;
+      wallMat.color.set(T.wall);
+      wallMat.roughness = T.wallRough;
+      trimMat.emissive.set(T.trim);
+      trimMat.emissiveIntensity = T.trimIntensity;
+      stoneMat.color.set(T.stone);
+      accentMat.emissive.set(T.trim);
+      for (const m of pulseMats) m.emissive.set(T.trim);
+      bodyMat.color.set(T.body);
+      packMat.color.set(T.pack);
+      visorMat.color.set(T.visor);
+      mirrorBody.color.set(T.body);
+      mirrorPack.color.set(T.pack);
+      mirrorVisor.color.set(T.visor);
+      mirrorBody.opacity = T.mirrorOpacity;
+      mirrorPack.opacity = T.mirrorOpacity;
+      mirrorVisor.opacity = T.mirrorOpacity;
+      for (const { ring } of ventRings) ring.material.emissive.set(T.trim);
+      btnRing.material.emissive.set(T.trim);
+      flashRing.material.color.set(T.trim);
+      stars.visible = T.starsVisible;
+      scene.environmentIntensity = T.envInt;
+      if (bloomPass) {
+        bloomPass.strength = T.bloom;
+        bloomPass.threshold = T.bloomThreshold;
+      }
+      buildLabels();
+    };
     const themeObserver = new MutationObserver(() => {
-      P = PALETTES[
-        document.documentElement.classList.contains("dark") ? "dark" : "light"
-      ];
+      const next = document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light";
+      if (next !== theme) {
+        theme = next;
+        applyTheme();
+      }
     });
     themeObserver.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
     });
 
-    // -- sizing -----------------------------------------------------------
-    let cssW = 0;
-    let cssH = 0;
+    // -- post ------------------------------------------------------------
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(1, 1),
+      T.bloom,
+      0.55,
+      T.bloomThreshold
+    );
+    composer.addPass(bloomPass);
+    composer.addPass(new OutputPass());
+    applyTheme();
+
+    // -- sizing ----------------------------------------------------------
+    let cssW = 1;
+    let cssH = 1;
     let dpr = 1;
     const resize = () => {
       const rect = wrap.getBoundingClientRect();
       cssW = Math.max(1, rect.width);
       cssH = Math.max(1, rect.height);
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(cssW * dpr);
-      canvas.height = Math.round(cssH * dpr);
+      renderer.setPixelRatio(dpr);
+      renderer.setSize(cssW, cssH, false);
+      composer.setPixelRatio(dpr);
+      composer.setSize(cssW, cssH);
+      camera.aspect = cssW / cssH;
+      camera.updateProjectionMatrix();
+      hudCanvas.width = Math.round(cssW * dpr);
+      hudCanvas.height = Math.round(cssH * dpr);
     };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
 
-    // -- static geometry --------------------------------------------------
-    const wallPath = new Path2D();
-    const floorPath = new Path2D();
-    const T = 10; // wall band thickness
-    for (const r of WALK) {
-      if (wallPath.roundRect) {
-        wallPath.roundRect(r.x - T, r.y - T, r.w + T * 2, r.h + T * 2, 16);
-        floorPath.roundRect(r.x, r.y, r.w, r.h, 8);
-      } else {
-        wallPath.rect(r.x - T, r.y - T, r.w + T * 2, r.h + T * 2);
-        floorPath.rect(r.x, r.y, r.w, r.h);
-      }
-    }
-
-    const rnd = mulberry32(1337);
-    const stars = Array.from({ length: 70 }, () => ({
-      x: WORLD.x - 200 + rnd() * (WORLD.w + 400),
-      y: WORLD.y - 200 + rnd() * (WORLD.h + 400),
-      r: 0.8 + rnd() * 1.4,
-      p: rnd() * Math.PI * 2,
-      s: 0.4 + rnd() * 1.2,
-    }));
-
-    // -- state ------------------------------------------------------------
+    // -- game state ------------------------------------------------------
     const player = {
       x: SPAWN.x,
       y: SPAWN.y,
       vx: 0,
       vy: 0,
-      face: 1,
-      faceT: 1,
+      angle: 0,
       walk: 0,
       scale: 0,
     };
     const cam = { x: SPAWN.x, y: SPAWN.y };
     const pressed = new Set();
     const toasts = [];
-    const dust = [];
-    let venting = null; // { from, to, t }
-    let flash = null; // { x, y, t }
+    let venting = null;
+    let flash = null;
     let meetings = 0;
-    let dustT = 0;
     let born = performance.now();
-    let joy = null; // { ox, oy, dx, dy, id }
+    let joy = null;
     let raf = 0;
     let last = performance.now();
 
@@ -523,35 +766,6 @@ export default function SusGame() {
     setTimeout(() => toast("> you wake up in the cafeteria"), 500);
     setTimeout(() => toast("> everyone else already left"), 2300);
 
-    // dev sanity: every walkable rect should be reachable from spawn.
-    if (process.env.NODE_ENV === "development") {
-      const seen = new Set();
-      const touches = (a, b) =>
-        a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
-      const start = WALK.findIndex(
-        (r) =>
-          SPAWN.x >= r.x &&
-          SPAWN.x <= r.x + r.w &&
-          SPAWN.y >= r.y &&
-          SPAWN.y <= r.y + r.h
-      );
-      const queue = [start];
-      seen.add(start);
-      while (queue.length) {
-        const i = queue.pop();
-        WALK.forEach((r, j) => {
-          if (!seen.has(j) && touches(WALK[i], r)) {
-            seen.add(j);
-            queue.push(j);
-          }
-        });
-      }
-      if (seen.size !== WALK.length) {
-        console.warn(`[sus] unreachable rects: ${WALK.length - seen.size}`);
-      }
-    }
-
-    // debug/verification hook
     window.__SUS = {
       get pos() {
         return { x: Math.round(player.x), y: Math.round(player.y) };
@@ -561,10 +775,9 @@ export default function SusGame() {
       },
     };
 
-    // -- input ------------------------------------------------------------
     const nearVent = () => {
       let best = null;
-      let bd = 52;
+      let bd = 54;
       for (const v of VENTS) {
         const d = Math.hypot(player.x - v.x, player.y - v.y);
         if (d < bd) {
@@ -575,7 +788,7 @@ export default function SusGame() {
       return best;
     };
     const nearButton = () =>
-      Math.hypot(player.x - BUTTON.x, player.y - BUTTON.y) < 64;
+      Math.hypot(player.x - BUTTON.x, player.y - BUTTON.y) < 70;
 
     const interact = () => {
       if (venting) return;
@@ -588,7 +801,7 @@ export default function SusGame() {
         return;
       }
       if (nearButton()) {
-        flash = { x: BUTTON.x, y: BUTTON.y, t: 0 };
+        flash = { t: 0 };
         toast(MEETING_LINES[Math.min(meetings, MEETING_LINES.length - 1)]);
         meetings += 1;
         if (meetings >= MEETING_LINES.length) meetings = 1;
@@ -606,17 +819,15 @@ export default function SusGame() {
     };
     const onKeyUp = (e) => pressed.delete(e.code);
     const clearKeys = () => pressed.clear();
-
     wrap.addEventListener("keydown", onKeyDown);
     wrap.addEventListener("keyup", onKeyUp);
     window.addEventListener("blur", clearKeys);
     document.addEventListener("visibilitychange", clearKeys);
 
-    // touch joystick + action button
     const btnPos = () => ({ x: cssW - 64, y: cssH - 64, r: 30 });
     const onPointerDown = (e) => {
       if (e.pointerType !== "touch") return;
-      const rect = canvas.getBoundingClientRect();
+      const rect = hudCanvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const b = btnPos();
@@ -628,7 +839,7 @@ export default function SusGame() {
     };
     const onPointerMove = (e) => {
       if (!joy || e.pointerId !== joy.id) return;
-      const rect = canvas.getBoundingClientRect();
+      const rect = hudCanvas.getBoundingClientRect();
       joy.dx = e.clientX - rect.left - joy.ox;
       joy.dy = e.clientY - rect.top - joy.oy;
       const len = Math.hypot(joy.dx, joy.dy);
@@ -640,12 +851,12 @@ export default function SusGame() {
     const onPointerEnd = (e) => {
       if (joy && e.pointerId === joy.id) joy = null;
     };
-    canvas.addEventListener("pointerdown", onPointerDown);
-    canvas.addEventListener("pointermove", onPointerMove);
-    canvas.addEventListener("pointerup", onPointerEnd);
-    canvas.addEventListener("pointercancel", onPointerEnd);
+    hudCanvas.addEventListener("pointerdown", onPointerDown);
+    hudCanvas.addEventListener("pointermove", onPointerMove);
+    hudCanvas.addEventListener("pointerup", onPointerEnd);
+    hudCanvas.addEventListener("pointercancel", onPointerEnd);
 
-    // -- simulation -------------------------------------------------------
+    // -- sim step --------------------------------------------------------
     const step = (dt, now) => {
       let ix = 0;
       let iy = 0;
@@ -674,8 +885,10 @@ export default function SusGame() {
       player.vx += (ix * SPEED - player.vx) * k;
       player.vy += (iy * SPEED - player.vy) * k;
 
-      // collision: substep + axis-separated slide
-      const steps = Math.max(1, Math.ceil((Math.hypot(player.vx, player.vy) * dt) / 10));
+      const steps = Math.max(
+        1,
+        Math.ceil((Math.hypot(player.vx, player.vy) * dt) / 10)
+      );
       for (let i = 0; i < steps; i++) {
         const sx = (player.vx * dt) / steps;
         const sy = (player.vy * dt) / steps;
@@ -696,39 +909,30 @@ export default function SusGame() {
       }
 
       const speed = Math.hypot(player.vx, player.vy);
-      if (Math.abs(player.vx) > 30) player.face = player.vx > 0 ? 1 : -1;
-      player.faceT += (player.face - player.faceT) * (1 - Math.exp(-18 * dt));
+      if (speed > 40) {
+        const target = Math.atan2(player.vx, player.vy);
+        let da = target - player.angle;
+        while (da > Math.PI) da -= Math.PI * 2;
+        while (da < -Math.PI) da += Math.PI * 2;
+        player.angle += da * (1 - Math.exp(-12 * dt));
+      }
       player.walk = speed > 40 ? player.walk + dt * (speed / 26) : 0;
 
-      // spawn pop-in
       const age = (now - born) / 1000;
       player.scale = reduceMotion
         ? 1
-        : Math.min(1, age < 0.35 ? 1.15 * (age / 0.35) : 1 + Math.max(0, 0.15 - (age - 0.35) * 1.2));
+        : Math.min(
+            1,
+            age < 0.35
+              ? 1.15 * (age / 0.35)
+              : 1 + Math.max(0, 0.15 - (age - 0.35) * 1.2)
+          );
 
-      // dust
-      if (!reduceMotion && speed > 80) {
-        dustT += dt;
-        if (dustT > 0.12) {
-          dustT = 0;
-          dust.push({
-            x: player.x - (player.vx / speed) * 12 + (Math.random() - 0.5) * 10,
-            y: player.y + 20,
-            life: 0.45,
-          });
-        }
-      }
-      for (let i = dust.length - 1; i >= 0; i--) {
-        dust[i].life -= dt;
-        if (dust[i].life <= 0) dust.splice(i, 1);
-      }
-
-      // venting animation
       if (venting) {
         venting.t += dt;
         if (venting.t >= 0.22 && venting.from) {
           player.x = venting.to.x;
-          player.y = venting.to.y + 26;
+          player.y = venting.to.y + 30;
           cam.x = player.x + (cam.x - player.x) * 0.25;
           cam.y = player.y + (cam.y - player.y) * 0.25;
           venting.from = null;
@@ -740,279 +944,157 @@ export default function SusGame() {
         if (flash.t > 0.9) flash = null;
       }
 
-      // camera
-      const zoom = Math.min(Math.max(Math.min(cssW / 1150, cssH / 700), 0.62), 1.05);
-      const look = reduceMotion ? 0 : 46;
+      const look = reduceMotion ? 0 : 52;
       const tx = player.x + (speed > 40 ? (player.vx / SPEED) * look : 0);
       const ty = player.y + (speed > 40 ? (player.vy / SPEED) * look : 0);
       const ck = 1 - Math.exp(-(venting ? 13 : 6.5) * dt);
       cam.x += (tx - cam.x) * ck;
       cam.y += (ty - cam.y) * ck;
-      const hw = cssW / 2 / zoom;
-      const hh = cssH / 2 / zoom;
-      cam.x = Math.min(Math.max(cam.x, WORLD.x + hw - 160), WORLD.x + WORLD.w - hw + 160);
-      cam.y = Math.min(Math.max(cam.y, WORLD.y + hh - 160), WORLD.y + WORLD.h - hh + 160);
-      if (WORLD.w < cssW / zoom) cam.x = WORLD.x + WORLD.w / 2;
-      if (WORLD.h < cssH / zoom) cam.y = WORLD.y + WORLD.h / 2;
-      return zoom;
     };
 
-    // -- render -----------------------------------------------------------
-    const mono = () => {
-      const fam = getComputedStyle(wrap).fontFamily || "monospace";
-      return fam;
+    // -- 3d sync + hud ---------------------------------------------------
+    const V = new THREE.Vector3();
+    const project = (x, y3, z) => {
+      V.set(x, y3, z).project(camera);
+      return [((V.x + 1) / 2) * cssW, ((1 - V.y) / 2) * cssH, V.z < 1];
     };
     let fontFam = "monospace";
     setTimeout(() => {
-      fontFam = mono();
+      fontFam = monoFamily();
     }, 0);
 
-    const render = (zoom, t) => {
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, cssW, cssH);
-
-      // stars (parallax, behind the ship)
-      ctx.save();
-      ctx.translate(cssW / 2, cssH / 2);
-      ctx.scale(zoom, zoom);
-      ctx.translate(-cam.x * 0.35 - (WORLD.x + WORLD.w / 2) * 0.65, -cam.y * 0.35 - (WORLD.y + WORLD.h / 2) * 0.65);
-      for (const s of stars) {
-        const tw = reduceMotion ? 0.5 : 0.35 + 0.35 * Math.sin(t * s.s + s.p);
-        ctx.globalAlpha = tw * 0.5;
-        ctx.fillStyle = P.star;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      ctx.restore();
-
-      // world
-      ctx.save();
-      ctx.translate(cssW / 2, cssH / 2);
-      ctx.scale(zoom, zoom);
-      ctx.translate(-cam.x, -cam.y);
-
-      // hull glow + wall band + floor
-      ctx.save();
-      ctx.shadowColor = P.glow;
-      ctx.shadowBlur = 34;
-      ctx.fillStyle = P.wall;
-      ctx.fill(wallPath);
-      ctx.restore();
-      ctx.strokeStyle = P.wallEdge;
-      ctx.lineWidth = 1.5;
-      ctx.stroke(wallPath);
-      ctx.fillStyle = P.floor;
-      ctx.fill(floorPath);
-
-      // floor dots (clipped, visible range only)
-      ctx.save();
-      ctx.clip(floorPath);
-      ctx.fillStyle = P.floorDot;
-      const gap = 26;
-      const x0 = Math.floor((cam.x - cssW / 2 / zoom) / gap) * gap;
-      const x1 = cam.x + cssW / 2 / zoom;
-      const y0 = Math.floor((cam.y - cssH / 2 / zoom) / gap) * gap;
-      const y1 = cam.y + cssH / 2 / zoom;
-      for (let gx = x0; gx <= x1; gx += gap) {
-        for (let gy = y0; gy <= y1; gy += gap) {
-          ctx.fillRect(gx, gy, 2, 2);
-        }
-      }
-      ctx.restore();
-
-      // room labels + decor
-      const inRoom = roomAt(player.x, player.y);
-      ctx.textBaseline = "top";
-      for (const room of ROOMS) {
-        drawDecor(ctx, room, t, P);
-        ctx.font = `500 15px ${fontFam}`;
-        ctx.fillStyle = room === inRoom ? P.labelActive : P.label;
-        ctx.fillText(`// ${room.name}`, room.x + 16, room.y + 14);
-      }
-
-      // vents
-      const nv = (() => {
-        let best = null;
-        let bd = 52;
-        for (const v of VENTS) {
-          const d = Math.hypot(player.x - v.x, player.y - v.y);
-          if (d < bd) {
-            bd = d;
-            best = v;
-          }
-        }
-        return best;
-      })();
-      for (const v of VENTS) {
-        const active =
-          venting && (venting.to === v || venting.from === v)
-            ? Math.sin(t * 40) * 1.6
-            : 0;
-        ctx.strokeStyle = P.line;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        rr(ctx, v.x - 23, v.y - 16, 46, 32, 9);
-        ctx.stroke();
-        for (let i = -1; i <= 1; i++) {
-          ctx.beginPath();
-          ctx.moveTo(v.x - 14, v.y + i * 8 + active * i);
-          ctx.lineTo(v.x + 14, v.y + i * 8 + active * i);
-          ctx.strokeStyle = P.lineSoft;
-          ctx.stroke();
-        }
-        if (v === nv && !venting) {
-          const pr = 30 + (reduceMotion ? 0 : Math.sin(t * 3.4) * 3);
-          ctx.strokeStyle = P.accentSoft;
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(v.x, v.y, pr, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      }
-
-      // emergency button
-      ctx.strokeStyle = P.line;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(BUTTON.x, BUTTON.y, 30, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.fillStyle = P.accent;
-      ctx.globalAlpha = 0.9;
-      ctx.beginPath();
-      ctx.arc(BUTTON.x, BUTTON.y, 15, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = P.outline;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      if (nearButton() && !venting) {
-        const pr = 40 + (reduceMotion ? 0 : Math.sin(t * 3.4) * 3);
-        ctx.strokeStyle = P.accentSoft;
-        ctx.beginPath();
-        ctx.arc(BUTTON.x, BUTTON.y, pr, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      if (flash) {
-        const ft = flash.t / 0.9;
-        ctx.strokeStyle = P.accent;
-        ctx.globalAlpha = (1 - ft) * 0.35;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(flash.x, flash.y, 40 + ft * (reduceMotion ? 60 : 620), 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-      }
-
-      // dust
-      for (const d of dust) {
-        ctx.globalAlpha = (d.life / 0.45) * 0.5;
-        ctx.fillStyle = P.line;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, 2.4, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-
-      // crewmate
+    const sync = (t) => {
       const ventScale = venting
         ? venting.from
-          ? Math.max(0.05, 1 - venting.t / 0.2)
+          ? Math.max(0.03, 1 - venting.t / 0.2)
           : Math.min(1, (venting.t - 0.24) / 0.22)
         : 1;
+      const s = Math.max(0.02, player.scale * ventScale);
+      const sink = venting && venting.from ? (1 - ventScale) * 26 : 0;
       const bob = reduceMotion
         ? 0
-        : Math.sin(t * (player.walk > 0 ? 9 : 2.2)) * (player.walk > 0 ? 2.5 : 1.4);
-      ctx.save();
-      ctx.translate(player.x, player.y + 26);
-      drawCrewmate(ctx, P, {
-        face: player.faceT >= 0 ? Math.max(0.25, player.faceT) : Math.min(-0.25, player.faceT),
-        walk: player.walk * Math.PI,
-        bob,
-        scale: Math.max(0.02, player.scale * ventScale),
-      });
-      ctx.restore();
+        : player.walk > 0
+          ? Math.abs(Math.sin(player.walk * Math.PI)) * 3
+          : Math.sin(t * 2.2) * 1.2;
 
-      // interaction hint (world-space, above target)
-      const hintFor = !venting && (nv || (nearButton() ? { x: BUTTON.x, y: BUTTON.y, label: "emergency meeting" } : null));
-      if (hintFor) {
-        const label = hintFor.label ?? "vent";
-        ctx.font = `500 13px ${fontFam}`;
-        ctx.textBaseline = "alphabetic";
-        const tx = hintFor.x;
-        const ty = hintFor.y - 44;
-        const tw = ctx.measureText(`[e] ${label}`).width;
-        ctx.fillStyle = P.accent;
-        ctx.fillText(`[e] ${label}`, tx - tw / 2, ty);
+      crew.group.position.set(player.x, bob - sink, player.y);
+      crew.group.scale.setScalar(s);
+      crew.group.rotation.y = player.angle;
+      const swing = player.walk > 0 ? Math.sin(player.walk * Math.PI) * 0.65 : 0;
+      crew.hipL.rotation.x = swing;
+      crew.hipR.rotation.x = -swing;
+
+      mirror.group.position.set(player.x, -(bob - sink), player.y);
+      mirror.group.scale.set(s, -s, s);
+      mirror.group.rotation.y = player.angle;
+      mirror.hipL.rotation.x = swing;
+      mirror.hipR.rotation.x = -swing;
+
+      lamp.position.set(player.x, 230, player.y + 40);
+
+      const pulse = reduceMotion ? 0.5 : 0.5 + 0.5 * Math.sin(t * 3.2);
+      const nv = venting ? null : nearVent();
+      for (const { v, ring } of ventRings) {
+        const on = nv === v || (venting && venting.to === v);
+        ring.material.opacity += ((on ? 0.55 + pulse * 0.35 : 0) - ring.material.opacity) * 0.25;
+      }
+      btnRing.material.opacity +=
+        ((nearButton() && !venting ? 0.5 + pulse * 0.35 : 0) - btnRing.material.opacity) * 0.25;
+      if (flash) {
+        const ft = flash.t / 0.9;
+        const r = 1 + ft * (reduceMotion ? 1.5 : 13);
+        flashRing.scale.setScalar(r);
+        flashRing.material.opacity = (1 - ft) * 0.5;
+      } else {
+        flashRing.material.opacity = 0;
+      }
+      for (let i = 0; i < reactorPulse.length; i++) {
+        reactorPulse[i].material.emissiveIntensity =
+          0.85 + (reduceMotion ? 0 : Math.sin(t * 2.1 + i * 1.7) * 0.25);
       }
 
-      ctx.restore();
+      // camera: tilted follow, north-up so controls stay screen-aligned
+      const fit = Math.min(Math.max(Math.max(1120 / cssW, 660 / cssH), 0.95), 1.7);
+      camera.position.set(cam.x, 500 * fit, cam.y + 330 * fit);
+      camera.lookAt(cam.x, 10, cam.y - 40);
+      dir.target.position.set(cam.x, 0, cam.y);
+      dir.position.set(cam.x - 420, 760, cam.y - 300);
 
-      // ---- HUD (screen space) ----
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.textBaseline = "alphabetic";
-      ctx.font = `500 12px ${fontFam}`;
-      const room = inRoom?.name ?? "hallway";
-      ctx.fillStyle = P.hudDim;
-      ctx.fillText("~/the-m0/", 14, 24);
-      const pw = ctx.measureText("~/the-m0/").width;
-      ctx.fillStyle = P.accent;
-      ctx.fillText(room, 14 + pw, 24);
+      composer.render();
 
-      // toasts
+      // ---- hud ----
+      hud.setTransform(dpr, 0, 0, dpr, 0, 0);
+      hud.clearRect(0, 0, cssW, cssH);
+      hud.font = `500 12px ${fontFam}`;
+      hud.textBaseline = "alphabetic";
+      const room = roomAt(player.x, player.y)?.name ?? "hallway";
+      hud.fillStyle = T.hudDim;
+      hud.fillText("~/the-m0/", 14, 24);
+      hud.fillStyle = T.accent;
+      hud.fillText(room, 14 + hud.measureText("~/the-m0/").width, 24);
+
+      const hint = !venting && (nv || (nearButton() ? { x: BUTTON.x, y: BUTTON.y, label: "emergency meeting" } : null));
+      if (hint) {
+        const [sx, sy, ok] = project(hint.x, 46, hint.y);
+        if (ok) {
+          const label = `[e] ${hint.label ?? "vent"}`;
+          hud.font = `500 13px ${fontFam}`;
+          hud.fillStyle = T.accent;
+          hud.fillText(label, sx - hud.measureText(label).width / 2, sy);
+        }
+      }
+
+      hud.font = `500 12px ${fontFam}`;
       const now = performance.now();
       let ty = cssH - (touchMode ? 96 : 40);
       for (let i = toasts.length - 1; i >= 0; i--) {
         const age = (now - toasts[i].born) / 1000;
         if (age > 4.2) continue;
-        const a = Math.min(1, age / 0.18) * (age > 3.5 ? Math.max(0, 1 - (age - 3.5) / 0.7) : 1);
-        ctx.globalAlpha = a;
-        ctx.fillStyle = P.toast;
-        ctx.fillText(toasts[i].text, 14, ty);
+        const a =
+          Math.min(1, age / 0.18) *
+          (age > 3.5 ? Math.max(0, 1 - (age - 3.5) / 0.7) : 1);
+        hud.globalAlpha = a;
+        hud.fillStyle = T.toast;
+        hud.fillText(toasts[i].text, 14, ty);
         ty -= 18;
       }
-      ctx.globalAlpha = 1;
+      hud.globalAlpha = 1;
 
-      // controls hint
       if (!touchMode) {
-        const hint = "[wasd] move · [e] interact";
-        const w = ctx.measureText(hint).width;
-        ctx.fillStyle = P.hudDim;
-        ctx.fillText(hint, cssW - w - 14, cssH - 14);
-      }
-
-      // touch UI
-      if (touchMode) {
+        const ch = "[wasd] move · [e] interact";
+        hud.fillStyle = T.hudDim;
+        hud.fillText(ch, cssW - hud.measureText(ch).width - 14, cssH - 14);
+      } else {
         const b = btnPos();
-        ctx.strokeStyle = P.hudDim;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.fillStyle = P.accent;
-        ctx.font = `500 14px ${fontFam}`;
-        const ew = ctx.measureText("e").width;
-        ctx.fillText("e", b.x - ew / 2, b.y + 5);
+        hud.strokeStyle = T.hudDim;
+        hud.lineWidth = 2;
+        hud.beginPath();
+        hud.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        hud.stroke();
+        hud.fillStyle = T.accent;
+        hud.font = `500 14px ${fontFam}`;
+        hud.fillText("e", b.x - hud.measureText("e").width / 2, b.y + 5);
         if (joy) {
-          ctx.strokeStyle = P.hudDim;
-          ctx.beginPath();
-          ctx.arc(joy.ox, joy.oy, 40, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.fillStyle = P.accentSoft;
-          ctx.beginPath();
-          ctx.arc(joy.ox + joy.dx, joy.oy + joy.dy, 16, 0, Math.PI * 2);
-          ctx.fill();
+          hud.strokeStyle = T.hudDim;
+          hud.beginPath();
+          hud.arc(joy.ox, joy.oy, 40, 0, Math.PI * 2);
+          hud.stroke();
+          hud.fillStyle = T.accent;
+          hud.globalAlpha = 0.5;
+          hud.beginPath();
+          hud.arc(joy.ox + joy.dx, joy.oy + joy.dy, 16, 0, Math.PI * 2);
+          hud.fill();
+          hud.globalAlpha = 1;
         }
       }
     };
 
-    // -- loop -------------------------------------------------------------
+    // -- loop ------------------------------------------------------------
     const frame = (now) => {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
-      const zoom = step(dt, now);
-      render(zoom, now / 1000);
+      step(dt, now);
+      sync(now / 1000);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -1025,11 +1107,24 @@ export default function SusGame() {
       wrap.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("blur", clearKeys);
       document.removeEventListener("visibilitychange", clearKeys);
-      canvas.removeEventListener("pointerdown", onPointerDown);
-      canvas.removeEventListener("pointermove", onPointerMove);
-      canvas.removeEventListener("pointerup", onPointerEnd);
-      canvas.removeEventListener("pointercancel", onPointerEnd);
+      hudCanvas.removeEventListener("pointerdown", onPointerDown);
+      hudCanvas.removeEventListener("pointermove", onPointerMove);
+      hudCanvas.removeEventListener("pointerup", onPointerEnd);
+      hudCanvas.removeEventListener("pointercancel", onPointerEnd);
       delete window.__SUS;
+      scene.traverse((o) => {
+        o.geometry?.dispose?.();
+        if (o.material) {
+          for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+            m.map?.dispose?.();
+            m.dispose?.();
+          }
+        }
+      });
+      envTex.dispose();
+      pmrem.dispose();
+      composer.dispose();
+      renderer.dispose();
     };
   }, [touchMode]);
 
@@ -1044,7 +1139,8 @@ export default function SusGame() {
       className="group relative w-full overflow-hidden rounded-md border border-stone-300 dark:border-stone-800 bg-stone-100/60 dark:bg-black/40 font-mono outline-none select-none touch-none focus-visible:border-amber-500/60 dark:focus-visible:border-amber-400/50"
       style={{ height: "clamp(420px, 62vh, 640px)" }}
     >
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas ref={glRef} className="absolute inset-0 h-full w-full" />
+      <canvas ref={hudRef} className="absolute inset-0 h-full w-full" />
       {!focused && !touchMode && (
         <div
           aria-hidden="true"
