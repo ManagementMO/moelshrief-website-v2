@@ -139,6 +139,7 @@ export default function CommandPalette() {
         h: () => router.push("/"),
         p: () => router.push("/projects"),
         w: () => router.push("/writing"),
+        s: () => router.push("/sus"),
         l: () =>
           window.open(
             "https://www.linkedin.com/in/mohammed-elshrief/",
@@ -256,6 +257,15 @@ export default function CommandPalette() {
                     shortcut="W"
                     isModifierPressed={isModifierPressed}
                     onSelect={() => runCommand(() => router.push("/writing"))}
+                  />
+                  <Item
+                    value="sus game ship crewmate among walk play"
+                    prefix="→"
+                    name="sus"
+                    dest="./sus"
+                    shortcut="S"
+                    isModifierPressed={isModifierPressed}
+                    onSelect={() => runCommand(() => router.push("/sus"))}
                   />
                 </Command.Group>
 

@@ -9,6 +9,7 @@ const WINDOWS = [
   { idx: 0, name: "about", href: "/" },
   { idx: 1, name: "projects", href: "/projects" },
   { idx: 2, name: "writing", href: "/writing" },
+  { idx: 3, name: "sus", href: "/sus" },
 ];
 
 export default function Statusline() {

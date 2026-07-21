@@ -42,6 +42,7 @@ const HELP_GROUPS = [
     rows: [
       ["neofetch", "system info"],
       ["cowsay [msg]", "ask the goose"],
+      ["sus", "board an empty ship"],
     ],
   },
 ];
@@ -77,6 +78,7 @@ const ALL_COMMANDS = [
   "cowsay",
   "honk",
   "writing",
+  "sus",
 ];
 
 function longestCommonPrefix(strings) {
@@ -227,6 +229,7 @@ const MAN_PAGES = {
   echo: "echo <text> — print text.",
   clear: "clear — wipe the terminal. also ctrl+L.",
   man: "man <command> — you are here.",
+  sus: "sus — walk an empty ship. wasd moves, e vents. definitely no impostors.",
 };
 
 function buildTree(path, prefix, lines) {
@@ -579,6 +582,13 @@ ${bottom}
       >(.)__
        (___/   — the goose has spoken`}</pre>
     );
+  }
+
+  if (c === "sus") {
+    if (typeof window !== "undefined") {
+      setTimeout(() => window.location.assign("/sus"), 450);
+    }
+    return DIM("// boarding the m0… crew of 1");
   }
 
   if (c === "sl") {

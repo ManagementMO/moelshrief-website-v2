@@ -135,12 +135,18 @@ export default function Header({ className }) {
         isActive: pathname.startsWith("/writing"),
         isNextLink: true,
       },
+      {
+        name: "sus",
+        href: "/sus",
+        isActive: pathname === "/sus",
+        isNextLink: true,
+      },
     ],
     [pathname]
   );
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex flex-wrap gap-y-1.5 justify-between items-center">
       <h1 className="text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
         <NextLink href="/" className="relative inline-block">
           <ScrambleText text="mohammed elshrief" />

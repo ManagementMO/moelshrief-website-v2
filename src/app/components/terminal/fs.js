@@ -165,7 +165,14 @@ function AboutOutput() {
 const FS = {
   "~": {
     type: "dir",
-    children: ["about.md", "projects", "writing", "work.txt", "contact.md"],
+    children: [
+      "about.md",
+      "projects",
+      "writing",
+      "work.txt",
+      "contact.md",
+      "sus.sh",
+    ],
     hidden: [".bashrc", ".secrets"],
   },
   "~/about.md": { type: "file", render: () => <AboutOutput /> },
@@ -268,6 +275,24 @@ const FS = {
         <div>- Software Engineer · LiftWerx</div>
         <div>- Machine Learning Engineer · WAT.ai</div>
         <div>- Machine Learning Engineer · UTMIST</div>
+      </>
+    ),
+  },
+  "~/sus.sh": {
+    type: "file",
+    url: "/sus",
+    internal: true,
+    render: () => (
+      <>
+        <div className="text-stone-500 dark:text-stone-500">#!/bin/sus</div>
+        <div>
+          an empty ship, one crewmate, zero tasks. run{" "}
+          <span className="text-amber-700 dark:text-amber-400">sus</span> or{" "}
+          <span className="text-amber-700 dark:text-amber-400">
+            open sus.sh
+          </span>{" "}
+          to board.
+        </div>
       </>
     ),
   },

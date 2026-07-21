@@ -6,6 +6,7 @@ export default function sitemap() {
     { url: `${base}/`, changeFrequency: "monthly", priority: 1 },
     { url: `${base}/projects`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/writing`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${base}/sus`, changeFrequency: "yearly", priority: 0.3 },
     ...publishedPosts.map((p) => ({
       url: `${base}/writing/${p.slug}`,
       lastModified: p.date,
