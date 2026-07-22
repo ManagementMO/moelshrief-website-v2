@@ -37,9 +37,6 @@ export default function Statusline() {
       aria-label="statusline"
       className="hidden md:flex fixed bottom-0 inset-x-0 z-30 h-7 items-center gap-4 px-3.5 font-mono text-micro bg-stone-100/90 dark:bg-black/90 backdrop-blur-sm border-t border-stone-300 dark:border-stone-800 text-stone-500 dark:text-stone-500"
     >
-      <span className="bg-amber-500 dark:bg-amber-400 text-stone-950 px-1.5 py-px rounded-sm font-medium select-none">
-        portfolio
-      </span>
       {WINDOWS.map((w) => (
         <NextLink
           key={w.idx}

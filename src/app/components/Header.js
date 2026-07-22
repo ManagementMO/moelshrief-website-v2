@@ -7,7 +7,6 @@ import Link from "./Link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import useModifierKey from "../hooks/useModifierKey";
 import useMobileDevice from "../hooks/useMobileDevice";
-import CurvedArrow from "./CurvedArrow";
 import { useTheme } from "./ThemeProvider";
 
 const SCRAMBLE_CHARS = "!<>-_\\/[]{}+*?#$%&@=01";
@@ -99,24 +98,15 @@ function ScrambleText({ text }) {
 export default function Header({ className }) {
   const pathname = usePathname();
   const [isMac, setIsMac] = useState(false);
-  const [showArrow, setShowArrow] = useState(false);
   const isModifierPressed = useModifierKey();
   const isMobileDevice = useMobileDevice();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setIsMac(navigator.platform.toLowerCase().includes("mac"));
-    const hasOpenedPalette = localStorage.getItem("hasOpenedCommandPalette");
-    setShowArrow(!hasOpenedPalette);
-
-    const handlePaletteOpened = () => setShowArrow(false);
-    window.addEventListener("command-palette-opened", handlePaletteOpened);
-    return () =>
-      window.removeEventListener("command-palette-opened", handlePaletteOpened);
   }, []);
 
   const openCommandPalette = () => {
-    setShowArrow(false);
     window.dispatchEvent(new CustomEvent("open-command-palette"));
   };
 
@@ -168,9 +158,6 @@ export default function Header({ className }) {
         </button>
         {!isMobileDevice && (
           <div className="relative">
-            {showArrow && (
-              <CurvedArrow className="hidden lg:block absolute -top-10 -right-28" />
-            )}
             <button
               onClick={openCommandPalette}
               className="group/cmdk hidden sm:flex items-center font-mono text-xs leading-none px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:border-amber-400/70 dark:hover:border-amber-500/50 hover:bg-amber-100/40 dark:hover:bg-amber-500/10 transition-colors duration-200"

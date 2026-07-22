@@ -49,11 +49,7 @@ export default function CommandPalette() {
     setIsMac(navigator.platform.toLowerCase().includes("mac"));
   }, []);
 
-  const handleOpen = () => {
-    setOpen(true);
-    localStorage.setItem("hasOpenedCommandPalette", "true");
-    window.dispatchEvent(new CustomEvent("command-palette-opened"));
-  };
+  const handleOpen = () => setOpen(true);
 
   useEffect(() => {
     if (!open) return;
