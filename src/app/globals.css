@@ -91,6 +91,82 @@
   }
 }
 
+@keyframes sonic-run-cycle {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -192px 0;
+  }
+}
+
+.sonic-sprite {
+  position: relative;
+  display: block;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sonic-sprite__idle,
+.sonic-sprite__run {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 48px;
+  height: 48px;
+  background-repeat: no-repeat;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.sonic-sprite__idle {
+  background-image: url("/sprites/sonic/idle.png");
+}
+
+.sonic-sprite__run {
+  background-image: url("/sprites/sonic/run.png");
+  background-size: 192px 48px;
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sonic-sprite:hover .sonic-sprite__idle {
+    opacity: 0;
+  }
+
+  .sonic-sprite:hover .sonic-sprite__run {
+    opacity: 1;
+    animation: sonic-run-cycle 320ms steps(4, end) infinite;
+  }
+}
+
+.sonic-sprite:active .sonic-sprite__idle {
+  opacity: 0;
+}
+
+.sonic-sprite:active .sonic-sprite__run {
+  opacity: 1;
+  animation: sonic-run-cycle 320ms steps(4, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sonic-sprite:hover .sonic-sprite__idle,
+  .sonic-sprite:active .sonic-sprite__idle {
+    opacity: 1;
+  }
+
+  .sonic-sprite:hover .sonic-sprite__run,
+  .sonic-sprite:active .sonic-sprite__run {
+    opacity: 0;
+    animation: none;
+  }
+}
+
 .animate-fade-in {
   animation: fade-in 150ms ease;
 }

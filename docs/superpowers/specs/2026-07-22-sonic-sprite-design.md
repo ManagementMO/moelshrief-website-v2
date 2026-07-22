@@ -6,10 +6,10 @@
 
 ## Goal
 
-Add a small, authentic 16-bit Sonic the Hedgehog sprite to the bottom-right of
-the home page's `~/activity` pane. Sonic stands still by default and changes to
-his classic Sonic 2 running cycle only while the visitor is interacting with
-the sprite.
+Add a small, authentic 16-bit Sonic the Hedgehog sprite to the far-right of the
+site footer row beneath its divider, opposite the social icons. Sonic stands
+still by default and changes to his classic Sonic 2 running cycle only while
+the visitor is interacting with the sprite.
 
 The interaction should feel like a discovered portfolio easter egg, not a new
 visual theme or a competing call to action.
@@ -17,8 +17,8 @@ visual theme or a competing call to action.
 ## Chosen approach
 
 Use authentic Sonic 2 frames packaged as local PNG assets and animate the run
-sequence with CSS `steps()`. Keep `ActivityPane` server-compatible: the sprite
-requires no React state, timers, canvas, or third-party runtime dependency.
+sequence with CSS `steps()`. Keep `Footer` server-compatible: the sprite requires
+no React state, timers, canvas, or third-party runtime dependency.
 
 This approach was selected over:
 
@@ -28,24 +28,25 @@ This approach was selected over:
 
 ## Visual design
 
-- Place Sonic inside the activity pane body, anchored to its bottom-right
-  corner and visually grounded against the pane's lower edge.
+- Place Sonic at the far-right of the footer row beneath the divider, directly
+  opposite the existing left-aligned social icons.
 - Normalize each source pose into a transparent 48×48-pixel cell without
   scaling the original pixels. Render that cell at exactly 48×48 CSS pixels on
   every viewport with `image-rendering: pixelated`.
-- Give Sonic a 56×56-pixel interaction area and reserve 56 pixels at the right
-  of the statistics/commit region. The heatmap keeps its full width.
+- Give Sonic a fixed 56×56-pixel interaction area. The social icon group keeps
+  its existing spacing and the row uses `justify-between` to hold both edges.
 - Do not add a glow, platform, badge, caption, tooltip, or new accent color.
   Sonic is the single decorative flourish; the existing stone/amber terminal
   system remains unchanged.
-- Reserve enough space in the pane body that the sprite never covers live
-  GitHub statistics or commit text and never changes the pane's width.
+- Keep the footer responsive so the sprite never overlaps or wraps into the
+  social icons and never changes the site's column width.
 
 ## Interaction
 
 - Resting state: one authentic standing Sonic frame.
 - Fine-pointer hover over Sonic's 56×56-pixel hit area: switch immediately to
-  an eight-frame Sonic 2 run cycle, looping in place every 560 milliseconds.
+  the four-frame Sonic 2 Full Speed cycle with the iconic circular-leg effect,
+  looping in place every 320 milliseconds.
 - Pointer exit: return immediately to the standing frame.
 - Touch/pen press: run while pressed, then return to standing.
 - The sprite is decorative, so it is not keyboard-focusable and is hidden from
@@ -69,15 +70,13 @@ This approach was selected over:
 
 - Add a focused `SonicSprite` component responsible only for semantic wrapper
   markup and sprite-state classes.
-- Compose it inside `ActivityPane`, whose body becomes the positioning context.
+- Compose it inside `Footer`, as the right-hand child of the social-icon row.
 - Keep sprite animation rules together in `globals.css`, including responsive
   sizing and the reduced-motion override.
-- Do not modify the shared `Pane` primitive or the site-wide footer.
+- Do not modify the shared `Pane` primitive or `ActivityPane`.
 
 ## Failure and fallback behavior
 
-- If GitHub activity is unavailable, `ActivityPane` already renders nothing;
-  Sonic should also be absent rather than floating independently.
 - If the run asset cannot load, the standing image remains the fallback visual.
 - If CSS animation is unsupported, the standing frame remains visible.
 
@@ -91,15 +90,15 @@ This approach was selected over:
 4. Confirm standing, hover-running, pointer-exit, and touch/active states.
 5. Emulate `prefers-reduced-motion: reduce` and confirm the run cycle never
    starts.
-6. Confirm the sprite does not overlap long contribution totals, streak text,
-   or recent commit rows.
+6. Confirm the sprite stays at the footer's right edge without overlapping or
+   wrapping into the social icons.
 7. Capture a final screenshot showing the integrated sprite in the requested
-   card location.
+   footer location.
 
 ## Out of scope
 
 - Sound effects, rings, trails, spin-dash, autonomous movement, or page-wide
   game mechanics.
-- Changes to the contribution heatmap, footer icons, card copy, or global color
-  palette.
+- Changes to the contribution heatmap, footer icon behavior, card copy, or
+  global color palette.
 - New animation libraries or a general-purpose sprite engine.
