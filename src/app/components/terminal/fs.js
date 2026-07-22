@@ -86,16 +86,6 @@ function AboutOutput() {
         hallucinate.
       </div>
       <div>&nbsp;&nbsp;built at wat.ai w/ composio + magic hour</div>
-      <div>
-        -{" "}
-        <Link href="https://github.com/ManagementMO/Meta-Harness">
-          <span className="text-amber-700 dark:text-amber-400">
-            Meta-Harness
-          </span>
-        </Link>{" "}
-        — turned stanford&apos;s linear meta-harness loop into a langgraph tree
-      </div>
-      <div>&nbsp;&nbsp;(time-travel forking, postgres checkpoints)</div>
       <div className="h-2" aria-hidden="true" />
       <div className="text-stone-500 dark:text-stone-500"># previously</div>
       <div>

@@ -29,3 +29,17 @@ test("Statusline starts with the about, projects, and writing windows", async ()
   assert.doesNotMatch(statusline, />\s*portfolio\s*</);
   assert.match(statusline, /<nav[\s\S]*?>\s*\{WINDOWS\.map/);
 });
+
+test("Homepage about output omits the Meta-Harness block", async () => {
+  const filesystem = await text("src/app/components/terminal/fs.js");
+  const aboutOutput = filesystem.slice(
+    filesystem.indexOf("function AboutOutput"),
+    filesystem.indexOf("// virtual filesystem")
+  );
+
+  assert.match(aboutOutput, /TRACE/);
+  assert.doesNotMatch(
+    aboutOutput,
+    /Meta-Harness|meta-harness|time-travel forking|postgres checkpoints/
+  );
+});
