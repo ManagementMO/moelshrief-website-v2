@@ -108,17 +108,17 @@ export default function BudgetKnee() {
             className={styles.chartGuide}
           />
           <text
-            x={x(knee.k) - 14}
-            y={y(knee.maxKm) - 24}
-            textAnchor="end"
+            x={x(knee.k) + 24}
+            y={y(knee.maxKm) - 48}
+            textAnchor="start"
             className={styles.chartAnnotation}
           >
             ten moves
           </text>
           <text
-            x={x(knee.k) - 14}
-            y={y(knee.maxKm) - 8}
-            textAnchor="end"
+            x={x(knee.k) + 24}
+            y={y(knee.maxKm) - 30}
+            textAnchor="start"
             className={styles.chartNote}
           >
             about 90% of the best proven reduction
