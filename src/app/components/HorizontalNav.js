@@ -9,7 +9,7 @@ export default function HorizontalNav({ links, variant = "plain" }) {
         <span key={link.href} className="group/nav flex items-center">
           {variant === "terminal" && (
             <span
-              className="text-stone-500 dark:text-stone-500 font-mono mr-1 transition-colors group-hover/nav:text-amber-600 dark:group-hover/nav:text-amber-400"
+              className="hidden sm:inline text-stone-500 dark:text-stone-500 font-mono mr-1 transition-colors group-hover/nav:text-amber-600 dark:group-hover/nav:text-amber-400"
               aria-hidden="true"
             >
               ${" "}
