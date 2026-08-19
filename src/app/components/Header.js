@@ -131,7 +131,7 @@ export default function Header({ className }) {
 
   return (
     <div className="flex justify-between items-center">
-      <h1 className="text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
+      <h1 className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
         <NextLink href="/" className="relative inline-block">
           <ScrambleText text="mohammed elshrief" />
         </NextLink>
@@ -142,7 +142,7 @@ export default function Header({ className }) {
           •
         </span>
       </h1>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-1 sm:gap-6">
         <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}

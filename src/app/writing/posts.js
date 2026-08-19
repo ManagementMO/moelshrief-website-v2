@@ -4,6 +4,15 @@
 
 export const posts = [
   {
+    slug: "fairer-world-cup-schedule",
+    title: "can a world cup schedule be fairer?",
+    date: "2026-08-18",
+    summary:
+      "how i rebuilt the world cup group stage, found where the travel burden came from, and tested two practical ways to make the schedule fairer.",
+    readMins: 6,
+    published: true,
+  },
+  {
     slug: "example-post",
     title: "example post — replace me",
     date: "2026-06-12",
