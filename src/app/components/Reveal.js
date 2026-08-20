@@ -1,10 +1,10 @@
 "use client";
 
-import { motion, MotionConfig } from "framer-motion";
+import { motion, MotionConfig } from "motion/react";
 
 // Invariant: the rendered element must not depend on client-only media
 // queries (SSR prerenders one branch; hydration won't patch the mismatch).
-// MotionConfig reducedMotion="user" lets framer strip the transform for
+// MotionConfig reducedMotion="user" lets Motion strip the transform for
 // reduced-motion users while still resolving opacity to 1.
 export default function Reveal({ children, delay = 0, className = "" }) {
   return (

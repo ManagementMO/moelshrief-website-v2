@@ -8,7 +8,7 @@ import {
   useReducedMotion,
   useSpring,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
 import styles from "./article.module.css";
 
 const km = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });

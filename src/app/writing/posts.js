@@ -4,6 +4,15 @@
 
 export const posts = [
   {
+    slug: "how-eduroam-works",
+    title: "how eduroam works",
+    date: "2026-08-19",
+    summary:
+      "i kept connecting to eduroam at other campuses and finally looked into what was happening after i pressed connect.",
+    readMins: 5,
+    published: true,
+  },
+  {
     slug: "fairer-world-cup-schedule",
     title: "can a world cup schedule be fairer?",
     date: "2026-08-18",
