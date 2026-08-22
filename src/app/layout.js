@@ -40,6 +40,9 @@ export const metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: "iXPA5xl53ap3PhR1brPZJq85vi_pymagfuMIjM6UGv4",
+  },
   openGraph: {
     title: "mohammed elshrief",
     description:
