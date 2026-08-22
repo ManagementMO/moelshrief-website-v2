@@ -20,6 +20,40 @@ export default function NotFound() {
         <span className="text-stone-500 dark:text-stone-500">
           mohammed@portfolio:~$
         </span>{" "}
+        <span className="text-stone-800 dark:text-stone-200">ls ~</span>
+      </div>
+      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+        {[
+          { href: "/", label: "about" },
+          { href: "/projects", label: "projects" },
+          { href: "/writing", label: "writing" },
+          { href: "/contact", label: "contact" },
+        ].map((l) => (
+          <NextLink
+            key={l.href}
+            href={l.href}
+            className="text-amber-700 dark:text-amber-400 hover:underline underline-offset-4"
+          >
+            {l.label}
+          </NextLink>
+        ))}
+        <a
+          href="/sitemap.xml"
+          className="text-amber-700 dark:text-amber-400 hover:underline underline-offset-4"
+        >
+          sitemap.xml
+        </a>
+        <a
+          href="/llms.txt"
+          className="text-amber-700 dark:text-amber-400 hover:underline underline-offset-4"
+        >
+          llms.txt
+        </a>
+      </div>
+      <div className="mt-3">
+        <span className="text-stone-500 dark:text-stone-500">
+          mohammed@portfolio:~$
+        </span>{" "}
         <NextLink
           href="/"
           className="text-amber-700 dark:text-amber-400 hover:underline underline-offset-4"

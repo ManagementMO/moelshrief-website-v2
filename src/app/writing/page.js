@@ -4,6 +4,7 @@ import { publishedPosts } from "./posts";
 export const metadata = {
   title: "writing · mohammed elshrief",
   description: "essays + notes on agents, engineering, and shipping.",
+  alternates: { canonical: "/writing" },
 };
 
 export default function Writing() {

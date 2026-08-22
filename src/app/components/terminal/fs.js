@@ -67,7 +67,7 @@ function Logo({
 function AboutOutput() {
   return (
     <>
-      <div className="text-stone-500 dark:text-stone-500"># currently</div>
+      <h2 className="text-stone-500 dark:text-stone-500"># currently</h2>
       <div>
         - Management Engineering @{" "}
         <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} unoptimized />
@@ -76,7 +76,7 @@ function AboutOutput() {
         </Link>
       </div>
       <div className="h-2" aria-hidden="true" />
-      <div className="text-stone-500 dark:text-stone-500"># building</div>
+      <h2 className="text-stone-500 dark:text-stone-500"># building</h2>
       <div>
         -{" "}
         <Link href="https://watai.ca">
@@ -87,7 +87,7 @@ function AboutOutput() {
       </div>
       <div>&nbsp;&nbsp;built at wat.ai w/ composio + magic hour</div>
       <div className="h-2" aria-hidden="true" />
-      <div className="text-stone-500 dark:text-stone-500"># previously</div>
+      <h2 className="text-stone-500 dark:text-stone-500"># previously</h2>
       <div>
         - Software Engineer @{" "}
         <Logo

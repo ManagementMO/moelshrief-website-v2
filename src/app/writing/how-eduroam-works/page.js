@@ -9,6 +9,7 @@ export const metadata = {
   title: "how eduroam works · mohammed elshrief",
   description:
     "i kept connecting to eduroam on other campuses and finally looked into what happens after i press connect.",
+  alternates: { canonical: "/writing/how-eduroam-works" },
   openGraph: {
     type: "article",
     title: "how eduroam works",
@@ -28,7 +29,7 @@ const articleJsonLd = {
   author: {
     "@type": "Person",
     name: "Mohammed Elshrief",
-    url: "https://moelshrief.wiki",
+    url: "https://moelshrief.com",
   },
 };
 

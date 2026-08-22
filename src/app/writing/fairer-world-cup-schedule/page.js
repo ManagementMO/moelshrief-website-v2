@@ -10,6 +10,7 @@ export const metadata = {
   title: "can a world cup schedule be fairer? · mohammed elshrief",
   description:
     "how i rebuilt the world cup group stage and tested two practical ways to reduce travel without making any team travel farther.",
+  alternates: { canonical: "/writing/fairer-world-cup-schedule" },
   openGraph: {
     type: "article",
     title: "can a world cup schedule be fairer?",
@@ -29,7 +30,7 @@ const articleJsonLd = {
   author: {
     "@type": "Person",
     name: "Mohammed Elshrief",
-    url: "https://moelshrief.wiki",
+    url: "https://moelshrief.com",
   },
 };
 

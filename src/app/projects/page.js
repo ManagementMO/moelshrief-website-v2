@@ -5,6 +5,7 @@ import { projects, archive } from "./projectsData";
 export const metadata = {
   title: "projects · mohammed elshrief",
   description: "things i've shipped — products, machine learning, hackathons.",
+  alternates: { canonical: "/projects" },
 };
 
 export default function Projects() {

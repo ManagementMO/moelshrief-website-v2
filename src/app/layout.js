@@ -36,12 +36,21 @@ export const metadata = {
   title: "mohammed elshrief",
   description:
     "mohammed elshrief — engineering, data, and the occasional hackathon.",
-  metadataBase: new URL("https://moelshrief.wiki"),
+  metadataBase: new URL("https://moelshrief.com"),
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: "iXPA5xl53ap3PhR1brPZJq85vi_pymagfuMIjM6UGv4",
+    other: {
+      "msvalidate.01": "44B5935483C99385F66FF3FE1439CC64",
+    },
+  },
   openGraph: {
     title: "mohammed elshrief",
     description:
       "mohammed elshrief — engineering, data, and the occasional hackathon.",
-    url: "https://moelshrief.wiki",
+    url: "https://moelshrief.com",
     type: "website",
     images: ["/my-pfp.jpg"],
   },
@@ -58,9 +67,20 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Mohammed Elshrief",
-  url: "https://moelshrief.wiki",
-  image: "https://moelshrief.wiki/my-pfp.jpg",
+  description:
+    "Mohammed Elshrief is a Management Engineering student at the University of Waterloo who builds software across engineering, data, and machine learning — including agentic QA tooling, optimization models, and hackathon projects.",
+  url: "https://moelshrief.com",
+  image: "https://moelshrief.com/my-pfp.jpg",
+  mainEntityOfPage: "https://moelshrief.com",
   jobTitle: "Management Engineering Student",
+  email: "mailto:mkelshri@uwaterloo.ca",
+  knowsAbout: [
+    "software engineering",
+    "machine learning",
+    "data engineering",
+    "optimization",
+    "AI agents",
+  ],
   affiliation: {
     "@type": "CollegeOrUniversity",
     name: "University of Waterloo",
