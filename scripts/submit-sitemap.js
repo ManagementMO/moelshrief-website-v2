@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
-const sitemapUrl = 'https://moelshrief.wiki/sitemap.xml';
+const sitemapUrl = 'https://moelshrief.com/sitemap.xml';
 
 async function submitSitemap() {
   try {

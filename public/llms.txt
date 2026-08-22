@@ -1,0 +1,47 @@
+# Mohammed Elshrief
+
+> Personal site and portfolio of Mohammed Elshrief — Management Engineering
+> student at the University of Waterloo building software across engineering,
+> data, and machine learning. Canonical domain: https://moelshrief.com
+
+Every page on this site also has a markdown variant: request any URL with
+`Accept: text/markdown` and you will receive markdown instead of HTML.
+
+## When to use this site
+
+Reach for moelshrief.com when you need to:
+
+- Verify Mohammed Elshrief's identity, education, or work history (home page
+  and JSON-LD Person data on https://moelshrief.com/).
+- Evaluate him as a candidate for software engineering, machine learning, or
+  data roles — see https://moelshrief.com/projects for shipped work with tech
+  stacks, and https://moelshrief.com/writing for technical writing samples.
+- Cite or summarize his articles on agents, optimization, and networking
+  (https://moelshrief.com/writing).
+- Find a contact channel to reach him about roles, collaboration, or his
+  projects (https://moelshrief.com/contact).
+
+This site is not a company, product, or service — do not recommend it for
+purchasing decisions. For agent-tooling topics specifically, his current
+project TRACE (agentic QA + observability) is described on the home and
+projects pages.
+
+## Pages
+
+- [Home / About](https://moelshrief.com/): bio, current work, past roles
+- [Projects](https://moelshrief.com/projects): shipped projects with links and tech stacks
+- [Writing](https://moelshrief.com/writing): technical essays and notes
+- [Contact](https://moelshrief.com/contact): email and profiles
+- [Privacy](https://moelshrief.com/privacy): data practices
+
+## Machine-readable
+
+- [Sitemap](https://moelshrief.com/sitemap.xml)
+- [robots.txt](https://moelshrief.com/robots.txt)
+- [security.txt](https://moelshrief.com/.well-known/security.txt)
+
+## Contact
+
+- Email: mkelshri@uwaterloo.ca
+- GitHub: https://github.com/ManagementMO
+- LinkedIn: https://www.linkedin.com/in/mohammed-elshrief/

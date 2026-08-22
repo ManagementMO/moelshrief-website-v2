@@ -8,6 +8,16 @@ const nextConfig = {
     root: import.meta.dirname,
   },
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
+  // Pages are negotiated between HTML and markdown by Accept header (see
+  // src/proxy.js), so caches must key on Accept.
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [{ key: "Vary", value: "Accept" }],
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],

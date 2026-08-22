@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://moelshrief.wiki/sitemap.xml
+Sitemap: https://moelshrief.com/sitemap.xml
