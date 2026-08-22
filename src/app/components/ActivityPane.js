@@ -1,12 +1,6 @@
 import Pane from "./Pane";
 
-const LEVEL_CLASSES = [
-  "bg-stone-200/70 dark:bg-stone-800/60",
-  "bg-amber-200 dark:bg-amber-900/70",
-  "bg-amber-300 dark:bg-amber-700/80",
-  "bg-amber-400 dark:bg-amber-500/90",
-  "bg-amber-500 dark:bg-amber-400",
-];
+const LEVEL_CLASSES = ["hm-0", "hm-1", "hm-2", "hm-3", "hm-4"];
 
 export default function ActivityPane({ activity }) {
   if (!activity) return null;
@@ -18,17 +12,15 @@ export default function ActivityPane({ activity }) {
         {weeks.map((week, wi) => (
           <div
             key={wi}
-            className={`flex-col gap-[2px] flex-1 min-w-0 ${
+            className={`hm-w ${
               wi < weeks.length - 26 ? "hidden sm:flex" : "flex"
             }`}
           >
             {week.map((day, di) => (
               <span
                 key={di}
-                className={`aspect-square w-full rounded-[2px] ${
-                  day
-                    ? LEVEL_CLASSES[day.level] ?? LEVEL_CLASSES[0]
-                    : "bg-transparent"
+                className={`hm-c ${
+                  day ? LEVEL_CLASSES[day.level] ?? LEVEL_CLASSES[0] : "hm-x"
                 }`}
               />
             ))}

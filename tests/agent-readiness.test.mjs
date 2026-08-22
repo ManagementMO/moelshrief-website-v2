@@ -93,3 +93,19 @@ test("trust pages exist with substantive content", async () => {
   assert.match(sitemap, /\/contact/);
   assert.match(sitemap, /\/privacy/);
 });
+
+test("activity heatmap uses compact class names backed by CSS definitions", async () => {
+  const pane = await text("src/app/components/ActivityPane.js");
+  assert.match(pane, /"hm-0", "hm-1", "hm-2", "hm-3", "hm-4"/);
+  assert.match(pane, /hm-c/);
+  assert.match(pane, /hm-w/);
+  assert.match(pane, /hm-x/);
+  assert.doesNotMatch(pane, /aspect-square/);
+  const css = await text("src/app/globals.css");
+  for (const cls of ["hm-w", "hm-c", "hm-x", "hm-0", "hm-1", "hm-2", "hm-3", "hm-4"]) {
+    assert.ok(css.includes(`.${cls} {`), `globals.css missing .${cls}`);
+  }
+  // level colors preserved exactly
+  assert.match(css, /bg-stone-200\/70 dark:bg-stone-800\/60/);
+  assert.match(css, /bg-amber-500 dark:bg-amber-400/);
+});

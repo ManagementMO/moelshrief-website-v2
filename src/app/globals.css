@@ -2,6 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* GitHub activity heatmap. Short class names keep the ~370 server-rendered
+     cells small in both the HTML and the RSC payload. */
+  .hm-w {
+    @apply flex-col gap-[2px] flex-1 min-w-0;
+  }
+  .hm-c {
+    @apply aspect-square w-full rounded-[2px];
+  }
+  .hm-x {
+    @apply bg-transparent;
+  }
+  .hm-0 {
+    @apply bg-stone-200/70 dark:bg-stone-800/60;
+  }
+  .hm-1 {
+    @apply bg-amber-200 dark:bg-amber-900/70;
+  }
+  .hm-2 {
+    @apply bg-amber-300 dark:bg-amber-700/80;
+  }
+  .hm-3 {
+    @apply bg-amber-400 dark:bg-amber-500/90;
+  }
+  .hm-4 {
+    @apply bg-amber-500 dark:bg-amber-400;
+  }
+}
+
 @layer base {
   ::-webkit-scrollbar {
     width: 10px;
