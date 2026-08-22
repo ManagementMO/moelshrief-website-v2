@@ -42,6 +42,9 @@ export const metadata = {
   },
   verification: {
     google: "iXPA5xl53ap3PhR1brPZJq85vi_pymagfuMIjM6UGv4",
+    other: {
+      "msvalidate.01": "44B5935483C99385F66FF3FE1439CC64",
+    },
   },
   openGraph: {
     title: "mohammed elshrief",
