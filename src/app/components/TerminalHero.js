@@ -33,7 +33,7 @@ function Prompt({ cwd }) {
   );
 }
 
-export default function TerminalHero({ activity = null }) {
+export default function TerminalHero({ activity = null, children }) {
   const { theme, toggleTheme } = useTheme();
   const [cwd, setCwd] = useState("~");
   // Seeded with the fully-rendered `cat about.md` command + output so the bio
@@ -176,7 +176,17 @@ export default function TerminalHero({ activity = null }) {
       className="relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
     >
       {matrixOn && <MatrixRain onDone={stopMatrix} />}
-      <div role="log" aria-live="polite" aria-label="terminal output">
+      {children ? (
+        <div className="relative z-[1] mb-4 sm:absolute sm:top-5 sm:right-5 sm:mb-0">
+          {children}
+        </div>
+      ) : null}
+      <div
+        role="log"
+        aria-live="polite"
+        aria-label="terminal output"
+        className={children ? "sm:pr-[240px]" : ""}
+      >
         {history.map((entry, i) => (
           <div key={i}>
             <div>

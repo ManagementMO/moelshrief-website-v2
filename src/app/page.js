@@ -2,6 +2,7 @@ import NextLink from "next/link";
 import TerminalHero from "./components/TerminalHero";
 import AsciiDivider from "./components/AsciiDivider";
 import ActivityPane from "./components/ActivityPane";
+import CurrentLocationMap from "./components/CurrentLocationMap";
 import EnterToProjects from "./components/EnterToProjects";
 import { getActivity } from "./lib/github";
 
@@ -11,7 +12,9 @@ export default async function About() {
   return (
     <div className="flex flex-col w-full min-w-0 font-extralight">
       <EnterToProjects />
-      <TerminalHero activity={activity} />
+      <TerminalHero activity={activity}>
+        <CurrentLocationMap />
+      </TerminalHero>
 
       <AsciiDivider />
 
