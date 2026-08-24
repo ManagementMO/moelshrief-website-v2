@@ -14,7 +14,7 @@ export default async function About() {
       <EnterToProjects />
       <div className="relative">
         <TerminalHero activity={activity} />
-        <AlexandriaMap />
+        <AlexandriaMap className="lg:absolute lg:top-40 lg:right-[-170px] lg:mt-0 min-[1200px]:right-[-250px]" />
       </div>
 
       <AsciiDivider />

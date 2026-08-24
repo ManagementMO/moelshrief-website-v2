@@ -70,7 +70,12 @@ function AboutOutput() {
       <h2 className="text-stone-500 dark:text-stone-500"># currently</h2>
       <div>
         - Management Engineering @{" "}
-        <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} unoptimized />
+        <Logo
+          src="/logos/waterloo.png"
+          alt="UWaterloo"
+          size={24}
+          unoptimized
+        />
         <Link href="https://uwaterloo.ca">
           <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
         </Link>

@@ -14,4 +14,4 @@ python scripts/generate-alexandria-map.py
 
 The upstream project is licensed under AGPL-3.0. OpenStreetMap data is ©
 OpenStreetMap contributors. The generated image retains both credits in the
-image and in the homepage caption.
+image and in the homepage origin detail.
