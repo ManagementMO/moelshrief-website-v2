@@ -12,11 +12,10 @@ export default async function About() {
   return (
     <div className="flex flex-col w-full min-w-0 font-extralight">
       <EnterToProjects />
-      <TerminalHero activity={activity} />
-
-      <AsciiDivider />
-
-      <AlexandriaMap />
+      <div className="relative">
+        <TerminalHero activity={activity} />
+        <AlexandriaMap />
+      </div>
 
       <AsciiDivider />
 

@@ -15,5 +15,7 @@ test("homepage includes the credited Alexandria origin map", () => {
   assert.match(homepage, /AlexandriaMap/);
   assert.match(component, /maps\/alexandria\.png/);
   assert.match(component, /OpenStreetMap data/);
+  assert.match(component, /first coordinates/);
+  assert.doesNotMatch(component, /the map keeps going/);
   assert.ok(fs.statSync(assetPath).size > 100_000);
 });
