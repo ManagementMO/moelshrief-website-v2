@@ -1,12 +1,14 @@
-"""Generate the credited Alexandria origin map used by the homepage.
+"""Generate the configurable current-location map used by the homepage.
+
+The location is read from src/app/data/current-location.json. Update that file,
+then run this script to replace the static map asset for a new city.
 
 Install the upstream renderer first:
     python -m pip install prettymaps
-
-The renderer fetches OpenStreetMap data at build time. The website ships the
-resulting raster asset so visitors do not depend on an OSM/Overpass request.
 """
 
+import json
+import math
 from pathlib import Path
 
 import geopandas as gpd
@@ -19,8 +21,7 @@ import prettymaps
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "public" / "maps" / "alexandria.png"
-ORIGIN = (31.2001, 29.9187)
+CONFIG = ROOT / "src" / "app" / "data" / "current-location.json"
 
 
 LAYERS = {
@@ -84,15 +85,25 @@ CREDIT = {
 }
 
 
+def utm_epsg(latitude, longitude):
+    zone = math.floor((longitude + 180) / 6) + 1
+    return (32600 if latitude >= 0 else 32700) + zone
+
+
 def main():
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    location = json.loads(CONFIG.read_text())
+    latitude = location["latitude"]
+    longitude = location["longitude"]
+    output = ROOT / "public" / "maps" / f"{location['slug']}.png"
+    output.parent.mkdir(parents=True, exist_ok=True)
+
     plot = prettymaps.plot(
-        ORIGIN,
+        (latitude, longitude),
         layers=LAYERS,
         style=STYLE,
         use_preset=False,
         circle=False,
-        radius=4500,
+        radius=location.get("radius", 9000),
         dilate=0,
         figsize=(10, 10),
         credit=CREDIT,
@@ -102,18 +113,30 @@ def main():
     x_limits = plot.ax.get_xlim()
     y_limits = plot.ax.get_ylim()
 
-    # Keep the map centered on the city while giving the visitor one quiet
-    # human marker. This is the city center, not a claim about an exact address.
-    point = gpd.GeoSeries([Point(ORIGIN[1], ORIGIN[0])], crs="EPSG:4326").to_crs(
-        "EPSG:32635"
+    point = gpd.GeoSeries([Point(longitude, latitude)], crs="EPSG:4326").to_crs(
+        epsg=utm_epsg(latitude, longitude)
     )
     x, y = point.geometry.iloc[0].x, point.geometry.iloc[0].y
     plot.ax.scatter(
-        [x], [y], s=160, facecolors="none", edgecolors="#d6a85c", linewidths=0.9, zorder=40
+        [x],
+        [y],
+        s=160,
+        facecolors="none",
+        edgecolors="#d6a85c",
+        linewidths=0.9,
+        zorder=40,
     )
-    plot.ax.scatter([x], [y], s=18, c="#d6a85c", edgecolors="#11120f", linewidths=0.8, zorder=41)
+    plot.ax.scatter(
+        [x],
+        [y],
+        s=18,
+        c="#d6a85c",
+        edgecolors="#11120f",
+        linewidths=0.8,
+        zorder=41,
+    )
     plot.ax.annotate(
-        "alexandria",
+        location["city"].lower(),
         (x, y),
         xytext=(10, 12),
         textcoords="offset points",
@@ -121,14 +144,22 @@ def main():
         fontsize=7,
         fontfamily="DejaVu Sans",
         fontweight="bold",
-        bbox={"boxstyle": "square,pad=0.28", "fc": "#11120f", "ec": "none", "alpha": 0.8},
+        bbox={
+            "boxstyle": "square,pad=0.28",
+            "fc": "#11120f",
+            "ec": "none",
+            "alpha": 0.8,
+        },
         zorder=42,
     )
     plot.ax.set_xlim(x_limits)
     plot.ax.set_ylim(y_limits)
     plot.fig.patch.set_facecolor("#11120f")
-    plot.fig.savefig(OUTPUT, dpi=220, bbox_inches="tight", pad_inches=0)
-    print(f"wrote {OUTPUT}")
+    # The module renders at 116 CSS pixels, so a compact 2x-ish source keeps
+    # the repository and first load light without sacrificing a crisp retina
+    # thumbnail.
+    plot.fig.savefig(output, dpi=132, bbox_inches="tight", pad_inches=0)
+    print(f"wrote {output}")
 
 
 if __name__ == "__main__":

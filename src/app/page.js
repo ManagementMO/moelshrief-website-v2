@@ -2,7 +2,7 @@ import NextLink from "next/link";
 import TerminalHero from "./components/TerminalHero";
 import AsciiDivider from "./components/AsciiDivider";
 import ActivityPane from "./components/ActivityPane";
-import AlexandriaMap from "./components/AlexandriaMap";
+import CurrentLocationMap from "./components/CurrentLocationMap";
 import EnterToProjects from "./components/EnterToProjects";
 import { getActivity } from "./lib/github";
 
@@ -12,10 +12,9 @@ export default async function About() {
   return (
     <div className="flex flex-col w-full min-w-0 font-extralight">
       <EnterToProjects />
-      <div className="relative">
-        <TerminalHero activity={activity} />
-        <AlexandriaMap className="lg:absolute lg:top-40 lg:right-[-170px] lg:mt-0 min-[1200px]:right-[-250px]" />
-      </div>
+      <TerminalHero activity={activity}>
+        <CurrentLocationMap />
+      </TerminalHero>
 
       <AsciiDivider />
 
