@@ -196,11 +196,11 @@ function runLs(target, { all = false } = {}) {
 const BOOT = Date.now();
 
 const CAREER = [
-  ["f4b1e25", "(HEAD -> waterloo) incoming software engineering @ Microsoft + IBM"],
-  ["a7c3d91", "software engineering @ altas partners"],
-  ["c1d8a44", "software engineering @ liftwerx"],
-  ["9b2e7f3", "machine learning engineering @ wat.ai"],
-  ["5a6c9d1", "ml dev @ themis ai · utmist"],
+  ["f4b1e25", "(HEAD -> waterloo) incoming software engineer intern @ Microsoft + IBM"],
+  ["a7c3d91", "software engineer intern @ altas partners"],
+  ["c1d8a44", "software engineer intern @ liftwerx"],
+  ["9b2e7f3", "core member @ wat.ai"],
+  ["5a6c9d1", "core member @ utmist"],
   ["e8f2b35", "(initial commit) management engineering @ uwaterloo"],
 ];
 
@@ -325,7 +325,7 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
     return (
       <div>
         mohammed elshrief — management engineering @ uwaterloo. incoming software
-        engineering @ Microsoft + IBM. slightly too into hackathons.
+        engineering internships @ Microsoft + IBM. slightly too into hackathons.
       </div>
     );
   }

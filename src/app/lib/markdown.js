@@ -26,16 +26,16 @@ hackathon project.
 
 ## incoming
 
-- Software Engineer @ Microsoft (https://www.microsoft.com)
-- Software Engineer @ IBM (https://www.ibm.com)
+- Software Engineer Intern @ Microsoft (https://www.microsoft.com)
+- Software Engineer Intern @ IBM (https://www.ibm.com)
 
 ## previously
 
-- Software Engineer @ Upfront Ventures (https://upfront.com)
-- Software Engineer @ Altas Partners (https://www.altas.com)
-- Software Engineer @ LiftWerx (https://www.liftwerx.com)
-- Machine Learning Engineer @ WAT.ai (https://watai.ca)
-- Machine Learning Engineer @ UTMIST (https://www.utmist.ca/)
+- Software Engineer Intern @ Upfront Ventures (https://upfront.com)
+- Software Engineer Intern @ Altas Partners (https://www.altas.com)
+- Software Engineer Intern @ LiftWerx (https://www.liftwerx.com)
+- Core Member @ WAT.ai (https://watai.ca)
+- Core Member @ UTMIST (https://www.utmist.ca/)
 
 ## pages
 

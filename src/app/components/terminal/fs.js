@@ -76,7 +76,7 @@ function AboutOutput() {
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># incoming</h2>
       <div>
-        - Software Engineer{" "}
+        - Software Engineer Intern{" "}
         <Company
           src="/logos/microsoft.svg"
           name="Microsoft"
@@ -85,7 +85,7 @@ function AboutOutput() {
         />
       </div>
       <div>
-        - Software Engineer{" "}
+        - Software Engineer Intern{" "}
         <Company
           src="/logos/ibm.svg"
           name="IBM"
@@ -99,7 +99,7 @@ function AboutOutput() {
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># previously</h2>
       <div>
-        - Software Engineer{" "}
+        - Software Engineer Intern{" "}
         <Company
           src="/logos/upfront.png"
           name="Upfront Ventures"
@@ -110,7 +110,7 @@ function AboutOutput() {
         />
       </div>
       <div>
-        - Software Engineer{" "}
+        - Software Engineer Intern{" "}
         <Company
           src="/logos/altas.png"
           name="Altas Partners"
@@ -119,7 +119,7 @@ function AboutOutput() {
         />
       </div>
       <div>
-        - Software Engineer{" "}
+        - Software Engineer Intern{" "}
         <Company
           src="/logos/liftwerx.png"
           name="LiftWerx"
@@ -129,11 +129,11 @@ function AboutOutput() {
         />
       </div>
       <div>
-        - Machine Learning Engineer{" "}
+        - Core Member{" "}
         <Company src="/logos/watai.png" name="WAT.ai" href="https://watai.ca" />
       </div>
       <div>
-        - Machine Learning Engineer{" "}
+        - Core Member{" "}
         <Company
           src="/logos/utmist.svg"
           name="UTMIST"
@@ -247,11 +247,11 @@ const FS = {
     type: "file",
     render: () => (
       <>
-        <div>- Software Engineer · Upfront Ventures</div>
-        <div>- Software Engineer · Altas Partners</div>
-        <div>- Software Engineer · LiftWerx</div>
-        <div>- Machine Learning Engineer · WAT.ai</div>
-        <div>- Machine Learning Engineer · UTMIST</div>
+        <div>- Software Engineer Intern · Upfront Ventures</div>
+        <div>- Software Engineer Intern · Altas Partners</div>
+        <div>- Software Engineer Intern · LiftWerx</div>
+        <div>- Core Member · WAT.ai</div>
+        <div>- Core Member · UTMIST</div>
       </>
     ),
   },
