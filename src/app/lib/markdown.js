@@ -22,7 +22,7 @@ hackathon project.
 
 ## studying
 
-- Management Engineering @ The University of Waterloo (https://uwaterloo.ca)
+- Management Engineering @ University of Waterloo (https://uwaterloo.ca)
 
 ## incoming
 
