@@ -26,8 +26,8 @@ hackathon project.
 
 ## incoming
 
-- Software Engineer @ IBM (https://www.ibm.com)
 - Software Engineer @ Microsoft (https://www.microsoft.com)
+- Software Engineer @ IBM (https://www.ibm.com)
 
 ## previously
 

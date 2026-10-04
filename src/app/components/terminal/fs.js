@@ -79,17 +79,34 @@ function AboutOutput() {
       <h2 className="text-stone-500 dark:text-stone-500"># incoming</h2>
       <div>
         - Software Engineer @{" "}
-        <Logo src="/logos/ibm.svg" alt="IBM" wide unoptimized />
-        <Link href="https://www.ibm.com">
-          <span className="text-amber-700 dark:text-amber-400">IBM</span>
-        </Link>
+        <span className="inline-flex items-center gap-2 align-middle">
+          <Image
+            src="/logos/microsoft.svg"
+            alt=""
+            width={14}
+            height={14}
+            unoptimized
+          />
+          <Link href="https://www.microsoft.com">
+            <span className="text-amber-700 dark:text-amber-400">Microsoft</span>
+          </Link>
+        </span>
       </div>
       <div>
         - Software Engineer @{" "}
-        <Logo src="/logos/microsoft.svg" alt="Microsoft" size={14} unoptimized />
-        <Link href="https://www.microsoft.com">
-          <span className="text-amber-700 dark:text-amber-400">Microsoft</span>
-        </Link>
+        <span className="inline-flex items-center gap-2 align-middle">
+          <Image
+            src="/logos/ibm.svg"
+            alt=""
+            width={30}
+            height={12}
+            unoptimized
+            className="shrink-0 dark:brightness-125"
+          />
+          <Link href="https://www.ibm.com">
+            <span className="text-amber-700 dark:text-amber-400">IBM</span>
+          </Link>
+        </span>
       </div>
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># previously</h2>

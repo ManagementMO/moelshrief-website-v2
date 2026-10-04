@@ -196,7 +196,7 @@ function runLs(target, { all = false } = {}) {
 const BOOT = Date.now();
 
 const CAREER = [
-  ["f4b1e25", "(HEAD -> waterloo) building TRACE + Meta-Harness @ wat.ai"],
+  ["f4b1e25", "(HEAD -> waterloo) incoming software engineering @ Microsoft + IBM"],
   ["a7c3d91", "software engineering @ altas partners"],
   ["c1d8a44", "software engineering @ liftwerx"],
   ["9b2e7f3", "machine learning engineering @ wat.ai"],
@@ -324,8 +324,8 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
   if (c === "whoami") {
     return (
       <div>
-        mohammed elshrief — management engineering @ uwaterloo. building TRACE
-        + meta-harness. slightly too into hackathons.
+        mohammed elshrief — management engineering @ uwaterloo. incoming software
+        engineering @ Microsoft + IBM. slightly too into hackathons.
       </div>
     );
   }
@@ -354,9 +354,9 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
           </div>
           <div>
             <span className="text-amber-700 dark:text-amber-400">
-              shipping
+              incoming
             </span>
-            : trace · meta-harness
+            : microsoft · ibm
           </div>
           <div>
             <span className="text-amber-700 dark:text-amber-400">coffee</span>:
