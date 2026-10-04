@@ -141,18 +141,6 @@ function AboutOutput() {
           height={12}
         />
       </div>
-      <div>
-        - Hackathon Addict{" "}
-        <Company
-          src="/logos/devpost.jpg"
-          name="Devpost"
-          href="https://devpost.com/ManagementMO"
-          padded
-          paddedWidth={16}
-          paddedBgSize="cover"
-          clipPath="polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
-        />
-      </div>
     </>
   );
 }

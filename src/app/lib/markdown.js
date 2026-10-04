@@ -36,7 +36,6 @@ hackathon project.
 - Software Engineer @ LiftWerx (https://www.liftwerx.com)
 - Machine Learning Engineer @ WAT.ai (https://watai.ca)
 - Machine Learning Engineer @ UTMIST (https://www.utmist.ca/)
-- Hackathon Addict @ Devpost (https://devpost.com/ManagementMO)
 
 ## pages
 
