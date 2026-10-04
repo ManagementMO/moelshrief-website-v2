@@ -66,7 +66,7 @@ function AboutOutput() {
         - Management Engineering{" "}
         <Company
           src="/logos/waterloo.png"
-          name="UWaterloo"
+          name="The University of Waterloo"
           href="https://uwaterloo.ca"
           width={16}
           height={16}
