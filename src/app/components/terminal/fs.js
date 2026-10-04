@@ -5,26 +5,24 @@ import { publishedPosts } from "../../writing/posts";
 
 function Logo({
   src,
-  alt,
   padded = false,
-  wide = false,
   paddedWidth = 36,
   paddedBgSize = "175%",
   clipPath,
-  size = 14,
+  width = 14,
+  height = 14,
   unoptimized = false,
   invertDark = false,
+  className = "",
 }) {
   if (padded) {
     return (
       <span
-        role="img"
-        aria-label={alt}
-        title={alt}
-        className="inline-block rounded-[2px] mr-1 align-middle"
+        aria-hidden="true"
+        className="inline-block shrink-0 rounded-[2px]"
         style={{
           width: `${paddedWidth}px`,
-          height: "14px",
+          height: `${height}px`,
           backgroundImage: `url(${src})`,
           backgroundSize: paddedBgSize,
           backgroundPosition: "center",
@@ -34,33 +32,29 @@ function Logo({
       />
     );
   }
-  if (wide) {
-    return (
-      <Image
-        src={src}
-        alt={alt}
-        width={56}
-        height={14}
-        unoptimized={unoptimized}
-        className={`object-contain object-left inline mr-1 align-middle${
-          invertDark ? " dark:invert" : ""
-        }`}
-        style={{
-          height: "14px",
-          width: "auto",
-        }}
-      />
-    );
-  }
   return (
     <Image
       src={src}
-      alt={alt}
-      width={size}
-      height={size}
+      alt=""
+      width={width}
+      height={height}
       unoptimized={unoptimized}
-      className="object-contain inline mr-1 align-middle"
+      className={`block shrink-0 object-contain${
+        invertDark ? " dark:invert" : ""
+      } ${className}`}
     />
+  );
+}
+
+function Company({ name, href, ...logoProps }) {
+  return (
+    <span className="inline-flex items-center gap-2 align-middle whitespace-nowrap">
+      <span>@</span>
+      <Logo {...logoProps} />
+      <Link href={href}>
+        <span className="text-amber-700 dark:text-amber-400">{name}</span>
+      </Link>
+    </span>
   );
 }
 
@@ -69,105 +63,95 @@ function AboutOutput() {
     <>
       <h2 className="text-stone-500 dark:text-stone-500"># studying</h2>
       <div>
-        - Management Engineering @{" "}
-        <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} unoptimized />
-        <Link href="https://uwaterloo.ca">
-          <span className="text-amber-700 dark:text-amber-400">UWaterloo</span>
-        </Link>
+        - Management Engineering{" "}
+        <Company
+          src="/logos/waterloo.png"
+          name="UWaterloo"
+          href="https://uwaterloo.ca"
+          width={16}
+          height={16}
+          unoptimized
+        />
       </div>
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># incoming</h2>
       <div>
-        - Software Engineer @{" "}
-        <span className="inline-flex items-center gap-2 align-middle">
-          <Image
-            src="/logos/microsoft.svg"
-            alt=""
-            width={14}
-            height={14}
-            unoptimized
-          />
-          <Link href="https://www.microsoft.com">
-            <span className="text-amber-700 dark:text-amber-400">Microsoft</span>
-          </Link>
-        </span>
+        - Software Engineer{" "}
+        <Company
+          src="/logos/microsoft.svg"
+          name="Microsoft"
+          href="https://www.microsoft.com"
+          unoptimized
+        />
       </div>
       <div>
-        - Software Engineer @{" "}
-        <span className="inline-flex items-center gap-2 align-middle">
-          <Image
-            src="/logos/ibm.svg"
-            alt=""
-            width={30}
-            height={12}
-            unoptimized
-            className="shrink-0 dark:brightness-125"
-          />
-          <Link href="https://www.ibm.com">
-            <span className="text-amber-700 dark:text-amber-400">IBM</span>
-          </Link>
-        </span>
+        - Software Engineer{" "}
+        <Company
+          src="/logos/ibm.svg"
+          name="IBM"
+          href="https://www.ibm.com"
+          width={30}
+          height={12}
+          className="dark:brightness-125"
+          unoptimized
+        />
       </div>
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># previously</h2>
       <div>
-        - Software Engineer @{" "}
-        <Logo
+        - Software Engineer{" "}
+        <Company
           src="/logos/upfront.png"
-          alt="Upfront Ventures"
-          wide
+          name="Upfront Ventures"
+          href="https://upfront.com"
+          width={44}
           invertDark
           unoptimized
         />
-        <Link href="https://upfront.com">
-          <span className="text-amber-700 dark:text-amber-400">
-            Upfront Ventures
-          </span>
-        </Link>
       </div>
       <div>
-        - Software Engineer @{" "}
-        <Logo src="/logos/altas.png" alt="Altas Partners" padded />
-        <Link href="https://www.altas.com">
-          <span className="text-amber-700 dark:text-amber-400">
-            Altas Partners
-          </span>
-        </Link>
+        - Software Engineer{" "}
+        <Company
+          src="/logos/altas.png"
+          name="Altas Partners"
+          href="https://www.altas.com"
+          padded
+        />
       </div>
       <div>
-        - Software Engineer @{" "}
-        <Logo src="/logos/liftwerx.png" alt="LiftWerx" wide />
-        <Link href="https://www.liftwerx.com">
-          <span className="text-amber-700 dark:text-amber-400">LiftWerx</span>
-        </Link>
+        - Software Engineer{" "}
+        <Company
+          src="/logos/liftwerx.png"
+          name="LiftWerx"
+          href="https://www.liftwerx.com"
+          width={46}
+          className="brightness-0 dark:brightness-100"
+        />
       </div>
       <div>
-        - Machine Learning Engineer @{" "}
-        <Logo src="/logos/watai.png" alt="WAT.ai" />
-        <Link href="https://watai.ca">
-          <span className="text-amber-700 dark:text-amber-400">WAT.ai</span>
-        </Link>
+        - Machine Learning Engineer{" "}
+        <Company src="/logos/watai.png" name="WAT.ai" href="https://watai.ca" />
       </div>
       <div>
-        - Machine Learning Engineer @{" "}
-        <Logo src="/logos/utmist.svg" alt="UTMIST" />
-        <Link href="https://www.utmist.ca/">
-          <span className="text-amber-700 dark:text-amber-400">UTMIST</span>
-        </Link>
+        - Machine Learning Engineer{" "}
+        <Company
+          src="/logos/utmist.svg"
+          name="UTMIST"
+          href="https://www.utmist.ca/"
+          height={12}
+        />
       </div>
       <div>
-        - Hackathon Addict @{" "}
-        <Logo
+        - Hackathon Addict{" "}
+        <Company
           src="/logos/devpost.jpg"
-          alt="Devpost"
+          name="Devpost"
+          href="https://devpost.com/ManagementMO"
           padded
           paddedWidth={16}
           paddedBgSize="cover"
           clipPath="polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
         />
-        <Link href="https://devpost.com/ManagementMO">
-          <span className="text-amber-700 dark:text-amber-400">Devpost</span>
-        </Link>
       </div>
     </>
   );

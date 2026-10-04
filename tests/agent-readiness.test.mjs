@@ -83,7 +83,7 @@ test("homepage bio uses h2 section headings for no-JS structure", async () => {
     fs.indexOf("// virtual filesystem")
   );
   assert.doesNotMatch(aboutOutput, /# building|built at wat\.ai|TRACE/);
-  assert.match(fs, /Software Engineer @/);
+  assert.match(fs, /Software Engineer/);
   assert.match(fs, /logos\/ibm\.svg/);
   assert.match(fs, /logos\/microsoft\.svg/);
 });
