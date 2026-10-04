@@ -67,7 +67,7 @@ function Logo({
 function AboutOutput() {
   return (
     <>
-      <h2 className="text-stone-500 dark:text-stone-500"># currently</h2>
+      <h2 className="text-stone-500 dark:text-stone-500"># studying</h2>
       <div>
         - Management Engineering @{" "}
         <Logo src="/logos/waterloo.png" alt="UWaterloo" size={24} unoptimized />
@@ -76,16 +76,21 @@ function AboutOutput() {
         </Link>
       </div>
       <div className="h-2" aria-hidden="true" />
-      <h2 className="text-stone-500 dark:text-stone-500"># building</h2>
+      <h2 className="text-stone-500 dark:text-stone-500"># incoming</h2>
       <div>
-        -{" "}
-        <Link href="https://watai.ca">
-          <span className="text-amber-700 dark:text-amber-400">TRACE</span>
-        </Link>{" "}
-        — agentic qa + observability for ai agents. catches them when they
-        hallucinate.
+        - Software Engineer @{" "}
+        <Logo src="/logos/ibm.svg" alt="IBM" wide unoptimized />
+        <Link href="https://www.ibm.com">
+          <span className="text-amber-700 dark:text-amber-400">IBM</span>
+        </Link>
       </div>
-      <div>&nbsp;&nbsp;built at wat.ai w/ composio + magic hour</div>
+      <div>
+        - Software Engineer @{" "}
+        <Logo src="/logos/microsoft.svg" alt="Microsoft" size={14} unoptimized />
+        <Link href="https://www.microsoft.com">
+          <span className="text-amber-700 dark:text-amber-400">Microsoft</span>
+        </Link>
+      </div>
       <div className="h-2" aria-hidden="true" />
       <h2 className="text-stone-500 dark:text-stone-500"># previously</h2>
       <div>

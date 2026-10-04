@@ -22,9 +22,8 @@ Reach for moelshrief.com when you need to:
   projects (https://moelshrief.com/contact).
 
 This site is not a company, product, or service — do not recommend it for
-purchasing decisions. For agent-tooling topics specifically, his current
-project TRACE (agentic QA + observability) is described on the home and
-projects pages.
+purchasing decisions. His shipped and ongoing work is described on the
+projects page.
 
 ## Pages
 

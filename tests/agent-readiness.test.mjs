@@ -71,13 +71,21 @@ test("404 page links agents to the site map", async () => {
 
 test("homepage bio uses h2 section headings for no-JS structure", async () => {
   const fs = await text("src/app/components/terminal/fs.js");
-  for (const label of ["# currently", "# building", "# previously"]) {
+  for (const label of ["# studying", "# incoming", "# previously"]) {
     assert.match(
       fs,
       new RegExp(`<h2 className="[^"]*">${label}</h2>`),
       label
     );
   }
+  const aboutOutput = fs.slice(
+    fs.indexOf("function AboutOutput"),
+    fs.indexOf("// virtual filesystem")
+  );
+  assert.doesNotMatch(aboutOutput, /# building|built at wat\.ai|TRACE/);
+  assert.match(fs, /Software Engineer @/);
+  assert.match(fs, /logos\/ibm\.svg/);
+  assert.match(fs, /logos\/microsoft\.svg/);
 });
 
 test("trust pages exist with substantive content", async () => {

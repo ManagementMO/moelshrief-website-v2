@@ -20,14 +20,14 @@ Management Engineering student at the University of Waterloo. I build software
 across engineering, data, and machine learning — and ship the occasional
 hackathon project.
 
-## currently
+## studying
 
 - Management Engineering @ University of Waterloo (https://uwaterloo.ca)
 
-## building
+## incoming
 
-- TRACE — agentic qa + observability for ai agents. catches them when they
-  hallucinate. built at wat.ai w/ composio + magic hour. (https://watai.ca)
+- Software Engineer @ IBM (https://www.ibm.com)
+- Software Engineer @ Microsoft (https://www.microsoft.com)
 
 ## previously
 

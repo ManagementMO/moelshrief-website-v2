@@ -37,7 +37,11 @@ test("Homepage about output omits the Meta-Harness block", async () => {
     filesystem.indexOf("// virtual filesystem")
   );
 
-  assert.match(aboutOutput, /TRACE/);
+  assert.match(aboutOutput, /# studying/);
+  assert.match(aboutOutput, /# incoming/);
+  assert.match(aboutOutput, /IBM/);
+  assert.match(aboutOutput, /Microsoft/);
+  assert.doesNotMatch(aboutOutput, /# building|TRACE|built at wat\.ai/);
   assert.doesNotMatch(
     aboutOutput,
     /Meta-Harness|meta-harness|time-travel forking|postgres checkpoints/
