@@ -28,14 +28,6 @@ export const projects = [
 
 export const archive = [
   {
-    slug: "paybridge",
-    title: "paybridge",
-    year: "2022",
-    href: "https://paybridgetech.com/",
-    description: "Founder, learned americans don't have etransfer",
-    technologies: ["Python", "React", "PostgreSQL", "Docker"],
-  },
-  {
     slug: "scam-mah",
     title: "scam-mah",
     year: "2024",
@@ -58,5 +50,13 @@ export const archive = [
     href: "https://github.com/ManagementMO/VBA-Financial-Planning-Tool",
     description: "student budget forecasting in excel/vba · used by 100+ students",
     technologies: ["Excel", "VBA", "Python"],
+  },
+  {
+    slug: "paybridge",
+    title: "paybridge",
+    year: "2022",
+    href: "https://paybridgetech.com/",
+    description: "Founder, learned americans don't have etransfer",
+    technologies: ["Python", "React", "PostgreSQL", "Docker"],
   },
 ];

@@ -173,7 +173,7 @@ export default function TerminalHero({ activity = null }) {
         if (e.target.tagName !== "A" && e.target.closest("a") === null)
           focusInput();
       }}
-      className="relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
+      className="relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-4 sm:p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
     >
       {matrixOn && <MatrixRain onDone={stopMatrix} />}
       <div role="log" aria-live="polite" aria-label="terminal output">

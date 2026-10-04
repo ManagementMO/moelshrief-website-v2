@@ -130,7 +130,7 @@ export default function Header({ className }) {
   );
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
       <h1 className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
         <NextLink href="/" className="relative inline-block">
           <ScrambleText text="mohammed elshrief" />
@@ -142,7 +142,7 @@ export default function Header({ className }) {
           •
         </span>
       </h1>
-      <div className="flex items-center gap-1 sm:gap-6">
+      <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 sm:gap-6">
         <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}
@@ -157,7 +157,7 @@ export default function Header({ className }) {
           <span className="text-stone-400 dark:text-stone-600">]</span>
         </button>
         {!isMobileDevice && (
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <button
               onClick={openCommandPalette}
               className="group/cmdk hidden sm:flex items-center font-mono text-xs leading-none px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 hover:border-amber-400/70 dark:hover:border-amber-500/50 hover:bg-amber-100/40 dark:hover:bg-amber-500/10 transition-colors duration-200"

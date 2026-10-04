@@ -48,7 +48,7 @@ function Logo({
 
 function Company({ name, href, ...logoProps }) {
   return (
-    <span className="inline-flex items-center gap-2 align-middle whitespace-nowrap">
+    <span className="flex w-fit items-center gap-2 align-middle whitespace-nowrap sm:inline-flex">
       <span>@</span>
       <Logo {...logoProps} />
       <Link href={href}>

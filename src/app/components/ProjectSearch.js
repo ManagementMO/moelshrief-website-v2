@@ -83,7 +83,7 @@ export default function ProjectSearch() {
               <AsciiDivider label="archive" />
               <div className="font-mono text-xs flex flex-col gap-1.5">
                 {archived.map((p) => (
-                  <div key={p.slug} className="flex items-baseline gap-3 min-w-0">
+                  <div key={p.slug} className="flex flex-wrap sm:flex-nowrap items-baseline gap-x-3 gap-y-0.5 min-w-0">
                     <span
                       aria-hidden="true"
                       className="text-stone-400 dark:text-stone-600 shrink-0 hidden sm:inline"
@@ -107,7 +107,7 @@ export default function ProjectSearch() {
                     <span className="text-stone-500 dark:text-stone-500 shrink-0">
                       {p.year}
                     </span>
-                    <span className="text-stone-500 dark:text-stone-500 truncate">
+                    <span className="w-full sm:w-auto text-stone-500 dark:text-stone-500 sm:truncate">
                       {p.description}
                     </span>
                   </div>
