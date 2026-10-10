@@ -1,9 +1,9 @@
 export default function Pane({ path, meta, children, className = "" }) {
   return (
     <section
-      className={`rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm overflow-hidden transition-colors hover:border-amber-500/40 dark:hover:border-amber-400/40 ${className}`}
+      className={`pane ${className}`}
     >
-      <div className="flex items-center gap-2 px-3.5 py-1.5 border-b border-stone-200 dark:border-stone-800/80 font-mono text-xs">
+      <div className="pane-header">
         <span
           className="text-stone-400 dark:text-stone-600 select-none"
           aria-hidden="true"

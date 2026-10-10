@@ -76,20 +76,16 @@ function ScrambleText({ text }) {
       className="relative inline-block"
       aria-label={text}
     >
-      {/* invisible ghost holds the layout at the natural text width */}
-      <span aria-hidden="true" className="invisible whitespace-pre">
+      {/* The stable name is real heading text; keep its width during scrambling. */}
+      <span className={`name-stable ${hovered ? "invisible" : ""}`}>
         {text}
       </span>
       {/* animated overlay */}
       <span
         aria-hidden="true"
-        className={`absolute inset-0 whitespace-pre transition-colors duration-150 ${
-          hovered
-            ? "text-amber-700 dark:text-amber-300"
-            : "text-stone-900 dark:text-stone-100"
-        }`}
+        className="name-scramble"
       >
-        {display}
+        {hovered ? display : ""}
       </span>
     </span>
   );
@@ -130,31 +126,31 @@ export default function Header({ className }) {
   );
 
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center">
-      <h1 className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline">
+    <div className="site-header">
+      <h1 className="site-title">
         <NextLink href="/" className="relative inline-block">
           <ScrambleText text="mohammed elshrief" />
         </NextLink>
         <span
-          className="ml-1 text-amber-600 dark:text-amber-400 select-none motion-safe:animate-pulse-dot"
+          className="name-dot"
           aria-hidden="true"
         >
           •
         </span>
       </h1>
-      <div className="flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 sm:gap-6">
+      <div className="site-toolbar">
         <HorizontalNav links={links} variant="terminal" />
         <button
           onClick={toggleTheme}
-          className="group/theme font-mono text-xs px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-amber-100/60 dark:hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-300 transition-colors leading-none"
+          className="theme-toggle"
           aria-label={`Theme: ${theme} — click to toggle`}
           title={`theme=${theme} · click to toggle`}
         >
-          <span className="text-stone-400 dark:text-stone-600">[</span>
-          <span className="text-stone-700 dark:text-stone-200 group-hover/theme:text-amber-700 dark:group-hover/theme:text-amber-300 transition-colors">
+          <span className="theme-bracket">[</span>
+          <span className="theme-value">
             {theme === "dark" ? "1" : "0"}
           </span>
-          <span className="text-stone-400 dark:text-stone-600">]</span>
+          <span className="theme-bracket">]</span>
         </button>
         {!isMobileDevice && (
           <div className="relative hidden sm:block">

@@ -526,10 +526,7 @@ function runCommand(input, cwd, setCwd, setHistory, extras = {}) {
     const a = extras.activity;
     if (!a) return ERR("activity: github unreachable — try again later");
     const blocks = "▁▂▃▅█";
-    const recent = a.weeks.slice(-12);
-    const weekly = recent.map((w) =>
-      w.reduce((s, d) => s + (d?.count ?? 0), 0)
-    );
+    const weekly = a.weeklyTotals;
     const max = Math.max(...weekly, 1);
     const spark = weekly
       .map((n) =>

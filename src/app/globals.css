@@ -3,31 +3,182 @@
 @tailwind utilities;
 
 @layer components {
-  /* GitHub activity heatmap. Short class names keep the ~370 server-rendered
-     cells small in both the HTML and the RSC payload. */
-  .hm-w {
-    @apply flex-col gap-[2px] flex-1 min-w-0;
+  .site-main {
+    @apply flex justify-center bg-stone-100 dark:bg-black font-extralight min-h-screen selection:bg-amber-200 dark:selection:bg-amber-800/40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px] md:pb-10;
   }
-  .hm-c {
-    @apply aspect-square w-full rounded-[2px];
+  .site-content {
+    @apply flex flex-col gap-4 w-full min-w-0 md:max-w-[540px] m-4 sm:m-6 md:m-20 text-neutral-500 dark:text-neutral-400 md:mt-[60px];
   }
-  .hm-x {
-    @apply bg-transparent;
+  .site-header {
+    @apply flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center;
   }
-  .hm-0 {
-    @apply bg-stone-200/70 dark:bg-stone-800/60;
+  .site-title {
+    @apply text-sm sm:text-base text-neutral-700 dark:text-neutral-300 font-semibold flex items-baseline;
   }
-  .hm-1 {
-    @apply bg-amber-200 dark:bg-amber-900/70;
+  .site-toolbar {
+    @apply flex w-full sm:w-auto items-center justify-between sm:justify-start gap-1 sm:gap-6;
   }
-  .hm-2 {
-    @apply bg-amber-300 dark:bg-amber-700/80;
+  .name-stable {
+    @apply whitespace-pre text-stone-900 dark:text-stone-100;
   }
-  .hm-3 {
-    @apply bg-amber-400 dark:bg-amber-500/90;
+  .name-scramble {
+    @apply absolute inset-0 whitespace-pre transition-colors duration-150 text-amber-700 dark:text-amber-300;
   }
-  .hm-4 {
-    @apply bg-amber-500 dark:bg-amber-400;
+  .name-dot {
+    @apply ml-1 text-amber-600 dark:text-amber-400 select-none motion-safe:animate-pulse-dot;
+  }
+  .site-nav {
+    @apply flex items-center gap-2 sm:gap-4 md:gap-6;
+  }
+  .site-nav-item {
+    @apply flex items-center;
+  }
+  .site-nav-prompt {
+    @apply hidden sm:inline text-stone-500 dark:text-stone-500 font-mono mr-1 transition-colors;
+  }
+  .site-nav-item:hover .site-nav-prompt {
+    @apply text-amber-600 dark:text-amber-400;
+  }
+  .theme-toggle {
+    @apply font-mono text-xs px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 hover:bg-amber-100/60 dark:hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-300 transition-colors leading-none;
+  }
+  .theme-bracket {
+    @apply text-stone-400 dark:text-stone-600;
+  }
+  .theme-value {
+    @apply text-stone-700 dark:text-stone-200 transition-colors;
+  }
+  .theme-toggle:hover .theme-value {
+    @apply text-amber-700 dark:text-amber-300;
+  }
+  .statusline {
+    @apply hidden md:flex fixed bottom-0 inset-x-0 z-30 h-7 items-center gap-4 px-3.5 font-mono text-micro bg-stone-100/90 dark:bg-black/90 backdrop-blur-sm border-t border-stone-300 dark:border-stone-800 text-stone-500 dark:text-stone-500;
+  }
+  .statusline-active {
+    @apply text-amber-700 dark:text-amber-400;
+  }
+  .statusline-link {
+    @apply hover:text-stone-700 dark:hover:text-stone-300 transition-colors;
+  }
+  .statusline-meta {
+    @apply ml-auto flex items-center gap-4;
+  }
+  .statusline-theme {
+    @apply hover:text-amber-700 dark:hover:text-amber-300 transition-colors;
+  }
+  .terminal-hero {
+    @apply relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-4 sm:p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text;
+  }
+  .terminal-input {
+    @apply absolute inset-0 w-full h-full bg-transparent outline-none border-none p-0 text-stone-800 dark:text-stone-200 caret-amber-500 dark:caret-amber-400;
+  }
+  .terminal-cursor {
+    @apply pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 w-[7px] h-[14px] bg-amber-500 dark:bg-amber-400 animate-cursor-blink;
+  }
+  .terminal-chip {
+    @apply font-mono text-xs px-2.5 py-1 rounded-md border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 active:bg-amber-100 dark:active:bg-amber-500/15;
+  }
+  .terminal-prompt {
+    @apply text-stone-500 dark:text-stone-500 pr-2;
+  }
+  .terminal-hint {
+    @apply text-stone-400 dark:text-stone-600 text-xs italic mt-1;
+  }
+  .terminal-help {
+    @apply text-amber-700 dark:text-amber-400 not-italic;
+  }
+  .company {
+    @apply flex w-fit items-center gap-2 align-middle whitespace-nowrap sm:inline-flex;
+  }
+  .company-logo {
+    @apply block shrink-0 object-contain;
+  }
+  .company .company-link,
+  .company .company-link:hover {
+    @apply text-amber-700 dark:text-amber-400;
+  }
+  .projects-shortcut {
+    @apply flex items-center justify-between font-mono text-xs sm:text-sm px-3.5 py-2.5 rounded-md border border-dashed border-stone-300 dark:border-stone-700 bg-stone-50/40 dark:bg-stone-900/30 hover:border-amber-500/60 dark:hover:border-amber-400/60 hover:bg-stone-50 dark:hover:bg-stone-900/60 transition-colors;
+  }
+  .projects-key {
+    @apply px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800 text-micro text-stone-400 dark:text-stone-500 transition-colors shrink-0 ml-3;
+  }
+  .projects-shortcut:hover .projects-key {
+    @apply bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300;
+  }
+  .ascii-divider {
+    @apply font-mono text-micro tracking-widest text-stone-400 dark:text-stone-600 select-none my-4 text-center truncate;
+  }
+  .pane {
+    @apply rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm overflow-hidden transition-colors hover:border-amber-500/40 dark:hover:border-amber-400/40;
+  }
+  .pane-header {
+    @apply flex items-center gap-2 px-3.5 py-1.5 border-b border-stone-200 dark:border-stone-800/80 font-mono text-xs;
+  }
+  .not-found-terminal {
+    @apply font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0;
+  }
+  .not-found-link {
+    @apply text-amber-700 dark:text-amber-400 hover:underline underline-offset-4;
+  }
+  .not-found-cursor {
+    @apply ml-1 inline-block w-[7px] h-[14px] bg-amber-500 dark:bg-amber-400 align-middle animate-cursor-blink;
+  }
+  /* Keep repeated presentation rules out of HTML and hydration payloads. */
+  .site-link {
+    @apply relative inline-flex items-center text-stone-700 dark:text-stone-300 transition-colors duration-150;
+  }
+  .site-link-idle {
+    @apply rounded-[2px] px-[2px] -mx-[2px] hover:bg-amber-300/35 dark:hover:bg-amber-400/15 hover:text-amber-900 dark:hover:text-amber-100;
+  }
+  .site-link-idle::after {
+    content: "";
+    @apply ml-0.5 inline-block w-[6px] h-[1em] bg-amber-500 dark:bg-amber-400 align-text-bottom opacity-0;
+  }
+  .site-link-idle:hover::after {
+    @apply opacity-100 animate-cursor-blink;
+  }
+  .footer-link {
+    @apply flex items-center hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-200;
+  }
+  .site-footer {
+    @apply flex flex-col gap-4 text-sm text-stone-500 dark:text-stone-400;
+  }
+  .footer-icon {
+    @apply w-5 h-5 transition-all duration-300 ease-out;
+  }
+  .footer-link:hover .footer-icon {
+    @apply scale-110 drop-shadow-[0_0_8px_rgba(245,158,11,0.55)];
+  }
+  .dark .footer-link:hover .footer-icon {
+    @apply drop-shadow-[0_0_8px_rgba(251,191,36,0.55)];
+  }
+  .footer-label {
+    @apply hidden md:inline-block md:w-0 md:overflow-hidden md:opacity-0 transition-all duration-300 ease-out font-mono text-xs;
+  }
+  .footer-link:hover .footer-label {
+    @apply md:w-auto md:ml-2 md:opacity-100;
+  }
+
+  /* The external SVG keeps the original square cells and fixed 2px gaps.
+     Its color-scheme media query inherits the user's chosen site theme. */
+  .activity-heatmap {
+    --columns: var(--mobile-columns);
+    container-type: inline-size;
+    color-scheme: light;
+  }
+  .dark .activity-heatmap {
+    color-scheme: dark;
+  }
+  .activity-heatmap img {
+    display: block;
+    width: 100%;
+    height: calc((100cqw - (var(--columns) - 1) * 2px) / var(--columns) * 7 + 12px);
+  }
+  @screen sm {
+    .activity-heatmap {
+      --columns: var(--desktop-columns);
+    }
   }
 }
 

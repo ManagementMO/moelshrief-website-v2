@@ -27,7 +27,7 @@ class OutputBoundary extends React.Component {
 
 function Prompt({ cwd }) {
   return (
-    <span className="text-stone-500 dark:text-stone-500 pr-2">
+    <span className="terminal-prompt">
       mohammed@portfolio:{cwd}$
     </span>
   );
@@ -173,7 +173,7 @@ export default function TerminalHero({ activity = null }) {
         if (e.target.tagName !== "A" && e.target.closest("a") === null)
           focusInput();
       }}
-      className="relative font-mono text-sm rounded-lg border border-stone-300 dark:border-stone-800 bg-stone-50/60 dark:bg-stone-900/40 backdrop-blur-sm p-4 sm:p-5 text-stone-700 dark:text-stone-300 leading-relaxed w-full min-w-0 break-words cursor-text"
+      className="terminal-hero"
     >
       {matrixOn && <MatrixRain onDone={stopMatrix} />}
       <div role="log" aria-live="polite" aria-label="terminal output">
@@ -209,19 +209,19 @@ export default function TerminalHero({ activity = null }) {
             autoCapitalize="off"
             autoComplete="off"
             aria-label="terminal input"
-            className="absolute inset-0 w-full h-full bg-transparent outline-none border-none p-0 text-stone-800 dark:text-stone-200 caret-amber-500 dark:caret-amber-400"
+            className="terminal-input"
           />
           {!focused && !input && (
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 w-[7px] h-[14px] bg-amber-500 dark:bg-amber-400 animate-cursor-blink"
+              className="terminal-cursor"
             />
           )}
         </div>
       </div>
-      <div className="text-stone-400 dark:text-stone-600 text-xs italic mt-1">
+      <div className="terminal-hint">
         (type{" "}
-        <span className="text-amber-700 dark:text-amber-400 not-italic">
+        <span className="terminal-help">
           help
         </span>{" "}
         for commands · ↑/↓ for history)
@@ -235,7 +235,7 @@ export default function TerminalHero({ activity = null }) {
                 e.stopPropagation();
                 execute(cmd);
               }}
-              className="font-mono text-xs px-2.5 py-1 rounded-md border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 active:bg-amber-100 dark:active:bg-amber-500/15"
+              className="terminal-chip"
             >
               $ {cmd}
             </button>

@@ -39,7 +39,7 @@ function Logo({
       width={width}
       height={height}
       unoptimized={unoptimized}
-      className={`block shrink-0 object-contain${
+      className={`company-logo${
         invertDark ? " dark:invert" : ""
       } ${className}`}
     />
@@ -48,11 +48,11 @@ function Logo({
 
 function Company({ name, href, ...logoProps }) {
   return (
-    <span className="flex w-fit items-center gap-2 align-middle whitespace-nowrap sm:inline-flex">
+    <span className="company">
       <span>@</span>
       <Logo {...logoProps} />
-      <Link href={href}>
-        <span className="text-amber-700 dark:text-amber-400">{name}</span>
+      <Link href={href} className="company-link">
+        {name}
       </Link>
     </span>
   );

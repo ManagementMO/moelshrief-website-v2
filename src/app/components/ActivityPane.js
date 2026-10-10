@@ -1,31 +1,24 @@
 import Pane from "./Pane";
 
-const LEVEL_CLASSES = ["hm-0", "hm-1", "hm-2", "hm-3", "hm-4"];
-
 export default function ActivityPane({ activity }) {
   if (!activity) return null;
-  const { total, streak, commits, weeks } = activity;
+  const { total, streak, commits, weekCount } = activity;
 
   return (
     <Pane path="~/activity" meta="github · cached 1h">
-      <div className="flex gap-[2px]" aria-hidden="true">
-        {weeks.map((week, wi) => (
-          <div
-            key={wi}
-            className={`hm-w ${
-              wi < weeks.length - 26 ? "hidden sm:flex" : "flex"
-            }`}
-          >
-            {week.map((day, di) => (
-              <span
-                key={di}
-                className={`hm-c ${
-                  day ? LEVEL_CLASSES[day.level] ?? LEVEL_CLASSES[0] : "hm-x"
-                }`}
-              />
-            ))}
-          </div>
-        ))}
+      <div
+        className="activity-heatmap"
+        aria-hidden="true"
+        style={{
+          "--mobile-columns": Math.max(Math.min(weekCount, 26), 1),
+          "--desktop-columns": Math.max(weekCount, 1),
+        }}
+      >
+        <picture>
+          <source media="(min-width: 640px)" srcSet="/activity.svg?columns=52" />
+          {/* Native picture/img preserves no-JS rendering and SVG theme inheritance. */}
+          <img src="/activity.svg?columns=26" alt="" width={258} height={68} />
+        </picture>
       </div>
       <p className="font-mono text-xs text-stone-500 dark:text-stone-500 mt-2.5">
         <span className="text-stone-800 dark:text-stone-200">{total}</span>{" "}

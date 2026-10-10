@@ -1,29 +1,13 @@
 import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Caveat, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 // Loaded as a JS CSS import (not a CSS @import) so it works with Turbopack's
 // strict CSS parser, which requires @import to precede all other rules.
 import "./styles/prism.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import dynamic from "next/dynamic";
-import ThemeProvider from "./components/ThemeProvider";
-import Statusline from "./components/Statusline";
-
-// Lazy-loaded for code-splitting. It's a client component that renders null
-// during SSR (mobile-detection defaults true server-side), so it needs no
-// `ssr: false` — which is disallowed in a Server Component in Next.js 15+.
-const CommandPalette = dynamic(() => import("./components/CommandPalette"));
-
-const handwriting = Caveat({
-  subsets: ["latin"],
-  weight: ["600"],
-  variable: "--font-handwriting",
-  display: "swap",
-});
+import SiteShell from "./components/SiteShell";
+import { identityMetadata } from "./lib/identity.mjs";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -33,9 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: "mohammed elshrief",
-  description:
-    "mohammed elshrief — engineering, data, and the occasional hackathon.",
+  ...identityMetadata,
   metadataBase: new URL("https://moelshrief.com"),
   alternates: {
     canonical: "/",
@@ -46,90 +28,25 @@ export const metadata = {
       "msvalidate.01": "44B5935483C99385F66FF3FE1439CC64",
     },
   },
-  openGraph: {
-    title: "mohammed elshrief",
-    description:
-      "mohammed elshrief — engineering, data, and the occasional hackathon.",
-    url: "https://moelshrief.com",
-    type: "website",
-    images: ["/my-pfp.jpg"],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "mohammed elshrief",
-    description:
-      "mohammed elshrief — engineering, data, and the occasional hackathon.",
-    images: ["/my-pfp.jpg"],
-  },
 };
 
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Mohammed Elshrief",
-  description:
-    "Mohammed Elshrief is a Management Engineering student at the University of Waterloo who builds software across engineering, data, and machine learning — including agentic QA tooling, optimization models, and hackathon projects.",
-  url: "https://moelshrief.com",
-  image: "https://moelshrief.com/my-pfp.jpg",
-  mainEntityOfPage: "https://moelshrief.com",
-  jobTitle: "Management Engineering Student",
-  email: "mailto:mkelshri@uwaterloo.ca",
-  knowsAbout: [
-    "software engineering",
-    "machine learning",
-    "data engineering",
-    "optimization",
-    "AI agents",
-  ],
-  affiliation: {
-    "@type": "CollegeOrUniversity",
-    name: "University of Waterloo",
-  },
-  sameAs: [
-    "https://github.com/ManagementMO",
-    "https://www.linkedin.com/in/mohammed-elshrief/",
-    "https://devpost.com/ManagementMO",
-  ],
-};
-
-const themeInitScript = `
-(function(){
-  try {
-    // Dark is the default; only an explicitly stored 'light' opts out.
-    var stored = localStorage.getItem('theme');
-    document.documentElement.classList.toggle('dark', stored !== 'light');
-  } catch (e) {}
-})();
-`;
+// Dark is the default; only an explicitly stored light preference opts out.
+const themeInitScript = `try{document.documentElement.classList.toggle("dark",localStorage.getItem("theme")!=="light")}catch{}`;
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${handwriting.variable} ${GeistMono.variable} ${jetbrainsMono.variable}`}
+      className={`dark ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
       </head>
       <body className={GeistSans.className}>
         <SpeedInsights />
         <Analytics />
-        <ThemeProvider>
-          <main className="flex justify-center bg-stone-100 dark:bg-black font-extralight min-h-screen selection:bg-amber-200 dark:selection:bg-amber-800/40 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:16px_16px] md:pb-10">
-            <div className="flex flex-col gap-4 w-full min-w-0 md:max-w-[540px] m-4 sm:m-6 md:m-20 text-neutral-500 dark:text-neutral-400 md:mt-[60px]">
-              <Header />
-              {children}
-              <Footer />
-            </div>
-          </main>
-          <CommandPalette />
-          <Statusline />
-        </ThemeProvider>
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

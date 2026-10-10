@@ -4,12 +4,12 @@ import Link from "./Link";
 
 export default function HorizontalNav({ links, variant = "plain" }) {
   return (
-    <nav className="flex items-center gap-2 sm:gap-4 md:gap-6">
+    <nav className="site-nav">
       {links.map((link) => (
-        <span key={link.href} className="group/nav flex items-center">
+        <span key={link.href} className="site-nav-item">
           {variant === "terminal" && (
             <span
-              className="hidden sm:inline text-stone-500 dark:text-stone-500 font-mono mr-1 transition-colors group-hover/nav:text-amber-600 dark:group-hover/nav:text-amber-400"
+              className="site-nav-prompt"
               aria-hidden="true"
             >
               ${" "}

@@ -35,7 +35,7 @@ export default function Statusline() {
   return (
     <nav
       aria-label="statusline"
-      className="hidden md:flex fixed bottom-0 inset-x-0 z-30 h-7 items-center gap-4 px-3.5 font-mono text-micro bg-stone-100/90 dark:bg-black/90 backdrop-blur-sm border-t border-stone-300 dark:border-stone-800 text-stone-500 dark:text-stone-500"
+      className="statusline"
     >
       {WINDOWS.map((w) => (
         <NextLink
@@ -43,19 +43,19 @@ export default function Statusline() {
           href={w.href}
           className={
             isCurrent(w)
-              ? "text-amber-700 dark:text-amber-400"
-              : "hover:text-stone-700 dark:hover:text-stone-300 transition-colors"
+              ? "statusline-active"
+              : "statusline-link"
           }
         >
           {w.idx}:{w.name}
           {isCurrent(w) ? "*" : ""}
         </NextLink>
       ))}
-      <span className="ml-auto flex items-center gap-4">
+      <span className="statusline-meta">
         <span suppressHydrationWarning>waterloo {time ?? "--:--"}</span>
         <button
           onClick={toggleTheme}
-          className="hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
+          className="statusline-theme"
           aria-label="toggle theme"
         >
           theme={theme}
