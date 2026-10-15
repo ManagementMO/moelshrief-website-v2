@@ -63,7 +63,7 @@ function AboutOutput() {
     <>
       <h2 className="text-stone-500 dark:text-stone-500"># studying</h2>
       <div>
-        - Engineering{" "}
+        - Management Engineering{" "}
         <Company
           src="/logos/waterloo.png"
           name="University of Waterloo"
